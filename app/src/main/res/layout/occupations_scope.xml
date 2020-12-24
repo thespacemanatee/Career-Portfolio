@@ -45,6 +45,7 @@
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:paddingStart="10dp"
+                android:fontFamily="@font/poppins_medium"
                 android:text="Direct or coordinate an organization's financial or budget activities to fund operations, maximize investments, or increase efficiency."/>
 
             <CheckBox

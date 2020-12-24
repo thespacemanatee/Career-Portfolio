@@ -191,7 +191,7 @@ public class Occupation {
         private static final String TAG = "CSV_Utilities";
         private boolean timeoutOccurred = false;
         private final Context context;
-        private String selectedOccupation;
+        private final String selectedOccupation;
         private final Integer timeout;
         private DataSource result = null;
         private boolean finish = false;
@@ -216,7 +216,7 @@ public class Occupation {
             );
 
             String line = "";
-            DataSource occupationScope = new DataSource();
+            DataSource occupations = new DataSource();
 
             long now = System.currentTimeMillis();
             long end = now + timeout;
@@ -236,10 +236,10 @@ public class Occupation {
                             tokens[2], tokens[3], tokens[4], tokens[5],
                             tokens[6], tokens[7], tokens[8], tokens[9], tokens[10]);
                     Log.d(TAG, "onClick: " + occupation.toString());
-                    if (occupationScope.contains(occupation)) {
+                    if (occupations.contains(occupation)) {
                         continue;
                     }
-                    occupationScope.addOccupation(occupation);
+                    occupations.addOccupation(occupation);
                 }
                 finish = true;
             } catch (IOException e) {
@@ -258,7 +258,7 @@ public class Occupation {
                 Log.d(TAG, "Timeout");
                 timeoutOccurred = true;
             }
-            result = occupationScope;
+            result = occupations;
         }
 
         /**
@@ -286,7 +286,9 @@ public class Occupation {
          * Check if failure occurred due to timeout (use only for failed queries)
          * @return true if timeout occurred
          */
-        public boolean isTimedOut() {return timeoutOccurred;}
+        public boolean isTimedOut() {
+            return timeoutOccurred;
+        }
     }
 
     @NotNull

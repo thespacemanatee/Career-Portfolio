@@ -84,9 +84,10 @@ public class WorkScheduleFragment extends Fragment {
         Occupation.GetOccupationDetails getter = new Occupation.GetOccupationDetails(getContext(), selectedOccupation, 5000) {
             @Override
             public void onPostExecute() {
-                for (int i = 0; i < getResult().getSize(); i++) {
-                    dataSource.addOccupation(getResult().getOccupation(i));
+                for (Occupation occupation: getResult()) {
+                    dataSource.addOccupation(occupation);
                 }
+
                 Log.d(TAG, "onPostExecute: " + dataSource);
                 loadingDialog.dismissLoadingDialog();
                 adapter.notifyDataSetChanged();
@@ -120,9 +121,12 @@ public class WorkScheduleFragment extends Fragment {
         toolbar.setVisibility(View.GONE);
         toolbar.getMenu().clear();
         counter = 0;
-        for (int i = 0; i < dataSource.getSize(); i++) {
-            dataSource.getOccupation(i).setCheckedDelete(false);
+        for (Occupation occupation: dataSource) {
+            occupation.setCheckedDelete(false);
         }
+//        for (int i = 0; i < dataSource.getSize(); i++) {
+//            dataSource.getOccupation(i).setCheckedDelete(false);
+//        }
         deleteList.clear();
         adapter.notifyDataSetChanged();
 
@@ -186,10 +190,15 @@ public class WorkScheduleFragment extends Fragment {
             builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    for (int i = 0; i < deleteList.getSize(); i++) {
-                        dataSource.removeOccupation(deleteList.getOccupation(i));
-                        Log.d(TAG, "onClick: " + deleteList.getOccupation(i).getTask());
+                    for (Occupation occupation: deleteList) {
+                        dataSource.removeOccupation(occupation);
+                        Log.d(TAG, "onClick: " + deleteList.contains(occupation));
                     }
+
+//                    for (int i = 0; i < deleteList.getSize(); i++) {
+//                        dataSource.removeOccupation(deleteList.getOccupation(i));
+//                        Log.d(TAG, "onClick: " + deleteList.getOccupation(i).getTask());
+//                    }
                     updateToolbarText(0);
                     clearActionMode();
                 }

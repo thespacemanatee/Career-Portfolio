@@ -67,6 +67,31 @@
                 android:fontFamily="@font/poppins_medium"
                 android:textSize="18sp"/>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/your_tasks_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textSize="20sp"
+                    android:text="@string/your_tasks"/>
+
+                <TextView
+                    android:id="@+id/core_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textSize="20sp"
+                    android:text="@string/core"/>
+
+            </RelativeLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/occupationScopeRecycler"
                 android:layout_width="match_parent"

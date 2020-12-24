@@ -10,4 +10,6 @@
     <string name="what_does_your_work_schedule_look_like">What does your work schedule look like?</string>
     <string name="work_schedule_subtitle">These are the tasks typically done by %1$s. Indicate if your task is a Core task, or not. Select and hold to delete tasks.</string>
     <string name="items_selected">%1$d items selected</string>
+    <string name="your_tasks">Your tasks</string>
+    <string name="core">Core</string>
 </resources>

@@ -61,6 +61,8 @@ public class Occupation {
 
     private boolean isCheckedCore = false;
 
+    private boolean isSelected = false;
+
     public static final String ADD_BY_TITLE = "title";
 
     public static final String ADD_BY_TASK = "task";
@@ -184,6 +186,14 @@ public class Occupation {
 
     public void setCheckedCore(boolean checkedCore) {
         isCheckedCore = checkedCore;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     public abstract static class GetOccupationDetails extends AsyncGetter {

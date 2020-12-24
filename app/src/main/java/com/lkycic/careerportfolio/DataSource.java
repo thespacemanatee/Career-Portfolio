@@ -3,8 +3,10 @@ package com.lkycic.careerportfolio;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.function.Consumer;
 
-public class DataSource {
+public class DataSource implements Iterable<Occupation> {
 
     private final ArrayList<Occupation> dataArrayList;
 
@@ -23,17 +25,6 @@ public class DataSource {
     void removeOccupation(Occupation occupation) {
         dataArrayList.remove(occupation);
     }
-
-//    void removeDataWithTitle(String title) {
-//        Occupation o = new Occupation();
-//        o.setTitle(title);
-//        dataArrayList.remove(o);
-//    }
-//
-//    void removeDataWithTask(String task) {
-//        Occupation o = new Occupation(task, Occupation.ADD_BY_TASK);
-//        dataArrayList.remove(o);
-//    }
 
     Occupation getOccupation(int i){
         return dataArrayList.get(i);
@@ -55,5 +46,11 @@ public class DataSource {
     @Override
     public String toString() {
         return "Occupations: " + dataArrayList;
+    }
+
+    @NonNull
+    @Override
+    public Iterator<Occupation> iterator() {
+        return dataArrayList.iterator();
     }
 }

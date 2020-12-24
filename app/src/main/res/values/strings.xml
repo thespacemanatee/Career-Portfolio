@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">CareerPortfolio</string>
     <string name="discovering_your_portfolio">Discovering your Portfolio</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="what_is_your_occupation">What is your occupation?</string>
     <string name="previous_occupation">If you are unemployed, please enter your previous occupation.</string>
@@ -10,4 +9,5 @@
     <string name="search">Search</string>
     <string name="what_does_your_work_schedule_look_like">What does your work schedule look like?</string>
     <string name="work_schedule_subtitle">These are the tasks typically done by %1$s. Indicate if your task is a Core task, or not. Select and hold to delete tasks.</string>
+    <string name="items_selected">%1$d items selected</string>
 </resources>

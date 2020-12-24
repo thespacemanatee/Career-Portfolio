@@ -236,11 +236,10 @@ public class Occupation {
                             tokens[2], tokens[3], tokens[4], tokens[5],
                             tokens[6], tokens[7], tokens[8], tokens[9], tokens[10]);
                     Log.d(TAG, "onClick: " + occupation.toString());
-                    String task = occupation.getTask();
-                    if (occupationScope.contains(new Occupation(task, Occupation.ADD_BY_TASK))) {
+                    if (occupationScope.contains(occupation)) {
                         continue;
                     }
-                    occupationScope.addOccupation(new Occupation(task, Occupation.ADD_BY_TASK));
+                    occupationScope.addOccupation(occupation);
                 }
                 finish = true;
             } catch (IOException e) {

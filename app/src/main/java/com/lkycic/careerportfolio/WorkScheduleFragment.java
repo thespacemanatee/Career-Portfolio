@@ -85,7 +85,7 @@ public class WorkScheduleFragment extends Fragment {
             @Override
             public void onPostExecute() {
                 for (int i = 0; i < getResult().getSize(); i++) {
-                    dataSource.addOccupation(new Occupation(getResult().getOccupation(i).getTask(), Occupation.ADD_BY_TASK));
+                    dataSource.addOccupation(getResult().getOccupation(i));
                 }
                 Log.d(TAG, "onPostExecute: " + dataSource);
                 loadingDialog.dismissLoadingDialog();
@@ -115,11 +115,14 @@ public class WorkScheduleFragment extends Fragment {
     private void clearActionMode() {
         isActionMode = false;
         txtToolbar.setVisibility(View.GONE);
-        txtToolbar.setText("0 items selected");
+        txtToolbar.setText(String.format(getResources().getString(R.string.items_selected), 0));
         btnBack.setVisibility(View.GONE);
         toolbar.setVisibility(View.GONE);
         toolbar.getMenu().clear();
         counter = 0;
+        for (int i = 0; i < dataSource.getSize(); i++) {
+            dataSource.getOccupation(i).setCheckedDelete(false);
+        }
         deleteList.clear();
         adapter.notifyDataSetChanged();
 
@@ -128,7 +131,7 @@ public class WorkScheduleFragment extends Fragment {
     public void startSelectionDelete(int index) {
         if (!isActionMode) {
             isActionMode = true;
-            deleteList.addOccupation(new Occupation(dataSource.getOccupation(index).getTask(), Occupation.ADD_BY_TASK));
+            deleteList.addOccupation(dataSource.getOccupation(index));
             counter++;
             updateToolbarText(counter);
             toolbar.setVisibility(View.VISIBLE);
@@ -142,11 +145,11 @@ public class WorkScheduleFragment extends Fragment {
 
     private void updateToolbarText(int counter) {
         if (counter == 0) {
-            txtToolbar.setText("0 items selected");
+            txtToolbar.setText(String.format(getResources().getString(R.string.items_selected), 0));
         } else if (counter == 1) {
-            txtToolbar.setText("1 items selected");
+            txtToolbar.setText(String.format(getResources().getString(R.string.items_selected), 1));
         } else {
-            txtToolbar.setText(counter + " items selected");
+            txtToolbar.setText(String.format(getResources().getString(R.string.items_selected), counter));
         }
     }
 
@@ -184,7 +187,7 @@ public class WorkScheduleFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     for (int i = 0; i < deleteList.getSize(); i++) {
-                        dataSource.removeDataWithTask(deleteList.getOccupation(i).getTask());
+                        dataSource.removeOccupation(deleteList.getOccupation(i));
                         Log.d(TAG, "onClick: " + deleteList.getOccupation(i).getTask());
                     }
                     updateToolbarText(0);

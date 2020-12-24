@@ -1,9 +1,6 @@
 package com.lkycic.careerportfolio;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
@@ -27,16 +24,16 @@ public class DataSource {
         dataArrayList.remove(occupation);
     }
 
-    void removeDataWithTitle(String title) {
-        Occupation o = new Occupation();
-        o.setTitle(title);
-        dataArrayList.remove(o);
-    }
-
-    void removeDataWithTask(String task) {
-        Occupation o = new Occupation(task, Occupation.ADD_BY_TASK);
-        dataArrayList.remove(o);
-    }
+//    void removeDataWithTitle(String title) {
+//        Occupation o = new Occupation();
+//        o.setTitle(title);
+//        dataArrayList.remove(o);
+//    }
+//
+//    void removeDataWithTask(String task) {
+//        Occupation o = new Occupation(task, Occupation.ADD_BY_TASK);
+//        dataArrayList.remove(o);
+//    }
 
     Occupation getOccupation(int i){
         return dataArrayList.get(i);

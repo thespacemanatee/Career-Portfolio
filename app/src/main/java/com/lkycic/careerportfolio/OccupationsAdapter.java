@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class OccupationsAdapter extends RecyclerView.Adapter<OccupationsAdapter.ViewHolder> {
@@ -53,6 +55,11 @@ public class OccupationsAdapter extends RecyclerView.Adapter<OccupationsAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.occupation.setText(dataSource.getOccupation(position).getTitle());
+        if (dataSource.getOccupation(position).isSelected()) {
+            ((CardView) holder.itemView).setCardBackgroundColor(ContextCompat.getColor(context, R.color.teal_200));
+        } else {
+            ((CardView) holder.itemView).setCardBackgroundColor(ContextCompat.getColor(context, R.color.white));
+        }
     }
 
     @Override

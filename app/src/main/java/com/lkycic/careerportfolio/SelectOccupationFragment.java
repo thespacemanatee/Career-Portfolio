@@ -192,5 +192,10 @@ public class SelectOccupationFragment extends Fragment implements OccupationsAda
     public void onOccupationClick(int position) {
         Log.d("TAG", "onOccupationClick: " + dataSource.getOccupation(position));
         selectedOccupation = dataSource.getOccupation(position).getTitle();
+        for (Occupation occupation: dataSource) {
+            occupation.setSelected(false);
+        }
+        dataSource.getOccupation(position).setSelected(true);
+        adapter.notifyDataSetChanged();
     }
 }

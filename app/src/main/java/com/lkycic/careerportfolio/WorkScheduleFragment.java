@@ -81,7 +81,7 @@ public class WorkScheduleFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
-        Occupation.GetOccupationDetails getter = new Occupation.GetOccupationDetails(getContext(), selectedOccupation, 5000) {
+        Occupation.GetOccupationDetails getter = new Occupation.GetOccupationDetails(getContext(), selectedOccupation) {
             @Override
             public void onPostExecute() {
                 for (Occupation occupation: getResult()) {
@@ -177,10 +177,8 @@ public class WorkScheduleFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        Log.d(TAG, "onOptionsItemSelected: " + "DELETE MENU");
         if (item.getItemId() == R.id.item_delete && deleteList.getSize() > 0) {
 
-            Log.d(TAG, "onOptionsItemSelected: " + "DELETE MENU SHOWN");
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setMessage("Delete " + deleteList.getSize() + " items?");
             builder.setTitle("Confirm");
@@ -192,10 +190,6 @@ public class WorkScheduleFragment extends Fragment {
                         Log.d(TAG, "onClick: " + deleteList.contains(occupation));
                     }
 
-//                    for (int i = 0; i < deleteList.getSize(); i++) {
-//                        dataSource.removeOccupation(deleteList.getOccupation(i));
-//                        Log.d(TAG, "onClick: " + deleteList.getOccupation(i).getTask());
-//                    }
                     updateToolbarText(0);
                     clearActionMode();
                 }

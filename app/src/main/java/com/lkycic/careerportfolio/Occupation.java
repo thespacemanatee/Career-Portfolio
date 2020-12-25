@@ -200,22 +200,17 @@ public class Occupation {
     public abstract static class GetOccupationDetails extends AsyncGetter {
 
         private static final String TAG = "CSV_Utilities";
-        private boolean timeoutOccurred = false;
         private final Context context;
         private final String selectedOccupation;
-        private final Integer timeout;
         private DataSource result = null;
-        private boolean finish = false;
 
         /**
          * Standard constructor
          * @param context context of caller
          * @param selectedOccupation selected occupation
-         * @param timeout timeout for parsing of data
          */
-        public GetOccupationDetails(Context context, String selectedOccupation, Integer timeout){
+        public GetOccupationDetails(Context context, String selectedOccupation){
             this.context = context;
-            this.timeout = timeout;
             this.selectedOccupation = selectedOccupation;
         }
 
@@ -229,13 +224,11 @@ public class Occupation {
             String line = "";
             DataSource occupations = new DataSource();
 
-            long now = System.currentTimeMillis();
-            long end = now + timeout;
-
             try {
                 while ((line = reader.readLine()) != null) {
                     // Split by ','
                     String[] tokens = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+                    tokens[2] = tokens[2].replaceAll("\"", "");
                     tokens[4] = tokens[4].replaceAll("\"", "");
 
                     if (!tokens[2].toLowerCase().equals(selectedOccupation.toLowerCase())) {
@@ -253,23 +246,11 @@ public class Occupation {
                     }
                 }
 
-                finish = true;
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.wtf(TAG, "Error reading data file on line " + line, e);
-                finish = true;
             }
 
-            while (now < end) {
-                now = System.currentTimeMillis();
-                if (finish) {
-                    break;
-                }
-            }
-            if (!finish) {
-                Log.d(TAG, "Timeout");
-                timeoutOccurred = true;
-            }
             result = occupations;
         }
 
@@ -301,14 +282,6 @@ public class Occupation {
          */
         public boolean isSuccessful(){
             return result!=null;
-        }
-
-        /**
-         * Check if failure occurred due to timeout (use only for failed queries)
-         * @return true if timeout occurred
-         */
-        public boolean isTimedOut() {
-            return timeoutOccurred;
         }
     }
 

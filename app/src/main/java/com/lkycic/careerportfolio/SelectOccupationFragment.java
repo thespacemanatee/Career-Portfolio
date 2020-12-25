@@ -41,10 +41,10 @@ public class SelectOccupationFragment extends Fragment implements OccupationsAda
     private LoadingDialog loadingDialog;
     private OccupationsAdapter adapter;
     private DataSource dataSource;
-    private final static String PREF_KEY = "mainPrefs";
-    private final static String DATA_KEY = "occupationsJson";
+//    private final static String PREF_KEY = "mainPrefs";
+//    private final static String DATA_KEY = "occupationsJson";
     private final static String SELECTED_KEY = "selectedOccupation";
-    private SharedPreferences mPreferences;
+//    private SharedPreferences mPreferences;
     private String selectedOccupation;
 
     @Override
@@ -52,7 +52,7 @@ public class SelectOccupationFragment extends Fragment implements OccupationsAda
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_select_occupation, container, false);
-        mPreferences = getActivity().getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
+//        mPreferences = getActivity().getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
 
         // Setup hooks
         RecyclerView recyclerView = rootView.findViewById(R.id.occupationsRecycler);
@@ -61,11 +61,11 @@ public class SelectOccupationFragment extends Fragment implements OccupationsAda
         MaterialButton searchBtn = rootView.findViewById(R.id.searchBtn);
         loadingDialog = new LoadingDialog(getActivity());
 
-        // Get saved search data from SharedPreferences
-        mPreferences.getString(DATA_KEY, null);
-        Gson gson = new Gson();
-        String json = mPreferences.getString(DATA_KEY, "");
-        dataSource = gson.fromJson(json, DataSource.class);
+//        // Get saved search data from SharedPreferences
+//        mPreferences.getString(DATA_KEY, null);
+//        Gson gson = new Gson();
+//        String json = mPreferences.getString(DATA_KEY, "");
+//        dataSource = gson.fromJson(json, DataSource.class);
 
         // If SharedPreferences does not contain saved data, initialise dataSource
         if (dataSource == null) {
@@ -149,7 +149,7 @@ public class SelectOccupationFragment extends Fragment implements OccupationsAda
                     @Override
                     public void run() {
                         try {
-                            // Get response wtih key value "occupation" into a JSONArray
+                            // Get response with key value "occupation" into a JSONArray
                             JSONArray jsonArray = new JSONObject(responseData).getJSONArray("occupation");
                             dataSource.clear();
                             // Parse each entry into dataSource for recyclerview information
@@ -181,11 +181,11 @@ public class SelectOccupationFragment extends Fragment implements OccupationsAda
     @Override
     public void onPause() {
         super.onPause();
-        SharedPreferences.Editor editor = mPreferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(dataSource);
-        editor.putString(DATA_KEY, json);
-        editor.apply();
+//        SharedPreferences.Editor editor = mPreferences.edit();
+//        Gson gson = new Gson();
+//        String json = gson.toJson(dataSource);
+//        editor.putString(DATA_KEY, json);
+//        editor.apply();
     }
 
     @Override

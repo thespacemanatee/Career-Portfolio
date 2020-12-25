@@ -116,6 +116,9 @@ public class WorkScheduleFragment extends Fragment {
             public void handleOnBackPressed() {
                 if (isActionMode) {
                     clearActionMode();
+                } else {
+                    setEnabled(false);
+                    requireActivity().onBackPressed();
                 }
             }
         };

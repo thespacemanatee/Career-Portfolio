@@ -124,9 +124,6 @@ public class WorkScheduleFragment extends Fragment {
         for (Occupation occupation: dataSource) {
             occupation.setCheckedDelete(false);
         }
-//        for (int i = 0; i < dataSource.getSize(); i++) {
-//            dataSource.getOccupation(i).setCheckedDelete(false);
-//        }
         deleteList.clear();
         adapter.notifyDataSetChanged();
 

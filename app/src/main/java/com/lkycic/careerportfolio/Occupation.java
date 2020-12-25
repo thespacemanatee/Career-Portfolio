@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 
 
 /**
@@ -246,11 +247,12 @@ public class Occupation {
                             tokens[2], tokens[3], tokens[4], tokens[5],
                             tokens[6], tokens[7], tokens[8], tokens[9], tokens[10]);
                     Log.d(TAG, "onClick: " + occupation.toString());
-                    if (occupations.contains(occupation)) {
-                        continue;
+
+                    if (!containsOccupationWithTask(occupations.getDataArrayList(), occupation.getTask())) {
+                        occupations.addOccupation(occupation);
                     }
-                    occupations.addOccupation(occupation);
                 }
+
                 finish = true;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -269,6 +271,15 @@ public class Occupation {
                 timeoutOccurred = true;
             }
             result = occupations;
+        }
+
+        public static boolean containsOccupationWithTask(Collection<Occupation> occupations, String task) {
+            for(Occupation o : occupations) {
+                if(o != null && o.getTask().equals(task)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /**

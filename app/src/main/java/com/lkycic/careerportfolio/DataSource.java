@@ -30,6 +30,10 @@ public class DataSource implements Iterable<Occupation> {
         return dataArrayList.get(i);
     }
 
+    ArrayList<Occupation> getDataArrayList(){
+        return dataArrayList;
+    }
+
     boolean contains(Occupation occupation) {
         return dataArrayList.contains(occupation);
     }

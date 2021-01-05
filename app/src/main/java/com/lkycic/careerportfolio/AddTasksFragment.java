@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,11 +17,15 @@ import android.view.ViewGroup;
 
 import com.google.android.material.button.MaterialButton;
 
+import java.util.ArrayList;
+
 public class AddTasksFragment extends Fragment {
 
     private static final int TARGET_FRAGMENT_REQUEST_CODE = 1000;
     private static final String CUSTOM_TASK = "custom_task";
     private static final String TAG = "AddTasksFragment";
+    private CustomTaskAdapter adapter;
+    private final ArrayList<CustomTask> customTasks = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,6 +35,11 @@ public class AddTasksFragment extends Fragment {
         Context mContext = rootView.getContext();
 
         MaterialButton addTask = rootView.findViewById(R.id.add_task);
+        RecyclerView recyclerView = rootView.findViewById(R.id.custom_task_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new CustomTaskAdapter(mContext, customTasks);
+        recyclerView.setAdapter(adapter);
+
 
         addTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,7 +60,9 @@ public class AddTasksFragment extends Fragment {
         }
         if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
             CustomTask customTask = data.getParcelableExtra(CUSTOM_TASK);
+            customTasks.add(customTask);
             Log.d(TAG, "onActivityResult: " + customTask.toString());
+            adapter.notifyDataSetChanged();
         }
     }
 }

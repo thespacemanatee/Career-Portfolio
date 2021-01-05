@@ -22,6 +22,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -108,6 +110,19 @@ public class WorkScheduleFragment extends Fragment {
             public void onClick(View v) {
                 Log.d(TAG, "Core List: " + coreList);
                 Log.d(TAG, "Core List Size: " + coreList.getSize());
+//                Bundle bundle = new Bundle();
+//                bundle.putString(SELECTED_KEY, selectedOccupation);
+                AddTasksFragment fragment = new AddTasksFragment();
+//                fragment.setArguments(bundle);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(
+                        R.anim.slide_in,
+                        R.anim.fade_out,
+                        R.anim.fade_in,
+                        R.anim.slide_out);
+                fragmentTransaction.replace(R.id.container, fragment).addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 

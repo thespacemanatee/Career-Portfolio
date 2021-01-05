@@ -12,4 +12,12 @@
     <string name="items_selected">%1$d items selected</string>
     <string name="your_tasks">Your tasks</string>
     <string name="core">Core</string>
+    <string name="what_other_tasks_have_you_done_in_past_jobs_or_outside_work">What other tasks have you done in past jobs, or outside work?</string>
+    <string name="a_task_is_made_up_of">A task is made up of an action, object, and purpose.<br>Example: Interview (action) people (object) to understand perspectives on current social trends (purpose).</br></string>
+    <string name="add_tasks">Add Tasks</string>
+    <string name="action">Action: </string>
+    <string name="enter_an_object">Enter an object</string>
+    <string name="object">Object:</string>
+    <string name="purpose">Purpose:</string>
+    <string name="enter_a_purpose">Enter a purpose</string>
 </resources>

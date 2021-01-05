@@ -9,9 +9,11 @@
         android:id="@+id/add_task_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="@string/add_tasks"
         android:gravity="center"
-        android:textSize="30sp"/>
+        android:textSize="30sp"
+        android:fontFamily="@font/poppins_semibold"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,75 +28,84 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:textSize="20sp"
+            android:fontFamily="@font/poppins_medium"
             android:text="@string/action"/>
 
         <org.angmarch.views.NiceSpinner
             android:id="@+id/actions_spinner"
-            android:layout_width="120dp"
+            android:layout_width="130dp"
             android:layout_height="match_parent"
             app:popupTextAlignment="start"/>
 
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
+        android:layout_marginEnd="16dp"
+        android:weightSum="2">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_weight="0.6"
+            android:gravity="center_vertical"
             android:textSize="20sp"
+            android:fontFamily="@font/poppins_medium"
             android:text="@string/object"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/object_text"
-            android:layout_width="250dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_weight="1.4"
             android:hint="@string/enter_an_object"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
+        android:layout_marginEnd="16dp"
+        android:weightSum="2">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:layout_weight="0.6"
+            android:gravity="center_vertical"
             android:textSize="20sp"
+            android:fontFamily="@font/poppins_medium"
             android:text="@string/purpose"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/purpose_text"
-            android:layout_width="250dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_weight="1.4"
             android:hint="@string/enter_a_purpose"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 
 

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -89,6 +90,9 @@ public class AddTasksDialog extends DialogFragment {
                 public void onClick(View v) {
                     String object = objectText.getEditText().getText().toString();
                     String purpose = purposeText.getEditText().getText().toString();
+                    if (action == null) {
+                        Toast.makeText(mContext, "Please select an action", Toast.LENGTH_SHORT).show();;
+                    }
                     if (object.isEmpty()) {
                         objectText.setError("Field cannot be empty");
                     } else {
@@ -102,7 +106,7 @@ public class AddTasksDialog extends DialogFragment {
                         purposeText.setErrorEnabled(false);
                     }
                     
-                    if (!(object.isEmpty() || purpose.isEmpty())) {
+                    if (!(action == null || object.isEmpty() || purpose.isEmpty())) {
                         CustomTask customTask = new CustomTask(action, object, purpose);
                         addTask(customTask);
                         dialog.dismiss();
@@ -140,7 +144,9 @@ public class AddTasksDialog extends DialogFragment {
             e.printStackTrace();
         }
 
-        return  lines;
+        action = lines.get(0);
+
+        return lines;
 
     }
 }

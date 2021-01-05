@@ -55,8 +55,6 @@ public class WorkScheduleFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_work_schedule, container, false);
         mPreferences = getActivity().getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
         setHasOptionsMenu(true);
-        loadingDialog = new LoadingDialog(getActivity());
-        loadingDialog.startLoadingDialog();
         Bundle bundle = this.getArguments();
         selectedOccupation = bundle.getString(SELECTED_KEY);
         deleteList = new DataSource();
@@ -77,6 +75,8 @@ public class WorkScheduleFragment extends Fragment {
         workSubtitle.setText(String.format(getResources().getString(R.string.work_schedule_subtitle), selectedOccupation));
 
         if (dataSource == null) {
+            loadingDialog = new LoadingDialog(getActivity());
+            loadingDialog.startLoadingDialog();
             dataSource = new DataSource();
         }
 

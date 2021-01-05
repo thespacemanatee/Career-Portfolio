@@ -33,7 +33,7 @@
 
         <org.angmarch.views.NiceSpinner
             android:id="@+id/actions_spinner"
-            android:layout_width="130dp"
+            android:layout_width="150dp"
             android:layout_height="match_parent"
             app:popupTextAlignment="start"/>
 

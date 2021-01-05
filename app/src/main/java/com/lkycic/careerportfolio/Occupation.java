@@ -288,18 +288,18 @@ public class Occupation {
     @NotNull
     @Override
     public String toString() {
-
-        return "Occupation{SOC_Code=" + SOC_Code +
-                ", title=" + title +
-                ", taskId=" + taskId +
-                ", task=" + task +
-                ", DWA_ID=" + DWA_ID +
-                ", DWA_Title=" + DWA_Title +
-                ", IWA_ID=" + IWA_ID +
-                ", IWA_Title=" + IWA_Title +
-                ", GWA_ID=" + GWA_ID +
-                ", GWA=" + GWA +
-                "}";
+        return "Occupation{" +
+                "SOC_Code='" + SOC_Code + '\'' +
+                ", title='" + title + '\'' +
+                ", taskId='" + taskId + '\'' +
+                ", task='" + task + '\'' +
+                ", DWA_ID='" + DWA_ID + '\'' +
+                ", DWA_Title='" + DWA_Title + '\'' +
+                ", IWA_ID='" + IWA_ID + '\'' +
+                ", IWA_Title='" + IWA_Title + '\'' +
+                ", GWA_ID='" + GWA_ID + '\'' +
+                ", GWA='" + GWA + '\'' +
+                '}';
     }
 
     @Override

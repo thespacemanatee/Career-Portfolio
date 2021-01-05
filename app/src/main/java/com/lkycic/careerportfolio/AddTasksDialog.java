@@ -1,8 +1,10 @@
 package com.lkycic.careerportfolio;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +29,7 @@ import java.util.Objects;
 
 public class AddTasksDialog extends DialogFragment {
 
+    private static final String CUSTOM_TASK = "custom_task";
     private View parentView;
     private final Context mContext;
     private NiceSpinner niceSpinner;
@@ -100,7 +103,8 @@ public class AddTasksDialog extends DialogFragment {
                     }
                     
                     if (!(object.isEmpty() || purpose.isEmpty())) {
-                        addTask();
+                        CustomTask customTask = new CustomTask(action, object, purpose);
+                        addTask(customTask);
                         dialog.dismiss();
                     }
                 }
@@ -110,7 +114,14 @@ public class AddTasksDialog extends DialogFragment {
 
     }
 
-    private void addTask() {
+    private void addTask(CustomTask customTask) {
+        if( getTargetFragment() == null ) {
+            return;
+        }
+
+        Intent intent = new Intent();
+        intent.putExtra(CUSTOM_TASK, customTask);
+        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
     }
 
     private List<String> readLine(Context mContext) {

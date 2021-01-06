@@ -3,6 +3,8 @@ package com.lkycic.careerportfolio;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.jetbrains.annotations.NotNull;
+
 public class CustomTask implements Parcelable {
 
     private String action;
@@ -57,6 +59,7 @@ public class CustomTask implements Parcelable {
         this.purpose = purpose;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "CustomTask{" +

@@ -19,12 +19,6 @@ import java.util.Collection;
 
 /**
  * Class to represent Occupation objects as a pojo.
- *
- * Occupation objects follow this contract:
- * - <Group ID>: Document
- *    - name: String
- *    - display_picture: String (nullable)
- *    - colour: Long, strictly non-negative integer
  **/
 public class Occupation {
 

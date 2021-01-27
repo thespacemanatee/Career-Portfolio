@@ -27,6 +27,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "Future of Work",
+    "githubUrl": "https://github.com/thespacemanatee/Career-Portfolio/tree/main/career-portfolio-react-native"
   }
 }

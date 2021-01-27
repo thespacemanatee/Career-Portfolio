@@ -1,10 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-const WorkScheduleScreen = () => {
+const WorkScheduleScreen = ({route, navigation, props}) => {
   return (
     <View>
-      <Text>Work Schedule</Text>
+      <Text>{route.params.chosenOccupation}</Text>
     </View>
   );
 };

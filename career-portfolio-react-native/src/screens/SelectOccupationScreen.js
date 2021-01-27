@@ -1,45 +1,89 @@
-import React, { useState } from "react";
-import { StyleSheet, View, FlatList } from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import { StyleSheet, View, FlatList, Alert, Image } from "react-native";
 import {
-  useTheme,
+  Card,
   Title,
-  Text,
   TextInput,
   FAB,
   Button,
-  TouchableRipple,
+  Paragraph,
 } from "react-native-paper";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import axios from "axios";
 import { Buffer } from "buffer";
+
+import * as data from "../data/career_data.json";
+import OccupationTile from "../components/OccupationTile";
+import CustomHeaderButton from "../components/ui/CustomHeaderButton";
 
 const username = "singapore_university";
 const password = "3594cgj";
 const token = Buffer.from(`${username}:${password}`, "utf8").toString("base64");
 
-const getSearchResults = (occupationKeyword) => {
-  const url = `https://services.onetcenter.org/ws/online/search?keyword=${occupationKeyword}&start=1&end=100`;
-  axios
-    .get(url, {
-      headers: {
-        Authorization: `Basic ${token}`,
-      },
-    })
-    .then((response) => {
-      console.log(response);
-    });
-};
-
 const SelectOccupationScreen = (props) => {
-  const [text, setText] = React.useState("");
+  const [text, setText] = useState("");
+  const [occupations, setOccupations] = useState();
+  const [chosenOccupation, setChosenOccupation] = useState();
+  const [searching, setSearching] = useState();
+
+  const renderOccupationTiles = useCallback(
+    (itemData) => {
+      // console.log(itemData.item);
+      return (
+        <OccupationTile
+          onClick={() => {
+            console.log("pressed");
+            setChosenOccupation(itemData.item);
+          }}
+        >
+          {itemData.item}
+        </OccupationTile>
+      );
+    },
+    [occupations]
+  );
+
+  const getSearchResults = (occupationKeyword) => {
+    setOccupations();
+    const url = `https://services.onetcenter.org/ws/online/search?keyword=${occupationKeyword}&start=1&end=100`;
+    axios
+      .get(url, {
+        headers: {
+          Authorization: `Basic ${token}`,
+        },
+      })
+      .then((response) => {
+        // console.log(response.data.occupation);
+        const titles = [];
+        response.data.occupation.forEach((item) => {
+          // console.log(item.title);
+          titles.push(item.title);
+        });
+        setOccupations(titles);
+        setSearching(false);
+      })
+      .catch((err) => {
+        setSearching(false);
+      });
+  };
+
+  // const showHelp = () => {
+  //   Alert.alert(
+  //     "Help",
+  //     "If you are unemployed, please enter your previous occupation!",
+  //     [{ text: "OK" }]
+  //   );
+  // };
 
   return (
     <View style={styles.screen}>
+      {/* <View style={styles.help}>
+        <IconButton icon="help-circle-outline" onPress={showHelp} />
+      </View>
+
       <View style={styles.textContainer}>
         <Text style={styles.titleText}>What is your occupation?</Text>
-        <Text style={styles.subtitleText}>
-          If you are unemployed, please enter your previous occupation!
-        </Text>
-      </View>
+      </View> */}
       <TextInput
         label="Please enter your occupation"
         mode="outlined"
@@ -51,20 +95,79 @@ const SelectOccupationScreen = (props) => {
           mode="contained"
           onPress={() => {
             getSearchResults(text);
+            setSearching(true);
           }}
+          loading={searching}
         >
           Search
         </Button>
+        {/* <Button mode="contained" onPress={() => {}}>
+          Log Data
+        </Button> */}
       </View>
-      <FlatList />
+      {!occupations && searching === false && (
+        <View style={styles.errorContainer}>
+          <Image
+            style={styles.errorImage}
+            source={require("../../assets/fail.png")}
+          />
+        </View>
+      )}
+      <View style={styles.flatListContainer}>
+        <FlatList
+          data={occupations}
+          renderItem={renderOccupationTiles}
+          keyExtractor={(item, index) => item}
+          contentContainerStyle={styles.flatList}
+        />
+      </View>
+      {chosenOccupation && (
+        <Card>
+          <Card.Content>
+            <Title>Chosen Occupation</Title>
+            <Paragraph>{chosenOccupation}</Paragraph>
+          </Card.Content>
+        </Card>
+      )}
       <View style={styles.fabContainer}>
         <FAB
           icon="arrow-forward-outline"
-          onPress={() => props.navigation.push("WorkSchedule")}
+          onPress={() => {
+            if (chosenOccupation) {
+              props.navigation.push("WorkSchedule", {
+                chosenOccupation: chosenOccupation,
+              });
+            } else {
+              Alert.alert("Error", "Please choose an occupation!", [
+                { text: "OK" },
+              ]);
+            }
+          }}
         />
       </View>
     </View>
   );
+};
+
+export const screenOptions = (navigationData) => {
+  return {
+    headerTitle: "What is your occupation?",
+    headerRight: () => (
+      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+        <Item
+          title="Help"
+          iconName="help-circle-outline"
+          onPress={() => {
+            Alert.alert(
+              "Help",
+              "If you are unemployed, please enter your previous occupation!",
+              [{ text: "OK" }]
+            );
+          }}
+        />
+      </HeaderButtons>
+    ),
+  };
 };
 
 export default SelectOccupationScreen;
@@ -75,27 +178,54 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     margin: 30,
   },
+  help: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+  },
   textContainer: {
     // flex: 1,
     marginLeft: 40,
     marginRight: 40,
-    height: 175,
+    height: 50,
   },
   titleText: {
-    fontSize: 40,
+    fontSize: 20,
     textAlign: "center",
     // marginBottom: 20,
   },
-  subtitleText: {
-    fontSize: 16,
-    textAlign: "center",
-    marginBottom: 20,
-  },
+  // subtitleText: {
+  //   fontSize: 16,
+  //   textAlign: "center",
+  //   marginBottom: 20,
+  // },
   buttonContainer: {
     marginTop: 10,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 100,
+  },
+  errorImage: {
+    flex: 1,
+    aspectRatio: 1,
+  },
+  flatListContainer: {
+    flex: 1,
+    marginTop: 20,
+    marginBottom: 20,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  flatList: {
+    borderRadius: 10,
+    overflow: "hidden",
   },
   fabContainer: {
     justifyContent: "flex-end",
     alignItems: "flex-end",
+    marginTop: 10,
   },
 });

@@ -1,12 +1,8 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import {
-  useTheme,
-  Title,
   Text,
-  Button,
   FAB,
-  TouchableRipple,
 } from "react-native-paper";
 
 const WelcomeScreen = (props) => {

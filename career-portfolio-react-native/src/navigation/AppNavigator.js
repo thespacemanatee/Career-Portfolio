@@ -1,21 +1,13 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import {
-  useTheme,
-  Title,
-  Text,
-  Button,
-  FAB,
-  TouchableRipple,
-  Appbar,
-} from "react-native-paper";
 
 import WelcomeScreen from "../screens/WelcomeScreen";
 import SelectOccupationScreen from "../screens/SelectOccupationScreen";
 import WorkScheduleScreen from "../screens/WorkScheduleScreen";
 import Colors from "../constants/Colors";
-import { screenOptions } from "../screens/SelectOccupationScreen";
+import { screenOptions as selectOccupationsScreenOptions } from "../screens/SelectOccupationScreen";
+import { screenOptions as workScheduleScreenOptions } from "../screens/WorkScheduleScreen";
 
 // function CustomNavigationBar({ navigation, previous }) {
 //   return (
@@ -30,12 +22,12 @@ const defaultNavOptions = {
   headerStyle: {
     backgroundColor: Platform.OS === "android" ? Colors.primary : undefined,
   },
-//   headerTitleStyle: {
-//     fontFamily: "open-sans-bold",
-//   },
-//   headerBackTitleStyle: {
-//     fontFamily: "open-sans",
-//   },
+  //   headerTitleStyle: {
+  //     fontFamily: "open-sans-bold",
+  //   },
+  //   headerBackTitleStyle: {
+  //     fontFamily: "open-sans",
+  //   },
   headerTintColor: Platform.OS === "android" ? "white" : Colors.primary,
 };
 
@@ -58,9 +50,13 @@ export const RootNavigator = () => {
       <Stack.Screen
         name="SelectOccupation"
         component={SelectOccupationScreen}
-        options={screenOptions}
+        options={selectOccupationsScreenOptions}
       />
-      <Stack.Screen name="WorkSchedule" component={WorkScheduleScreen} />
+      <Stack.Screen
+        name="WorkSchedule"
+        component={WorkScheduleScreen}
+        options={workScheduleScreenOptions}
+      />
     </Stack.Navigator>
   );
 };

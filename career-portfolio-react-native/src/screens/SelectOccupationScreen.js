@@ -3,6 +3,7 @@ import { StyleSheet, View, FlatList, Alert, Image } from "react-native";
 import {
   Card,
   Title,
+  Text,
   TextInput,
   FAB,
   Button,
@@ -12,7 +13,6 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import axios from "axios";
 import { Buffer } from "buffer";
 
-import * as data from "../data/career_data.json";
 import OccupationTile from "../components/OccupationTile";
 import CustomHeaderButton from "../components/ui/CustomHeaderButton";
 
@@ -32,7 +32,6 @@ const SelectOccupationScreen = (props) => {
       return (
         <OccupationTile
           onClick={() => {
-            console.log("pressed");
             setChosenOccupation(itemData.item);
           }}
         >
@@ -77,13 +76,9 @@ const SelectOccupationScreen = (props) => {
 
   return (
     <View style={styles.screen}>
-      {/* <View style={styles.help}>
-        <IconButton icon="help-circle-outline" onPress={showHelp} />
-      </View>
-
       <View style={styles.textContainer}>
         <Text style={styles.titleText}>What is your occupation?</Text>
-      </View> */}
+      </View>
       <TextInput
         label="Please enter your occupation"
         mode="outlined"
@@ -101,9 +96,6 @@ const SelectOccupationScreen = (props) => {
         >
           Search
         </Button>
-        {/* <Button mode="contained" onPress={() => {}}>
-          Log Data
-        </Button> */}
       </View>
       {!occupations && searching === false && (
         <View style={styles.errorContainer}>
@@ -122,7 +114,7 @@ const SelectOccupationScreen = (props) => {
         />
       </View>
       {chosenOccupation && (
-        <Card>
+        <Card style={{ height: 100 }}>
           <Card.Content>
             <Title>Chosen Occupation</Title>
             <Paragraph>{chosenOccupation}</Paragraph>
@@ -151,7 +143,7 @@ const SelectOccupationScreen = (props) => {
 
 export const screenOptions = (navigationData) => {
   return {
-    headerTitle: "What is your occupation?",
+    headerTitle: "Onboarding",
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
         <Item
@@ -178,27 +170,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     margin: 30,
   },
-  help: {
-    position: "absolute",
-    top: 0,
-    right: 0,
-  },
   textContainer: {
-    // flex: 1,
     marginLeft: 40,
     marginRight: 40,
-    height: 50,
+    height: 40,
   },
   titleText: {
     fontSize: 20,
     textAlign: "center",
-    // marginBottom: 20,
   },
-  // subtitleText: {
-  //   fontSize: 16,
-  //   textAlign: "center",
-  //   marginBottom: 20,
-  // },
   buttonContainer: {
     marginTop: 10,
   },

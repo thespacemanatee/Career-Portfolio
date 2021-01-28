@@ -17,7 +17,7 @@ import {
 } from "react-native-paper";
 
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import OccupationTile from "../components/OccupationTile";
+import TaskTile from "../components/TaskTile";
 import CustomHeaderButton from "../components/ui/CustomHeaderButton";
 import Colors from "../constants/Colors";
 
@@ -26,13 +26,33 @@ const array = Object.values(data);
 
 const WorkScheduleScreen = ({ route, navigation }) => {
   const [tasks, setTasks] = useState([]);
+  const [coreTasks, setCoreTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(undefined);
+
+  const addOrRemoveFromCoreTasks = (task) => {
+    console.log("INPUT TASK: " + task);
+    if (coreTasks.indexOf(task) !== -1) {
+      console.log("already inside");
+      setCoreTasks(coreTasks.filter((item) => item !== task));
+    } else {
+      setCoreTasks([...coreTasks, task]);
+    }
+    console.log(coreTasks);
+  };
 
   const renderTaskTiles = useCallback(
     (itemData) => {
       // console.log(itemData.item);
-      return <OccupationTile>{itemData.item["Task"]}</OccupationTile>;
+      return (
+        <TaskTile
+          isChecked={() => {
+            addOrRemoveFromCoreTasks(itemData.item);
+          }}
+        >
+          {itemData.item["Task"]}
+        </TaskTile>
+      );
     },
     [tasks]
   );
@@ -119,7 +139,12 @@ const WorkScheduleScreen = ({ route, navigation }) => {
         />
       </View>
       <View style={styles.fabContainer}>
-        <FAB icon="arrow-forward-outline" onPress={() => {}} />
+        <FAB
+          icon="arrow-forward-outline"
+          onPress={() => {
+            console.log(coreTasks);
+          }}
+        />
       </View>
     </View>
   );

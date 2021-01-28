@@ -105,6 +105,14 @@ const SelectOccupationScreen = (props) => {
           />
         </View>
       )}
+      {chosenOccupation && (
+        <Card>
+          <Card.Content>
+            <Title>Chosen Occupation</Title>
+            <Paragraph numberOfLines={1}>{chosenOccupation}</Paragraph>
+          </Card.Content>
+        </Card>
+      )}
       <View style={styles.flatListContainer}>
         <FlatList
           data={occupations}
@@ -113,14 +121,6 @@ const SelectOccupationScreen = (props) => {
           contentContainerStyle={styles.flatList}
         />
       </View>
-      {chosenOccupation && (
-        <Card style={{ height: 100 }}>
-          <Card.Content>
-            <Title>Chosen Occupation</Title>
-            <Paragraph>{chosenOccupation}</Paragraph>
-          </Card.Content>
-        </Card>
-      )}
       <View style={styles.fabContainer}>
         <FAB
           icon="arrow-forward-outline"
@@ -181,6 +181,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 10,
+    marginBottom: 10,
   },
   errorContainer: {
     flex: 1,
@@ -194,8 +195,8 @@ const styles = StyleSheet.create({
   },
   flatListContainer: {
     flex: 1,
-    marginTop: 20,
-    marginBottom: 20,
+    marginTop: 10,
+    marginBottom: 10,
     borderRadius: 10,
     overflow: "hidden",
   },

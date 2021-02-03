@@ -10,11 +10,13 @@ import {
   Paragraph,
 } from "react-native-paper";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { Buffer } from "buffer";
 
 import OccupationTile from "../components/OccupationTile";
 import CustomHeaderButton from "../components/ui/CustomHeaderButton";
+import { resetCoreTasks } from "../store/actions/task";
 
 const username = "singapore_university";
 const password = "3594cgj";
@@ -26,12 +28,20 @@ const SelectOccupationScreen = (props) => {
   const [chosenOccupation, setChosenOccupation] = useState();
   const [searching, setSearching] = useState();
 
+  const dispatch = useDispatch();
+
+  const resetCoreTasksHandler = (occupation) => {
+    console.log("Resetting core tasks...");
+    dispatch(resetCoreTasks(occupation));
+  };
+
   const renderOccupationTiles = useCallback(
     (itemData) => {
       // console.log(itemData.item);
       return (
         <OccupationTile
           onClick={() => {
+            resetCoreTasksHandler(itemData.item);
             setChosenOccupation(itemData.item);
           }}
         >

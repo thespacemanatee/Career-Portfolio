@@ -6,15 +6,7 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
-import {
-  Card,
-  Title,
-  Text,
-  TextInput,
-  FAB,
-  Button,
-  Paragraph,
-} from "react-native-paper";
+import { Text, FAB } from "react-native-paper";
 import { useSelector, useDispatch } from "react-redux";
 
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -44,7 +36,8 @@ const WorkScheduleScreen = ({ route, navigation }) => {
       // console.log(itemData.item);
       return (
         <TaskTile
-          isChecked={() => {
+          isChecked={coreTasks.find((task) => task === itemData.item)}
+          checked={() => {
             // console.log(typeof itemData.item);
             toggleCoreTaskHandler(itemData.item);
           }}

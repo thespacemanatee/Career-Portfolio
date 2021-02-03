@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -12,6 +12,11 @@ import Colors from "../constants/Colors";
 
 const TaskTile = (props) => {
   const [checked, setChecked] = useState(false);
+  const { isChecked } = props;
+
+  useEffect(() => {
+    setChecked(isChecked);
+  }, [isChecked]);
 
   let TouchableCustom = TouchableOpacity;
   if (Platform.OS === "android" && Platform.Version >= 21) {
@@ -33,7 +38,7 @@ const TaskTile = (props) => {
           status={checked ? "checked" : "unchecked"}
           onPress={() => {
             setChecked(!checked);
-            props.isChecked();
+            props.checked();
           }}
         />
       </View>
@@ -49,7 +54,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "flex-start",
-    backgroundColor: "teal",
+    backgroundColor: Colors.tileBackground,
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 30,

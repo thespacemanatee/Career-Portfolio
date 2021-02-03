@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "flex-start",
     height: 50,
-    backgroundColor: Colors.accent,
+    backgroundColor: Colors.tileBackground,
     padding: 10,
     borderColor: "#ccc",
     borderWidth: 0.5,

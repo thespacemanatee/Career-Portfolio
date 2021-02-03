@@ -27,8 +27,8 @@ import * as data from "../data/career_data.json";
 const dataArray = Object.values(data);
 
 const WorkScheduleScreen = ({ route, navigation }) => {
+  const coreTasks = useSelector((state) => state.tasks.coreTasks);
   const [tasks, setTasks] = useState([]);
-  const [coreTasks, setCoreTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(undefined);
 
@@ -57,7 +57,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
   );
 
   const getNewArray = useCallback(() => {
-    console.log("useCallback");
+    // console.log("useCallback");
     const tempArray = dataArray.filter(
       (occupation) => occupation["Title"] === route.params.chosenOccupation
     );
@@ -72,7 +72,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
   }, [dataArray]);
 
   useEffect(() => {
-    console.log("useEffect");
+    // console.log("useEffect");
     const result = getNewArray();
 
     // for (let i = 0; i < newArray.length; i++) {
@@ -116,7 +116,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
   } else if (tasks.length === 0) {
     return (
       <View style={styles.centered}>
-        <Text>No products found. Start adding some!</Text>
+        <Text>No tasks found. Start adding some!</Text>
       </View>
     );
   }

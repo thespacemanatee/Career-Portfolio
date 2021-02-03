@@ -7,13 +7,13 @@ const initialState = {
 const tasksReducer = (state = initialState, action) => {
   switch (action.type) {
     case TOGGLE_CORE_TASK:
-      console.log("toggling...");
-      console.log("state.coreTasks: " + state.coreTasks);
+      // console.log("toggling...");
+      // console.log("state.coreTasks: " + state.coreTasks);
 
       const existingIndex = state.coreTasks.findIndex(
         (task) => task === action.coreTask
       );
-      console.log(existingIndex);
+      // console.log(existingIndex);
       if (existingIndex >= 0) {
         const updatedCoreTasks = [...state.coreTasks];
         updatedCoreTasks.splice(existingIndex, 1);

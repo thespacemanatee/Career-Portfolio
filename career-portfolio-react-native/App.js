@@ -14,11 +14,11 @@ import tasksReducer from "./src/store/reducers/task";
 import { RootNavigator } from "./src/navigation/AppNavigator";
 import Colors from "./src/constants/Colors";
 
-// const rootReducer = combineReducers({
-//   tasks: tasksReducer,
-// });
+const rootReducer = combineReducers({
+  tasks: tasksReducer,
+});
 
-// const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 const theme = {
   ...DefaultTheme,
@@ -32,7 +32,7 @@ const theme = {
 
 export default function App() {
   return (
-    // <Provider store={store}>
+    <Provider store={store}>
     <PaperProvider
       theme={theme}
       settings={{
@@ -43,15 +43,6 @@ export default function App() {
         <RootNavigator />
       </NavigationContainer>
     </PaperProvider>
-    // </Provider>
+    </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

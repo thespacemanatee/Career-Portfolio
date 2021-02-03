@@ -15,14 +15,16 @@ import {
   Button,
   Paragraph,
 } from "react-native-paper";
+import { useSelector, useDispatch } from "react-redux";
 
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import TaskTile from "../components/TaskTile";
 import CustomHeaderButton from "../components/ui/CustomHeaderButton";
 import Colors from "../constants/Colors";
+import { toggleCoreTask } from "../store/actions/task";
 
 import * as data from "../data/career_data.json";
-const array = Object.values(data);
+const dataArray = Object.values(data);
 
 const WorkScheduleScreen = ({ route, navigation }) => {
   const [tasks, setTasks] = useState([]);
@@ -30,15 +32,11 @@ const WorkScheduleScreen = ({ route, navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(undefined);
 
-  const addOrRemoveFromCoreTasks = (task) => {
-    console.log("INPUT TASK: " + task);
-    if (coreTasks.indexOf(task) !== -1) {
-      console.log("already inside");
-      setCoreTasks(coreTasks.filter((item) => item !== task));
-    } else {
-      setCoreTasks([...coreTasks, task]);
-    }
-    console.log(coreTasks);
+  const dispatch = useDispatch();
+
+  const toggleCoreTaskHandler = (task) => {
+    console.log("TASK CHECKED: " + task);
+    dispatch(toggleCoreTask(task));
   };
 
   const renderTaskTiles = useCallback(
@@ -47,7 +45,8 @@ const WorkScheduleScreen = ({ route, navigation }) => {
       return (
         <TaskTile
           isChecked={() => {
-            addOrRemoveFromCoreTasks(itemData.item);
+            // console.log(typeof itemData.item);
+            toggleCoreTaskHandler(itemData.item);
           }}
         >
           {itemData.item["Task"]}
@@ -59,7 +58,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
 
   const getNewArray = useCallback(() => {
     console.log("useCallback");
-    const tempArray = array.filter(
+    const tempArray = dataArray.filter(
       (occupation) => occupation["Title"] === route.params.chosenOccupation
     );
 
@@ -70,7 +69,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
       }
       return false;
     }, Object.create(null));
-  }, [array]);
+  }, [dataArray]);
 
   useEffect(() => {
     console.log("useEffect");

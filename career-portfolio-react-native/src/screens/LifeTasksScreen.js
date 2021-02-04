@@ -20,7 +20,7 @@ const LifeTasksScreen = (props) => {
   const bottomSheetOccupationRef = useRef(null);
 
   // variables
-  const snapPoints = useMemo(() => ["10%", "70%"], []);
+  const snapPoints = useMemo(() => ["20%", "70%"], []);
 
   // callbacks
   const handlePresentAdd = useCallback(() => {
@@ -60,25 +60,34 @@ const LifeTasksScreen = (props) => {
     dismiss("A");
   }, [dismiss]);
 
-  const initialLoadBottomSheet = useCallback(() => {
-    if (bottomSheetAddRef.current) {
-      bottomSheetAddRef.current.present();
-    }
-  }, []);
-
   useEffect(() => {
-    initialLoadBottomSheet();
-  }, [initialLoadBottomSheet]);
+    handlePresentAdd();
+  }, [handlePresentAdd]);
 
   // renders
   const renderBottomSheetContent = useCallback(
-    (type, onPress) => {
+    (type) => {
       if (type === "Add") {
-        return <AddTask type={type} onPress={onPress} />;
+        return (
+          <AddTask
+            type={type}
+            onPress={{
+              action: handlePresentAction,
+              occupation: handlePresentOccupation,
+            }}
+          />
+        );
       } else if (type === "Action") {
-        return <AddByAction type={type} onPress={onPress} />;
+        return (
+          <AddByAction type={type} onPress={{ back: handleDismissAction }} />
+        );
       } else if (type === "Occupation") {
-        return <AddByOccupation type={type} onPress={onPress} />;
+        return (
+          <AddByOccupation
+            type={type}
+            onPress={{ back: handleDismissOccupation }}
+          />
+        );
       } else {
         return <Text>Error</Text>;
       }
@@ -128,9 +137,9 @@ const LifeTasksScreen = (props) => {
         name="Add"
         index={1}
         ref={bottomSheetAddRef}
-        snapPoints={["10%", "30%"]}
+        snapPoints={["10%", "20%"]}
         dismissOnPanDown={false}
-        children={renderBottomSheetContent("Add", handlePresentAction)}
+        children={renderBottomSheetContent("Add")}
       />
 
       <BottomSheetModal
@@ -139,7 +148,7 @@ const LifeTasksScreen = (props) => {
         ref={bottomSheetActionRef}
         snapPoints={snapPoints}
         dismissOnPanDown={false}
-        children={renderBottomSheetContent("Action", handlePresentOccupation)}
+        children={renderBottomSheetContent("Action")}
       />
 
       <BottomSheetModal
@@ -148,10 +157,7 @@ const LifeTasksScreen = (props) => {
         index={1}
         snapPoints={snapPoints}
         dismissOnPanDown={false}
-        children={renderBottomSheetContent(
-          "Occupation",
-          handleDismissOccupation
-        )}
+        children={renderBottomSheetContent("Occupation")}
       />
     </View>
   );

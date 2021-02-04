@@ -4,12 +4,34 @@ import { Title, Text, Button } from "react-native-paper";
 
 const AddByOccupation = (props) => {
   return (
-    <View>
-      <Button onPress={props.onPress}>{props.type}</Button>
+    <View style={styles.container}>
+      <View style={styles.title}>
+        <Title>ADD BY OCCUPATION</Title>
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button onPress={props.onPress.back}>BACK</Button>
+        <Button onPress={props.onPress.back}>ADD</Button>
+      </View>
     </View>
   );
 };
 
 export default AddByOccupation;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "space-between",
+  },
+  title: {
+    marginLeft: 20,
+  },
+  buttonContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "flex-end",
+    margin: 20,
+    // backgroundColor: "red",
+  },
+});

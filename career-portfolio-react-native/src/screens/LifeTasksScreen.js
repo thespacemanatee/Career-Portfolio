@@ -3,51 +3,54 @@ import { View, StyleSheet } from "react-native";
 import { BottomSheetModal, useBottomSheetModal } from "@gorhom/bottom-sheet";
 // import ContactListContainer from "../../components/contactListContainer";
 import modalProvider from "./modalProvider";
-import { Title, Text, TextInput, FAB, Button } from "react-native-paper";
+import { Text } from "react-native-paper";
 
 import ScreenTitle from "../components/ui/ScreenTitle";
+import AddTask from "../components/bottom_sheets/AddTask";
+import AddByAction from "../components/bottom_sheets/AddByAction";
+import AddByOccupation from "../components/bottom_sheets/AddByOccupation";
 
 const LifeTasksScreen = (props) => {
   // hooks
   const { dismiss, dismissAll } = useBottomSheetModal();
 
   // refs
-  const bottomSheetModalARef = useRef(null);
-  const bottomSheetModalBRef = useRef(null);
-  const bottomSheetModalCRef = useRef(null);
+  const bottomSheetAddRef = useRef(null);
+  const bottomSheetActionRef = useRef(null);
+  const bottomSheetOccupationRef = useRef(null);
 
   // variables
   const snapPoints = useMemo(() => ["10%", "70%"], []);
 
   // callbacks
-  const handlePresentAPress = useCallback(() => {
-    if (bottomSheetModalARef.current) {
-      bottomSheetModalARef.current.present();
+  const handlePresentAdd = useCallback(() => {
+    if (bottomSheetAddRef.current) {
+      bottomSheetAddRef.current.present();
     }
   }, []);
-  const handleDismissAPress = useCallback(() => {
-    if (bottomSheetModalARef.current) {
-      bottomSheetModalARef.current.dismiss();
+  const handleDismissAdd = useCallback(() => {
+    if (bottomSheetAddRef.current) {
+      bottomSheetAddRef.current.dismiss();
     }
   }, []);
-  const handlePresentBPress = useCallback(() => {
-    if (bottomSheetModalBRef.current) {
-      bottomSheetModalBRef.current.present();
+  const handlePresentAction = useCallback(() => {
+    if (bottomSheetActionRef.current) {
+      bottomSheetActionRef.current.present();
     }
   }, []);
-  const handleDismissBPress = useCallback(() => {
-    if (bottomSheetModalBRef.current) {
-      bottomSheetModalBRef.current.dismiss();
+  const handleDismissAction = useCallback(() => {
+    if (bottomSheetActionRef.current) {
+      bottomSheetActionRef.current.dismiss();
     }
   }, []);
-  const handlePresentCPress = useCallback(() => {
-    if (bottomSheetModalCRef.current) {
-      bottomSheetModalCRef.current.present();
+  const handlePresentOccupation = useCallback(() => {
+    if (bottomSheetOccupationRef.current) {
+      bottomSheetOccupationRef.current.present();
     }
   }, []);
-  const handleDismissCPress = useCallback(() => {
-    if (bottomSheetModalCRef.current) {
-      bottomSheetModalCRef.current.dismiss();
+  const handleDismissOccupation = useCallback(() => {
+    if (bottomSheetOccupationRef.current) {
+      bottomSheetOccupationRef.current.dismiss();
     }
   }, []);
   const handleDismissAllPress = useCallback(() => {
@@ -58,8 +61,8 @@ const LifeTasksScreen = (props) => {
   }, [dismiss]);
 
   const initialLoadBottomSheet = useCallback(() => {
-    if (bottomSheetModalARef.current) {
-      bottomSheetModalARef.current.present();
+    if (bottomSheetAddRef.current) {
+      bottomSheetAddRef.current.present();
     }
   }, []);
 
@@ -69,23 +72,32 @@ const LifeTasksScreen = (props) => {
 
   // renders
   const renderBottomSheetContent = useCallback(
-    (title, onPress) => (
-      <View style={styles.titleContainer}>
-        <Title style={styles.title}>{title}</Title>
-        <Button onPress={onPress}>Click Me</Button>
-      </View>
+    (type, onPress) => {
+      if (type === "Add") {
+        return <AddTask type={type} onPress={onPress} />;
+      } else if (type === "Action") {
+        return <AddByAction type={type} onPress={onPress} />;
+      } else if (type === "Occupation") {
+        return <AddByOccupation type={type} onPress={onPress} />;
+      } else {
+        return <Text>Error</Text>;
+      }
+    },
 
-      //   <ContactListContainer
-      //     title={title}
-      //     type="FlatList"
-      //     onItemPress={onPress}
-      //   />
-    ),
+    //   <ContactListContainer
+    //     title={title}
+    //     type="FlatList"
+    //     onItemPress={onPress}
+    //   />
     []
   );
   return (
     <View style={styles.container}>
-      <Button style={styles.buttonContainer} onPress={handlePresentAPress}>
+      <ScreenTitle>
+        What other tasks have you done in past jobs, or outside work?
+      </ScreenTitle>
+
+      {/* <Button style={styles.buttonContainer} onPress={handlePresentAPress}>
         Present Modal A
       </Button>
       <Button style={styles.buttonContainer} onPress={handleDismissAPress}>
@@ -110,37 +122,35 @@ const LifeTasksScreen = (props) => {
 
       <Button style={styles.buttonContainer} onPress={handleDismissByHookPress}>
         Dismiss A By Hook
-      </Button>
+      </Button> */}
 
       <BottomSheetModal
-        name="A"
-        ref={bottomSheetModalARef}
-        snapPoints={snapPoints}
-        dismissOnPanDown={false}
-        children={renderBottomSheetContent("Add Task", handlePresentBPress)}
-      />
-
-      <BottomSheetModal
-        name="B"
+        name="Add"
         index={1}
-        ref={bottomSheetModalBRef}
-        snapPoints={snapPoints}
+        ref={bottomSheetAddRef}
+        snapPoints={["10%", "30%"]}
         dismissOnPanDown={false}
-        children={renderBottomSheetContent(
-          "Add By Action",
-          handlePresentCPress
-        )}
+        children={renderBottomSheetContent("Add", handlePresentAction)}
       />
 
       <BottomSheetModal
-        name="C"
-        ref={bottomSheetModalCRef}
+        name="Action"
+        index={1}
+        ref={bottomSheetActionRef}
+        snapPoints={snapPoints}
+        dismissOnPanDown={false}
+        children={renderBottomSheetContent("Action", handlePresentOccupation)}
+      />
+
+      <BottomSheetModal
+        name="Occupation"
+        ref={bottomSheetOccupationRef}
         index={1}
         snapPoints={snapPoints}
         dismissOnPanDown={false}
         children={renderBottomSheetContent(
-          "Add By Occupation",
-          handleDismissCPress
+          "Occupation",
+          handleDismissOccupation
         )}
       />
     </View>

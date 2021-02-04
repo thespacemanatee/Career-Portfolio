@@ -1,10 +1,11 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import WelcomeScreen from "../screens/WelcomeScreen";
 import SelectOccupationScreen from "../screens/SelectOccupationScreen";
 import WorkScheduleScreen from "../screens/WorkScheduleScreen";
+import LifeTasksScreen from "../screens/LifeTasksScreen";
 import Colors from "../constants/Colors";
 import { screenOptions as selectOccupationsScreenOptions } from "../screens/SelectOccupationScreen";
 import { screenOptions as workScheduleScreenOptions } from "../screens/WorkScheduleScreen";
@@ -57,8 +58,11 @@ export const RootNavigator = () => {
         component={WorkScheduleScreen}
         options={workScheduleScreenOptions}
       />
+      <Stack.Screen
+        name="LifeTasks"
+        component={LifeTasksScreen}
+        // options={}
+      />
     </Stack.Navigator>
   );
 };
-
-const styles = StyleSheet.create({});

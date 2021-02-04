@@ -16,6 +16,7 @@ import { Buffer } from "buffer";
 
 import OccupationTile from "../components/OccupationTile";
 import CustomHeaderButton from "../components/ui/CustomHeaderButton";
+import ScreenTitle from "../components/ui/ScreenTitle";
 import { resetCoreTasks } from "../store/actions/task";
 
 const username = "singapore_university";
@@ -86,9 +87,7 @@ const SelectOccupationScreen = (props) => {
 
   return (
     <View style={styles.screen}>
-      <View style={styles.textContainer}>
-        <Text style={styles.titleText}>What is your occupation?</Text>
-      </View>
+      <ScreenTitle>What is your occupation?</ScreenTitle>
       <TextInput
         label="Please enter your occupation"
         mode="outlined"
@@ -179,15 +178,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     margin: 30,
-  },
-  textContainer: {
-    marginLeft: 40,
-    marginRight: 40,
-    height: 40,
-  },
-  titleText: {
-    fontSize: 20,
-    textAlign: "center",
   },
   buttonContainer: {
     marginTop: 10,

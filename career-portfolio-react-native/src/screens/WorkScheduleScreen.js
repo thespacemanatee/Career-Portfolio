@@ -12,6 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import TaskTile from "../components/TaskTile";
 import CustomHeaderButton from "../components/ui/CustomHeaderButton";
+import ScreenTitle from "../components/ui/ScreenTitle";
 import Colors from "../constants/Colors";
 import { toggleCoreTask } from "../store/actions/task";
 
@@ -116,11 +117,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <View style={styles.textContainer}>
-        <Text style={styles.titleText}>
-          What does your work schedule look like?
-        </Text>
-      </View>
+      <ScreenTitle>What does your work schedule look like?</ScreenTitle>
 
       <View style={styles.flatListContainer}>
         <FlatList
@@ -135,6 +132,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
           icon="arrow-forward-outline"
           onPress={() => {
             console.log(coreTasks);
+            navigation.push("LifeTasks");
           }}
         />
       </View>
@@ -160,15 +158,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     margin: 30,
-  },
-  textContainer: {
-    marginLeft: 40,
-    marginRight: 40,
-    height: 50,
-  },
-  titleText: {
-    fontSize: 20,
-    textAlign: "center",
   },
   flatListContainer: {
     flex: 1,

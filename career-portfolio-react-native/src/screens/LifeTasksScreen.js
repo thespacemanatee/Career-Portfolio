@@ -106,33 +106,6 @@ const LifeTasksScreen = (props) => {
         What other tasks have you done in past jobs, or outside work?
       </ScreenTitle>
 
-      {/* <Button style={styles.buttonContainer} onPress={handlePresentAPress}>
-        Present Modal A
-      </Button>
-      <Button style={styles.buttonContainer} onPress={handleDismissAPress}>
-        Dismiss Modal A
-      </Button>
-      <Button style={styles.buttonContainer} onPress={handlePresentBPress}>
-        Present Modal B
-      </Button>
-      <Button style={styles.buttonContainer} onPress={handleDismissBPress}>
-        Dismiss Modal B
-      </Button>
-      <Button style={styles.buttonContainer} onPress={handlePresentCPress}>
-        Present Modal C
-      </Button>
-      <Button style={styles.buttonContainer} onPress={handleDismissCPress}>
-        Dismiss Modal C
-      </Button>
-
-      <Button style={styles.buttonContainer} onPress={handleDismissAllPress}>
-        Dismiss All Modal
-      </Button>
-
-      <Button style={styles.buttonContainer} onPress={handleDismissByHookPress}>
-        Dismiss A By Hook
-      </Button> */}
-
       <BottomSheetModal
         name="Add"
         index={1}

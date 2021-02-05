@@ -1,8 +1,12 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import { Title, Text, Button } from "react-native-paper";
 
 const AddByAction = (props) => {
+  const actionVerbs = useSelector((state) => state.verbs.verbs);
+  console.log(actionVerbs);
+
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -10,7 +14,13 @@ const AddByAction = (props) => {
       </View>
       <View style={styles.buttonContainer}>
         <Button onPress={props.onPress.back}>BACK</Button>
-        <Button onPress={props.onPress.back}>ADD</Button>
+        <Button
+          onPress={() => {
+            props.onPress.back();
+          }}
+        >
+          ADD
+        </Button>
       </View>
     </View>
   );

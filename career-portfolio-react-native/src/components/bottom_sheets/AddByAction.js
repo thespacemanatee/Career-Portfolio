@@ -78,14 +78,14 @@ const AddByAction = (props) => {
             }
           >
             {actionVerbs.map((verb) => (
-              <Picker.Item label={verb} value={verb} keyExtractor={(i) => i} />
+              <Picker.Item key={Math.random()} label={verb} value={verb} />
             ))}
           </Picker>
         </BottomSheetView>
       </BottomSheetView>
       <BottomSheetFlatList
         data={resultTasks}
-        keyExtractor={(i) => i["Task ID"]}
+        keyExtractor={(i) => i["Task ID"].toString()}
         renderItem={renderTaskTiles}
         contentContainerStyle={styles.contentContainer}
       />

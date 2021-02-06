@@ -14,13 +14,13 @@ import TaskTile from "../components/TaskTile";
 import CustomHeaderButton from "../components/ui/CustomHeaderButton";
 import ScreenTitle from "../components/ui/ScreenTitle";
 import Colors from "../constants/Colors";
-import { toggleCoreTask } from "../store/actions/task";
+import * as taskActions from "../store/actions/task";
 
 import * as data from "../data/career_data.json";
 const dataArray = Object.values(data);
 
 const WorkScheduleScreen = ({ route, navigation }) => {
-  const coreTasks = useSelector((state) => state.tasks.coreTasks);
+  const storeTasks = useSelector((state) => state.tasks.tasks);
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(undefined);
@@ -29,17 +29,19 @@ const WorkScheduleScreen = ({ route, navigation }) => {
 
   const toggleCoreTaskHandler = (task) => {
     console.log("TASK CHECKED: " + task);
-    dispatch(toggleCoreTask(task));
+    dispatch(taskActions.toggleCoreTask(task));
   };
 
   const renderTaskTiles = useCallback(
     (itemData) => {
-      // console.log(itemData.item);
       return (
         <TaskTile
-          isChecked={coreTasks.find((task) => task === itemData.item)}
+          isChecked={storeTasks.find((task) => {
+            if (task["Task ID"] === itemData.item["Task ID"]) {
+              return task.coreTask;
+            }
+          })}
           checked={() => {
-            // console.log(typeof itemData.item);
             toggleCoreTaskHandler(itemData.item);
           }}
         >
@@ -47,11 +49,11 @@ const WorkScheduleScreen = ({ route, navigation }) => {
         </TaskTile>
       );
     },
-    [tasks]
+    [storeTasks]
   );
 
-  const getNewArray = useCallback(() => {
-    // console.log("useCallback");
+  const getTasks = useCallback(() => {
+    console.log("useCallback");
     const tempArray = dataArray.filter(
       (occupation) => occupation["Title"] === route.params.chosenOccupation
     );
@@ -66,16 +68,22 @@ const WorkScheduleScreen = ({ route, navigation }) => {
   }, [dataArray]);
 
   useEffect(() => {
-    // console.log("useEffect");
-    const result = getNewArray();
+    console.log("useEffect");
+    let result;
 
-    // for (let i = 0; i < newArray.length; i++) {
-    //   console.log(newArray[i]["Title"]);
-    // }
+    if (!storeTasks.length) {
+      result = getTasks();
+      result.forEach(function (task) {
+        task.coreTask = false;
+      });
 
+      dispatch(taskActions.addAllTasks(result));
+    } else {
+      result = storeTasks;
+    }
     setTasks(result);
     setIsLoading(false);
-  }, [setTasks, setIsLoading, getNewArray]);
+  }, [setTasks, setIsLoading, getTasks]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -131,7 +139,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
         <FAB
           icon="arrow-forward-outline"
           onPress={() => {
-            console.log(coreTasks);
+            console.log(storeTasks);
             navigation.push("LifeTasks");
           }}
         />

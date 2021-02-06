@@ -1,5 +1,5 @@
-import React from "react";
-import { StyleSheet } from "react-native";
+import React, { useCallback, useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import WelcomeScreen from "../screens/WelcomeScreen";
@@ -7,6 +7,7 @@ import SelectOccupationScreen from "../screens/SelectOccupationScreen";
 import WorkScheduleScreen from "../screens/WorkScheduleScreen";
 import LifeTasksScreen from "../screens/LifeTasksScreen";
 import Colors from "../constants/Colors";
+import { storeVerbs } from "../store/actions/verbs";
 import { screenOptions as selectOccupationsScreenOptions } from "../screens/SelectOccupationScreen";
 import { screenOptions as workScheduleScreenOptions } from "../screens/WorkScheduleScreen";
 
@@ -34,7 +35,13 @@ const defaultNavOptions = {
 
 const Stack = createStackNavigator();
 
-export const RootNavigator = () => {
+export const RootNavigator = (props) => {
+  const actionVerbs = props.data.actionVerbs;
+  console.log(actionVerbs);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(storeVerbs(actionVerbs));
+  }, [actionVerbs]);
   return (
     <Stack.Navigator
       initialRouteName="Welcome"

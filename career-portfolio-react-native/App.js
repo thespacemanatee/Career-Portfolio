@@ -15,6 +15,9 @@ import verbsReducer from "./src/store/reducers/verbs";
 import { RootNavigator } from "./src/navigation/AppNavigator";
 import Colors from "./src/constants/Colors";
 
+import * as data from "./src/data/career_data.json";
+const dataArray = Object.values(data);
+
 const rootReducer = combineReducers({
   tasks: tasksReducer,
   verbs: verbsReducer,
@@ -32,7 +35,43 @@ const theme = {
   },
 };
 
+const getActionVerbsArray = () => {
+  return new Promise((resolve, reject) => {
+    const tempArray = [];
+    dataArray.forEach((element) => {
+      const { Task } = element;
+      const actionVerb = (Task + "").split(/[ ,]+/, 1).toString();
+      if (
+        !tempArray.find((v) =>
+          _.isEqual((v + "").split(/[ ,]+/, 1).toString(), actionVerb)
+        )
+      )
+        tempArray.push(actionVerb);
+    });
+    tempArray.sort();
+    resolve(tempArray);
+  });
+};
+
 export default function App() {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [actionVerbs, setActionVerbs] = useState([]);
+
+  if (!isLoaded) {
+    return (
+      <AppLoading
+        startAsync={async () => {
+          const tempArray = await getActionVerbsArray();
+          setActionVerbs(tempArray);
+        }}
+        onFinish={() => {
+          setIsLoaded(true);
+        }}
+        onError={(err) => console.log(err)}
+      />
+    );
+  }
+
   return (
     <Provider store={store}>
       <PaperProvider
@@ -42,7 +81,7 @@ export default function App() {
         }}
       >
         <NavigationContainer>
-          <RootNavigator />
+          <RootNavigator data={{ actionVerbs: actionVerbs }} />
         </NavigationContainer>
       </PaperProvider>
     </Provider>

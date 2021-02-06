@@ -56,7 +56,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
       (occupation) => occupation["Title"] === route.params.chosenOccupation
     );
 
-    return tempArray.filter((item) => {
+    return tempArray.filter(function (item) {
       if (!this[item["Task"]]) {
         this[item["Task"]] = true;
         return true;

@@ -37,7 +37,7 @@ const Stack = createStackNavigator();
 
 export const RootNavigator = (props) => {
   const actionVerbs = props.data.actionVerbs;
-  console.log(actionVerbs);
+  // console.log(actionVerbs);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(storeVerbs(actionVerbs));

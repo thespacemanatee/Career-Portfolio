@@ -1,17 +1,39 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, FlatList } from "react-native";
 import { Picker, PickerIOS } from "@react-native-picker/picker";
 import { useSelector, useDispatch } from "react-redux";
 import { Title, Button } from "react-native-paper";
+import { BottomSheetView, BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import _ from "lodash";
+
+import TaskTile from "../../components/TaskTile";
 
 import * as data from "../../data/career_data.json";
 const dataArray = Object.values(data);
 
 const AddByAction = (props) => {
-  const [selectedValue, setSelectedValue] = useState("java");
+  const [selectedValue, setSelectedValue] = useState("Accept");
+  const [resultTasks, setResultTasks] = useState([]);
   const actionVerbs = useSelector((state) => state.verbs.verbs);
   // console.log(actionVerbs);
+
+  const renderTaskTiles = useCallback(
+    (itemData) => {
+      // console.log(itemData.item);
+      return (
+        <TaskTile
+          // isChecked={coreTasks.find((task) => task === itemData.item)}
+          checked={() => {
+            // console.log(typeof itemData.item);
+            toggleCoreTaskHandler(itemData.item);
+          }}
+        >
+          {itemData.item["Task"]}
+        </TaskTile>
+      );
+    },
+    [resultTasks]
+  );
 
   const getNewArray = useCallback(() => {
     // console.log("useCallback");
@@ -19,27 +41,32 @@ const AddByAction = (props) => {
     dataArray.forEach((element) => {
       const { Task } = element;
       const actionVerb = (Task + "").split(/[ ,]+/, 1).toString();
-      if (actionVerb === selectedValue) {
+
+      if (
+        !tempArray.find((v) => _.isEqual(v["Task"], Task)) &&
+        actionVerb === selectedValue
+      ) {
         tempArray.push(element);
       }
     });
     console.log(tempArray);
+    setResultTasks(tempArray);
   }, [dataArray, selectedValue]);
 
   useEffect(() => {
     // console.log("useEffect");
-    const result = getNewArray();
+    getNewArray();
 
     // for (let i = 0; i < newArray.length; i++) {
     //   console.log(newArray[i]["Title"]);
     // }
-  }, [getNewArray]);
+  }, [getNewArray, selectedValue]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.title}>
+    <BottomSheetView style={styles.container}>
+      <BottomSheetView style={styles.title}>
         <Title>ADD BY ACTION</Title>
-        <View style={styles.pickerContainer}>
+        <BottomSheetView style={styles.pickerContainer}>
           <Text>Choose an action: </Text>
           <Picker
             itemStyle={{ height: 100 }}
@@ -51,12 +78,18 @@ const AddByAction = (props) => {
             }
           >
             {actionVerbs.map((verb) => (
-              <Picker.Item label={verb} value={verb} />
+              <Picker.Item label={verb} value={verb} keyExtractor={(i) => i} />
             ))}
           </Picker>
-        </View>
-      </View>
-      <View style={styles.buttonContainer}>
+        </BottomSheetView>
+      </BottomSheetView>
+      <BottomSheetFlatList
+        data={resultTasks}
+        keyExtractor={(i) => i["Task ID"]}
+        renderItem={renderTaskTiles}
+        contentContainerStyle={styles.contentContainer}
+      />
+      <BottomSheetView style={styles.buttonContainer}>
         <Button onPress={props.onPress.back}>BACK</Button>
         <Button
           onPress={() => {
@@ -65,8 +98,8 @@ const AddByAction = (props) => {
         >
           ADD
         </Button>
-      </View>
-    </View>
+      </BottomSheetView>
+    </BottomSheetView>
   );
 };
 
@@ -86,10 +119,15 @@ const styles = StyleSheet.create({
   title: {
     marginLeft: 20,
   },
+  contentContainer: {
+    margin: 20,
+    borderRadius: 6,
+  },
   buttonContainer: {
-    flex: 1,
+    // flex: 1,
     flexDirection: "row",
     justifyContent: "space-around",
+    height: 40,
     alignItems: "flex-end",
     margin: 20,
     // backgroundColor: "red",

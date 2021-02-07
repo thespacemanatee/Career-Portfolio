@@ -14,6 +14,7 @@ const dataArray = Object.values(data);
 
 const AddByOccupation = (props) => {
   const storeLifeTasks = useSelector((state) => state.tasks.lifeTasks);
+  const occupations = useSelector((state) => state.occupations.occupations);
   const [selectedValue, setSelectedValue] = useState("Accept");
   const [resultTasks, setResultTasks] = useState([]);
 
@@ -75,9 +76,13 @@ const AddByOccupation = (props) => {
               setSelectedValue(itemValue)
             }
           >
-            {/* {actionVerbs.map((verb) => (
-              <Picker.Item key={Math.random()} label={verb} value={verb} />
-            ))} */}
+            {occupations.map((occupation) => (
+              <Picker.Item
+                key={Math.random()}
+                label={occupation}
+                value={occupation}
+              />
+            ))}
           </Picker>
         </BottomSheetView>
       </BottomSheetView>
@@ -109,13 +114,24 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
   },
+  pickerContainer: {
+    // flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
   title: {
     marginLeft: 20,
   },
+  contentContainer: {
+    margin: 20,
+    borderRadius: 6,
+  },
   buttonContainer: {
-    flex: 1,
+    // flex: 1,
     flexDirection: "row",
     justifyContent: "space-around",
+    height: 40,
     alignItems: "flex-end",
     margin: 20,
     // backgroundColor: "red",

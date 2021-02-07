@@ -8,6 +8,7 @@ import WorkScheduleScreen from "../screens/WorkScheduleScreen";
 import LifeTasksScreen from "../screens/LifeTasksScreen";
 import Colors from "../constants/Colors";
 import { storeVerbs } from "../store/actions/verbs";
+import { storeOccupations } from "../store/actions/occupations";
 import { screenOptions as selectOccupationsScreenOptions } from "../screens/SelectOccupationScreen";
 import { screenOptions as workScheduleScreenOptions } from "../screens/WorkScheduleScreen";
 
@@ -37,10 +38,11 @@ const Stack = createStackNavigator();
 
 export const RootNavigator = (props) => {
   const actionVerbs = props.data.actionVerbs;
-  // console.log(actionVerbs);
+  const occupations = props.data.occupations;
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(storeVerbs(actionVerbs));
+    dispatch(storeOccupations(occupations));
   }, [actionVerbs]);
   return (
     <Stack.Navigator

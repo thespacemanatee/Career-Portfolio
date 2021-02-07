@@ -12,6 +12,7 @@ import _ from "lodash";
 
 import tasksReducer from "./src/store/reducers/task";
 import verbsReducer from "./src/store/reducers/verbs";
+import occupationsReducer from "./src/store/reducers/occupations";
 import { RootNavigator } from "./src/navigation/AppNavigator";
 import Colors from "./src/constants/Colors";
 
@@ -21,6 +22,7 @@ const dataArray = Object.values(data);
 const rootReducer = combineReducers({
   tasks: tasksReducer,
   verbs: verbsReducer,
+  occupations: occupationsReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
@@ -53,16 +55,32 @@ const getActionVerbsArray = () => {
   });
 };
 
+const getOccupationsArray = () => {
+  return new Promise((resolve, reject) => {
+    const tempArray = [];
+    dataArray.forEach((element) => {
+      const { Title } = element;
+      // const actionVerb = (Task + "").split(/[ ,]+/, 1).toString();
+      if (!tempArray.find((v) => _.isEqual(v, Title))) tempArray.push(Title);
+    });
+    tempArray.sort();
+    resolve(tempArray);
+  });
+};
+
 export default function App() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [actionVerbs, setActionVerbs] = useState([]);
+  const [occupations, setOccupations] = useState([]);
 
   if (!isLoaded) {
     return (
       <AppLoading
         startAsync={async () => {
-          const tempArray = await getActionVerbsArray();
-          setActionVerbs(tempArray);
+          const verbsArray = await getActionVerbsArray();
+          const occupationsArray = await getOccupationsArray();
+          setActionVerbs(verbsArray);
+          setOccupations(occupationsArray);
         }}
         onFinish={() => {
           setIsLoaded(true);
@@ -81,7 +99,9 @@ export default function App() {
         }}
       >
         <NavigationContainer>
-          <RootNavigator data={{ actionVerbs: actionVerbs }} />
+          <RootNavigator
+            data={{ actionVerbs: actionVerbs, occupations: occupations }}
+          />
         </NavigationContainer>
       </PaperProvider>
     </Provider>

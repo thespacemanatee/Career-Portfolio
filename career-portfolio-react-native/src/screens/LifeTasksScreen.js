@@ -1,16 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, FlatList } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 import { BottomSheetModal, useBottomSheetModal } from "@gorhom/bottom-sheet";
-// import ContactListContainer from "../../components/contactListContainer";
 import modalProvider from "./modalProvider";
 import { Text } from "react-native-paper";
 
+import TaskTile from "../components/TaskTile";
 import ScreenTitle from "../components/ui/ScreenTitle";
-import AddTask from "../components/bottom_sheets/AddTask";
-import AddByAction from "../components/bottom_sheets/AddByAction";
-import AddByOccupation from "../components/bottom_sheets/AddByOccupation";
+import AddTask from "../screens/bottom_sheets/AddTask";
+import AddByAction from "../screens/bottom_sheets/AddByAction";
+import AddByOccupation from "../screens/bottom_sheets/AddByOccupation";
 
 const LifeTasksScreen = (props) => {
+  const storeTasks = useSelector((state) => state.tasks.lifeTasks);
   // hooks
   const { dismiss, dismissAll } = useBottomSheetModal();
 
@@ -100,11 +102,40 @@ const LifeTasksScreen = (props) => {
     //   />
     []
   );
+
+  const renderTaskTiles = useCallback(
+    (itemData) => {
+      return (
+        <TaskTile
+          // isChecked={storeTasks.find((task) => {
+          //   if (task["Task ID"] === itemData.item["Task ID"]) {
+          //     return task.coreTask;
+          //   }
+          // })}
+          checked={() => {
+            // toggleCoreTaskHandler(itemData.item);
+          }}
+        >
+          {itemData.item["Task"]}
+        </TaskTile>
+      );
+    },
+    [storeTasks]
+  );
+
   return (
     <View style={styles.container}>
       <ScreenTitle>
         What other tasks have you done in past jobs, or outside work?
       </ScreenTitle>
+      <View style={styles.flatListContainer}>
+        <FlatList
+          data={storeTasks}
+          renderItem={renderTaskTiles}
+          contentContainerStyle={styles.flatList}
+          keyExtractor={(item) => item["Task ID"].toString()}
+        />
+      </View>
 
       <BottomSheetModal
         name="Add"
@@ -142,19 +173,15 @@ const styles = StyleSheet.create({
     padding: 24,
     backgroundColor: "#dfdfdf",
   },
-  buttonContainer: {
-    marginBottom: 6,
+  flatListContainer: {
+    flex: 0.75,
+    marginTop: 20,
+    borderRadius: 10,
+    overflow: "hidden",
   },
-  contentContainer: {
-    flex: 1,
-    alignItems: "flex-start",
-    marginLeft: 20,
-  },
-  titleContainer: {
-    marginLeft: 20,
-  },
-  title: {
-    fontSize: 30,
+  flatList: {
+    borderRadius: 10,
+    overflow: "hidden",
   },
 });
 

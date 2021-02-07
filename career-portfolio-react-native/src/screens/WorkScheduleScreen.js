@@ -29,6 +29,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
 
   const toggleCoreTaskHandler = (task) => {
     console.log("TASK CHECKED: " + task);
+    task.lifeTask = false;
     dispatch(taskActions.toggleCoreTask(task));
   };
 
@@ -139,7 +140,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
         <FAB
           icon="arrow-forward-outline"
           onPress={() => {
-            console.log(storeTasks);
+            // console.log(storeTasks);
             navigation.push("LifeTasks");
           }}
         />

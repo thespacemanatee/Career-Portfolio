@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import { Picker, PickerIOS } from "@react-native-picker/picker";
 import { useSelector, useDispatch } from "react-redux";
 import { Title, Button } from "react-native-paper";
@@ -7,15 +7,15 @@ import { BottomSheetView, BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import _ from "lodash";
 
 import TaskTile from "../../components/TaskTile";
+import * as taskActions from "../../store/actions/task";
 
 import * as data from "../../data/career_data.json";
 const dataArray = Object.values(data);
 
-const AddByAction = (props) => {
+const AddByOccupation = (props) => {
+  const storeLifeTasks = useSelector((state) => state.tasks.lifeTasks);
   const [selectedValue, setSelectedValue] = useState("Accept");
   const [resultTasks, setResultTasks] = useState([]);
-  const actionVerbs = useSelector((state) => state.verbs.verbs);
-  // console.log(actionVerbs);
 
   const renderTaskTiles = useCallback(
     (itemData) => {
@@ -25,7 +25,7 @@ const AddByAction = (props) => {
           // isChecked={coreTasks.find((task) => task === itemData.item)}
           checked={() => {
             // console.log(typeof itemData.item);
-            toggleCoreTaskHandler(itemData.item);
+            // toggleLifeTaskHandler(itemData.item);
           }}
         >
           {itemData.item["Task"]}
@@ -40,46 +40,44 @@ const AddByAction = (props) => {
     const tempArray = [];
     dataArray.forEach((element) => {
       const { Task } = element;
-      const actionVerb = (Task + "").split(/[ ,]+/, 1).toString();
+      const taskId = element["Task ID"];
+      // const actionVerb = (Task + "").split(/[ ,]+/, 1).toString();
 
-      if (
-        !tempArray.find((v) => _.isEqual(v["Task"], Task)) &&
-        actionVerb === selectedValue
-      ) {
-        tempArray.push(element);
-      }
+      // if (
+      //   !tempArray.find((v) => _.isEqual(v["Task"], Task)) &&
+      //   actionVerb === selectedValue &&
+      //   !storeLifeTasks.find((u) => _.isEqual(u["Task ID"], taskId))
+      // ) {
+      //   tempArray.push(element);
+      // }
     });
-    console.log(tempArray);
+    // console.log(tempArray);
     setResultTasks(tempArray);
   }, [dataArray, selectedValue]);
 
   useEffect(() => {
     // console.log("useEffect");
     getNewArray();
-
-    // for (let i = 0; i < newArray.length; i++) {
-    //   console.log(newArray[i]["Title"]);
-    // }
   }, [getNewArray, selectedValue]);
 
   return (
     <BottomSheetView style={styles.container}>
       <BottomSheetView style={styles.title}>
-        <Title>ADD BY ACTION</Title>
+        <Title>ADD BY OCCUPATION</Title>
         <BottomSheetView style={styles.pickerContainer}>
-          <Text>Choose an action: </Text>
+          <Text>Choose an occupation: </Text>
           <Picker
             itemStyle={{ height: 100 }}
             selectedValue={selectedValue}
-            prompt="Choose an action"
+            prompt="Choose an occupation"
             style={{ height: 50, width: 200 }}
             onValueChange={(itemValue, itemIndex) =>
               setSelectedValue(itemValue)
             }
           >
-            {actionVerbs.map((verb) => (
+            {/* {actionVerbs.map((verb) => (
               <Picker.Item key={Math.random()} label={verb} value={verb} />
-            ))}
+            ))} */}
           </Picker>
         </BottomSheetView>
       </BottomSheetView>
@@ -91,43 +89,33 @@ const AddByAction = (props) => {
       />
       <BottomSheetView style={styles.buttonContainer}>
         <Button onPress={props.onPress.back}>BACK</Button>
-        <Button
+        {/* <Button
           onPress={() => {
+            postRequest();
             props.onPress.back();
           }}
         >
           ADD
-        </Button>
+        </Button> */}
       </BottomSheetView>
     </BottomSheetView>
   );
 };
 
-export default AddByAction;
+export default AddByOccupation;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "space-between",
   },
-  pickerContainer: {
-    // flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-  },
   title: {
     marginLeft: 20,
   },
-  contentContainer: {
-    margin: 20,
-    borderRadius: 6,
-  },
   buttonContainer: {
-    // flex: 1,
+    flex: 1,
     flexDirection: "row",
     justifyContent: "space-around",
-    height: 40,
     alignItems: "flex-end",
     margin: 20,
     // backgroundColor: "red",

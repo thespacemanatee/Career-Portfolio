@@ -18,6 +18,13 @@ const AddByOccupation = (props) => {
   const [selectedValue, setSelectedValue] = useState("Accept");
   const [resultTasks, setResultTasks] = useState([]);
 
+  const dispatch = useDispatch();
+
+  const toggleLifeTaskHandler = (task) => {
+    console.log("TASK CHECKED: " + task);
+    dispatch(taskActions.toggleLifeTask(task));
+  };
+
   const renderTaskTiles = useCallback(
     (itemData) => {
       // console.log(itemData.item);
@@ -26,7 +33,7 @@ const AddByOccupation = (props) => {
           // isChecked={coreTasks.find((task) => task === itemData.item)}
           checked={() => {
             // console.log(typeof itemData.item);
-            // toggleLifeTaskHandler(itemData.item);
+            toggleLifeTaskHandler(itemData.item);
           }}
         >
           {itemData.item["Task"]}
@@ -40,17 +47,16 @@ const AddByOccupation = (props) => {
     // console.log("useCallback");
     const tempArray = [];
     dataArray.forEach((element) => {
+      const { Title } = element;
       const { Task } = element;
       const taskId = element["Task ID"];
-      // const actionVerb = (Task + "").split(/[ ,]+/, 1).toString();
-
-      // if (
-      //   !tempArray.find((v) => _.isEqual(v["Task"], Task)) &&
-      //   actionVerb === selectedValue &&
-      //   !storeLifeTasks.find((u) => _.isEqual(u["Task ID"], taskId))
-      // ) {
-      //   tempArray.push(element);
-      // }
+      if (
+        !tempArray.find((v) => _.isEqual(v["Task"], Task)) &&
+        Title === selectedValue &&
+        !storeLifeTasks.find((u) => _.isEqual(u["Task ID"], taskId))
+      ) {
+        tempArray.push(element);
+      }
     });
     // console.log(tempArray);
     setResultTasks(tempArray);
@@ -94,14 +100,6 @@ const AddByOccupation = (props) => {
       />
       <BottomSheetView style={styles.buttonContainer}>
         <Button onPress={props.onPress.back}>BACK</Button>
-        {/* <Button
-          onPress={() => {
-            postRequest();
-            props.onPress.back();
-          }}
-        >
-          ADD
-        </Button> */}
       </BottomSheetView>
     </BottomSheetView>
   );

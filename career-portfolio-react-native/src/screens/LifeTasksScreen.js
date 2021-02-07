@@ -1,7 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { BottomSheetModal, useBottomSheetModal } from "@gorhom/bottom-sheet";
+import {
+  BottomSheetModal,
+  useBottomSheetModal,
+  BottomSheetBackdrop,
+} from "@gorhom/bottom-sheet";
 import modalProvider from "./modalProvider";
 import { Text } from "react-native-paper";
 
@@ -10,6 +14,7 @@ import ScreenTitle from "../components/ui/ScreenTitle";
 import AddTask from "../screens/bottom_sheets/AddTask";
 import AddByAction from "../screens/bottom_sheets/AddByAction";
 import AddByOccupation from "../screens/bottom_sheets/AddByOccupation";
+import CustomBackdrop from "../components/ui/CustomBackdrop";
 
 const LifeTasksScreen = (props) => {
   const storeTasks = useSelector((state) => state.tasks.lifeTasks);
@@ -144,6 +149,7 @@ const LifeTasksScreen = (props) => {
         snapPoints={["10%", "20%"]}
         dismissOnPanDown={false}
         children={renderBottomSheetContent("Add")}
+        backdropComponent={BottomSheetBackdrop}
       />
 
       <BottomSheetModal
@@ -153,6 +159,7 @@ const LifeTasksScreen = (props) => {
         snapPoints={snapPoints}
         dismissOnPanDown={false}
         children={renderBottomSheetContent("Action")}
+        backdropComponent={BottomSheetBackdrop}
       />
 
       <BottomSheetModal
@@ -162,6 +169,7 @@ const LifeTasksScreen = (props) => {
         snapPoints={snapPoints}
         dismissOnPanDown={false}
         children={renderBottomSheetContent("Occupation")}
+        backdropComponent={BottomSheetBackdrop}
       />
     </View>
   );

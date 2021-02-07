@@ -115,14 +115,6 @@ const AddByAction = (props) => {
       />
       <BottomSheetView style={styles.buttonContainer}>
         <Button onPress={props.onPress.back}>BACK</Button>
-        {/* <Button
-          onPress={() => {
-            postRequest();
-            props.onPress.back();
-          }}
-        >
-          ADD
-        </Button> */}
       </BottomSheetView>
     </BottomSheetView>
   );

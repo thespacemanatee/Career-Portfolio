@@ -48,17 +48,17 @@ const tasksReducer = (state = initialState, action) => {
 
     case TOGGLE_LIFE_TASK:
       const lifeTask = { ...action.lifeTask };
-      lifeTask.lifeTask = true;
+      lifeTask.task_type = "life";
       // console.log(lifeTask);
       // const existingIndex = state.tasks.findIndex((task) => task === lifeTask);
       // console.log(existingIndex);
       if (
-        state.lifeTasks.some((item) => item["Task ID"] === lifeTask["Task ID"])
+        state.lifeTasks.some((item) => item.taskId === lifeTask.taskId)
       ) {
         const updatedLifeTasks = [...state.lifeTasks];
         // updatedLifeTasks.splice(existingIndex, 1);
         const filtered = updatedLifeTasks.filter(
-          (item) => item["Task ID"] !== lifeTask["Task ID"]
+          (item) => item.taskId !== lifeTask.taskId
         );
         console.log("existingIndex >= 0: --------------------");
         console.log(updatedLifeTasks);

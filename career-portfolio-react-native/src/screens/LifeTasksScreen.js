@@ -99,21 +99,12 @@ const LifeTasksScreen = (props) => {
       } else {
         return <Text>Error</Text>;
       }
-    },
-
-    //   <ContactListContainer
-    //     title={title}
-    //     type="FlatList"
-    //     onItemPress={onPress}
-    //   />
-    []
+    }, []
   );
 
   const renderTaskTiles = useCallback(
     (itemData) => {
-      return (
-        <TaskTile checkBoxEnabled={false}>{itemData.item["Task"]}</TaskTile>
-      );
+      return <TaskTile checkBoxEnabled={false}>{itemData.item.task}</TaskTile>;
     },
     [storeTasks]
   );
@@ -130,7 +121,7 @@ const LifeTasksScreen = (props) => {
           data={storeTasks}
           renderItem={renderTaskTiles}
           contentContainerStyle={styles.flatList}
-          keyExtractor={(item) => item["Task ID"].toString()}
+          keyExtractor={(item) => item.taskId.toString()}
         />
       </View>
 

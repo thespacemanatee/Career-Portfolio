@@ -13,7 +13,6 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import DefaultScreen from "../components/ui/DefaultScreen";
 import CustomHeaderButton from "../components/ui/CustomHeaderButton";
 import TaskTile from "../components/TaskTile";
-import ScreenTitle from "../components/ui/ScreenTitle";
 import AddTask from "../screens/bottom_sheets/AddTask";
 import AddByAction from "../screens/bottom_sheets/AddByAction";
 import AddByOccupation from "../screens/bottom_sheets/AddByOccupation";
@@ -113,18 +112,7 @@ const LifeTasksScreen = (props) => {
   const renderTaskTiles = useCallback(
     (itemData) => {
       return (
-        <TaskTile
-          // isChecked={storeTasks.find((task) => {
-          //   if (task["Task ID"] === itemData.item["Task ID"]) {
-          //     return task.coreTask;
-          //   }
-          // })}
-          checked={() => {
-            // toggleCoreTaskHandler(itemData.item);
-          }}
-        >
-          {itemData.item["Task"]}
-        </TaskTile>
+        <TaskTile checkBoxEnabled={false}>{itemData.item["Task"]}</TaskTile>
       );
     },
     [storeTasks]

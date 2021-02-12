@@ -6,7 +6,7 @@ import {
   TouchableNativeFeedback,
   TouchableOpacity,
 } from "react-native";
-import { Text, FAB, Checkbox } from "react-native-paper";
+import { Text, Checkbox } from "react-native-paper";
 
 import Colors from "../constants/Colors";
 
@@ -36,19 +36,25 @@ const TaskTile = (props) => {
             {props.children}
           </Text>
         </View>
-        <Checkbox
-          status={checked ? "checked" : "unchecked"}
-          onPress={() => {
-            setChecked(!checked);
-            props.checked();
-          }}
-        />
+        {props.checkBoxEnabled && (
+          <Checkbox
+            status={checked ? "checked" : "unchecked"}
+            onPress={() => {
+              setChecked(!checked);
+              props.checked();
+            }}
+          />
+        )}
       </View>
     </TouchableCustom>
   );
 };
 
 export default TaskTile;
+
+TaskTile.defaultProps = {
+  checkBoxEnabled: true,
+};
 
 const styles = StyleSheet.create({
   container: {

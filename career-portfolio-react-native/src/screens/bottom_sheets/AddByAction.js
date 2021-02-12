@@ -67,11 +67,12 @@ const AddByAction = (props) => {
     dataArray.forEach((element) => {
       const { Task } = element;
       const taskId = element["Task ID"];
-      const actionVerb = (Task + "").split(/[ ,]+/, 1).toString();
+      let actionVerb = (Task + "").split(/[ ,]+/);
+      actionVerb = actionVerb.map((verb) => verb.toLowerCase());
 
       if (
         !tempArray.find((v) => _.isEqual(v["Task"], Task)) &&
-        actionVerb === selectedValue &&
+        actionVerb.includes(selectedValue.toLowerCase()) &&
         !storeLifeTasks.find((u) => _.isEqual(u["Task ID"], taskId))
       ) {
         tempArray.push(element);

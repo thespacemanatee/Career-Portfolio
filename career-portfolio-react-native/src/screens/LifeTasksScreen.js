@@ -29,7 +29,7 @@ const LifeTasksScreen = (props) => {
   const bottomSheetOccupationRef = useRef(null);
 
   // variables
-  const snapPoints = useMemo(() => ["1%", "70%"], []);
+  const snapPoints = useMemo(() => ["20%", "70%"], []);
 
   // callbacks
   const handlePresentAdd = useCallback(() => {
@@ -132,6 +132,11 @@ const LifeTasksScreen = (props) => {
 
   return (
     <DefaultScreen title="What other tasks have you done in past jobs, or outside work?">
+      {storeTasks.length === 0 && (
+        <View style={styles.centered}>
+          <Text>No tasks found. Start adding some!</Text>
+        </View>
+      )}
       <View style={styles.flatListContainer}>
         <FlatList
           data={storeTasks}
@@ -175,11 +180,11 @@ const LifeTasksScreen = (props) => {
 };
 
 const styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  //   padding: 24,
-  //   backgroundColor: "#dfdfdf",
-  // },
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   flatListContainer: {
     flex: 1,
     marginTop: 10,

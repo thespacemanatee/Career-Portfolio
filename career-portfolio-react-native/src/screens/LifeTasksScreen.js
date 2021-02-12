@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
-import { View, StyleSheet, FlatList } from "react-native";
+import { View, StyleSheet, FlatList, Alert } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import {
   BottomSheetModal,
@@ -8,13 +8,15 @@ import {
 } from "@gorhom/bottom-sheet";
 import modalProvider from "./modalProvider";
 import { Text } from "react-native-paper";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
+import DefaultScreen from "../components/ui/DefaultScreen";
+import CustomHeaderButton from "../components/ui/CustomHeaderButton";
 import TaskTile from "../components/TaskTile";
 import ScreenTitle from "../components/ui/ScreenTitle";
 import AddTask from "../screens/bottom_sheets/AddTask";
 import AddByAction from "../screens/bottom_sheets/AddByAction";
 import AddByOccupation from "../screens/bottom_sheets/AddByOccupation";
-import CustomBackdrop from "../components/ui/CustomBackdrop";
 
 const LifeTasksScreen = (props) => {
   const storeTasks = useSelector((state) => state.tasks.lifeTasks);
@@ -27,7 +29,7 @@ const LifeTasksScreen = (props) => {
   const bottomSheetOccupationRef = useRef(null);
 
   // variables
-  const snapPoints = useMemo(() => ["20%", "70%"], []);
+  const snapPoints = useMemo(() => ["1%", "70%"], []);
 
   // callbacks
   const handlePresentAdd = useCallback(() => {
@@ -129,10 +131,7 @@ const LifeTasksScreen = (props) => {
   );
 
   return (
-    <View style={styles.container}>
-      <ScreenTitle>
-        What other tasks have you done in past jobs, or outside work?
-      </ScreenTitle>
+    <DefaultScreen title="What other tasks have you done in past jobs, or outside work?">
       <View style={styles.flatListContainer}>
         <FlatList
           data={storeTasks}
@@ -149,7 +148,7 @@ const LifeTasksScreen = (props) => {
         snapPoints={["10%", "20%"]}
         dismissOnPanDown={false}
         children={renderBottomSheetContent("Add")}
-        backdropComponent={BottomSheetBackdrop}
+        // backdropComponent={BottomSheetBackdrop}
       />
 
       <BottomSheetModal
@@ -171,19 +170,20 @@ const LifeTasksScreen = (props) => {
         children={renderBottomSheetContent("Occupation")}
         backdropComponent={BottomSheetBackdrop}
       />
-    </View>
+    </DefaultScreen>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 24,
-    backgroundColor: "#dfdfdf",
-  },
+  // container: {
+  //   flex: 1,
+  //   padding: 24,
+  //   backgroundColor: "#dfdfdf",
+  // },
   flatListContainer: {
-    flex: 0.75,
-    marginTop: 20,
+    flex: 1,
+    marginTop: 10,
+    marginBottom: 10,
     borderRadius: 10,
     overflow: "hidden",
   },
@@ -192,5 +192,26 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
 });
+
+export const screenOptions = (navigationData) => {
+  return {
+    headerTitle: "Onboarding",
+    headerRight: () => (
+      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+        <Item
+          title="Help"
+          iconName="help-circle-outline"
+          onPress={() => {
+            Alert.alert(
+              "Help",
+              "Select tasks that you have done in past jobs or outside work!",
+              [{ text: "OK" }]
+            );
+          }}
+        />
+      </HeaderButtons>
+    ),
+  };
+};
 
 export default modalProvider(LifeTasksScreen);

@@ -9,6 +9,7 @@ import {
 import { Text, FAB } from "react-native-paper";
 import { useSelector, useDispatch } from "react-redux";
 
+import DefaultScreen from "../components/ui/DefaultScreen";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import TaskTile from "../components/TaskTile";
 import CustomHeaderButton from "../components/ui/CustomHeaderButton";
@@ -125,9 +126,12 @@ const WorkScheduleScreen = ({ route, navigation }) => {
   }
 
   return (
-    <View style={styles.screen}>
-      <ScreenTitle>What does your work schedule look like?</ScreenTitle>
-
+    <DefaultScreen
+      title="What does your work schedule look like?"
+      onPress={() => {
+        navigation.push("LifeTasks");
+      }}
+    >
       <View style={styles.flatListContainer}>
         <FlatList
           data={tasks}
@@ -136,16 +140,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
           keyExtractor={(item, index) => index.toString()}
         />
       </View>
-      <View style={styles.fabContainer}>
-        <FAB
-          icon="arrow-forward-outline"
-          onPress={() => {
-            // console.log(storeTasks);
-            navigation.push("LifeTasks");
-          }}
-        />
-      </View>
-    </View>
+    </DefaultScreen>
   );
 };
 

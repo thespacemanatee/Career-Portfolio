@@ -11,6 +11,7 @@ import { storeVerbs } from "../store/actions/verbs";
 import { storeOccupations } from "../store/actions/occupations";
 import { screenOptions as selectOccupationsScreenOptions } from "../screens/SelectOccupationScreen";
 import { screenOptions as workScheduleScreenOptions } from "../screens/WorkScheduleScreen";
+import { screenOptions as lifeTasksScreenOptions } from "../screens/LifeTasksScreen";
 
 // function CustomNavigationBar({ navigation, previous }) {
 //   return (
@@ -70,7 +71,7 @@ export const RootNavigator = (props) => {
       <Stack.Screen
         name="LifeTasks"
         component={LifeTasksScreen}
-        // options={}
+        options={lifeTasksScreenOptions}
       />
     </Stack.Navigator>
   );

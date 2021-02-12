@@ -3,9 +3,7 @@ import { StyleSheet, View, FlatList, Alert, Image } from "react-native";
 import {
   Card,
   Title,
-  Text,
   TextInput,
-  FAB,
   Button,
   Paragraph,
 } from "react-native-paper";
@@ -14,9 +12,9 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { Buffer } from "buffer";
 
+import DefaultScreen from "../components/ui/DefaultScreen";
 import OccupationTile from "../components/OccupationTile";
 import CustomHeaderButton from "../components/ui/CustomHeaderButton";
-import ScreenTitle from "../components/ui/ScreenTitle";
 import { resetCoreTasks } from "../store/actions/task";
 
 const username = "singapore_university";
@@ -86,8 +84,20 @@ const SelectOccupationScreen = (props) => {
   // };
 
   return (
-    <View style={styles.screen}>
-      <ScreenTitle>What is your occupation?</ScreenTitle>
+    <DefaultScreen
+      title="What is your occupation?"
+      onPress={() => {
+        if (chosenOccupation) {
+          props.navigation.push("WorkSchedule", {
+            chosenOccupation: chosenOccupation,
+          });
+        } else {
+          Alert.alert("Error", "Please choose an occupation!", [
+            { text: "OK" },
+          ]);
+        }
+      }}
+    >
       <TextInput
         label="Please enter your occupation"
         mode="outlined"
@@ -130,23 +140,7 @@ const SelectOccupationScreen = (props) => {
           contentContainerStyle={styles.flatList}
         />
       </View>
-      <View style={styles.fabContainer}>
-        <FAB
-          icon="arrow-forward-outline"
-          onPress={() => {
-            if (chosenOccupation) {
-              props.navigation.push("WorkSchedule", {
-                chosenOccupation: chosenOccupation,
-              });
-            } else {
-              Alert.alert("Error", "Please choose an occupation!", [
-                { text: "OK" },
-              ]);
-            }
-          }}
-        />
-      </View>
-    </View>
+    </DefaultScreen>
   );
 };
 
@@ -174,11 +168,6 @@ export const screenOptions = (navigationData) => {
 export default SelectOccupationScreen;
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    justifyContent: "center",
-    margin: 30,
-  },
   buttonContainer: {
     marginTop: 10,
     marginBottom: 10,
@@ -203,10 +192,5 @@ const styles = StyleSheet.create({
   flatList: {
     borderRadius: 10,
     overflow: "hidden",
-  },
-  fabContainer: {
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
-    marginTop: 10,
   },
 });

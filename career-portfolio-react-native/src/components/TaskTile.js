@@ -31,9 +31,11 @@ const TaskTile = (props) => {
       }}
     >
       <View style={styles.container}>
-        <Text style={styles.text} numberOfLines={2}>
-          {props.children}
-        </Text>
+        <View style={styles.textContainer}>
+          <Text style={styles.text} numberOfLines={2}>
+            {props.children}
+          </Text>
+        </View>
         <Checkbox
           status={checked ? "checked" : "unchecked"}
           onPress={() => {
@@ -52,17 +54,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "flex-start",
     backgroundColor: Colors.tileBackground,
     paddingTop: 10,
     paddingBottom: 10,
-    paddingLeft: 30,
-    paddingRight: 30,
+    paddingLeft: 20,
+    paddingRight: 20,
     borderColor: "#ccc",
     borderWidth: 0.5,
   },
   text: {
     textAlign: "left",
+  },
+  textContainer: {
+    flex: 1,
   },
 });

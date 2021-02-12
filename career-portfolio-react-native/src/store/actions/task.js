@@ -4,8 +4,8 @@ export const RESET_CORE_TASKS = "RESET_CORE_TASKS";
 export const TOGGLE_LIFE_TASK = "TOGGLE_LIFE_TASK";
 // export const POST_TASKS = "POST_TASKS";
 
-export const addAllTasks = (tasks) => {
-  return { type: ADD_ALL_TASKS, tasks: tasks };
+export const addAllTasks = (tasks, occupation) => {
+  return { type: ADD_ALL_TASKS, tasks: tasks, chosenOccupation: occupation };
 };
 
 export const toggleCoreTask = (task) => {

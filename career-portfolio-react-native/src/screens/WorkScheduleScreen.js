@@ -5,15 +5,16 @@ import {
   FlatList,
   Alert,
   ActivityIndicator,
+  Vibration,
 } from "react-native";
-import { Text, FAB } from "react-native-paper";
+import { Text } from "react-native-paper";
 import { useSelector, useDispatch } from "react-redux";
 
+import Task from "../models/task";
 import DefaultScreen from "../components/ui/DefaultScreen";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import TaskTile from "../components/TaskTile";
 import CustomHeaderButton from "../components/ui/CustomHeaderButton";
-import ScreenTitle from "../components/ui/ScreenTitle";
 import Colors from "../constants/Colors";
 import * as taskActions from "../store/actions/task";
 
@@ -24,13 +25,13 @@ const WorkScheduleScreen = ({ route, navigation }) => {
   const storeTasks = useSelector((state) => state.tasks.tasks);
   const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [deleteMode, setDeleteMode] = useState(false);
   const [error, setError] = useState(undefined);
 
   const dispatch = useDispatch();
 
   const toggleCoreTaskHandler = (task) => {
     console.log("TASK CHECKED: " + task);
-    task.lifeTask = false;
     dispatch(taskActions.toggleCoreTask(task));
   };
 
@@ -39,19 +40,27 @@ const WorkScheduleScreen = ({ route, navigation }) => {
       return (
         <TaskTile
           isChecked={storeTasks.find((task) => {
-            if (task["Task ID"] === itemData.item["Task ID"]) {
-              return task.coreTask;
+            if (task.taskId === itemData.item.taskId) {
+              if (task.task_type === "core") {
+                return true;
+              }
+              return false;
             }
           })}
           checked={() => {
             toggleCoreTaskHandler(itemData.item);
           }}
+          onLongPress={() => {
+            console.log("Long press mode:" + deleteMode);
+            Vibration.vibrate();
+            setDeleteMode(!deleteMode);
+          }}
         >
-          {itemData.item["Task"]}
+          {itemData.item.task}
         </TaskTile>
       );
     },
-    [storeTasks]
+    [storeTasks, deleteMode]
   );
 
   const getTasks = useCallback(() => {
@@ -75,15 +84,20 @@ const WorkScheduleScreen = ({ route, navigation }) => {
 
     if (!storeTasks.length) {
       result = getTasks();
-      result.forEach(function (task) {
-        task.coreTask = false;
+      let newResult = [];
+      result.forEach((task) => {
+        const newObject = new Task(task);
+        newResult.push(newObject);
       });
-
-      dispatch(taskActions.addAllTasks(result));
+      // console.log(newResult);
+      setTasks(newResult);
+      dispatch(
+        taskActions.addAllTasks(newResult, route.params.chosenOccupation)
+      );
     } else {
       result = storeTasks;
+      setTasks(result);
     }
-    setTasks(result);
     setIsLoading(false);
   }, [setTasks, setIsLoading, getTasks]);
 
@@ -104,6 +118,9 @@ const WorkScheduleScreen = ({ route, navigation }) => {
           />
         </HeaderButtons>
       ),
+      headerStyle: {
+        backgroundColor: deleteMode ? "red" : Colors.primary,
+      },
     });
   });
 

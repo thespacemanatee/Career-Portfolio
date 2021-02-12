@@ -24,12 +24,7 @@ const TaskTile = (props) => {
   }
 
   return (
-    <TouchableCustom
-      onPress={props.onClick}
-      onLongPress={() => {
-        console.log("Long Press");
-      }}
-    >
+    <TouchableCustom onPress={props.onClick} onLongPress={props.onLongPress}>
       <View style={styles.container}>
         <View style={styles.textContainer}>
           <Text style={styles.text} numberOfLines={2}>

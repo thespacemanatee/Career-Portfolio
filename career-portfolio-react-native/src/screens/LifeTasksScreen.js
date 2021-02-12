@@ -1,5 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
-import { View, StyleSheet, FlatList, Alert } from "react-native";
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from "react";
+import { View, StyleSheet, FlatList, Alert, Vibration } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import {
   BottomSheetModal,
@@ -9,7 +15,9 @@ import {
 import modalProvider from "./modalProvider";
 import { Text } from "react-native-paper";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import { HeaderBackButton } from "@react-navigation/stack";
 
+import Colors from "../constants/Colors";
 import DefaultScreen from "../components/ui/DefaultScreen";
 import CustomHeaderButton from "../components/ui/CustomHeaderButton";
 import TaskTile from "../components/TaskTile";
@@ -17,8 +25,9 @@ import AddTask from "../screens/bottom_sheets/AddTask";
 import AddByAction from "../screens/bottom_sheets/AddByAction";
 import AddByOccupation from "../screens/bottom_sheets/AddByOccupation";
 
-const LifeTasksScreen = (props) => {
+const LifeTasksScreen = ({ route, navigation }) => {
   const storeTasks = useSelector((state) => state.tasks.lifeTasks);
+  const [deleteMode, setDeleteMode] = useState(false);
   // hooks
   const { dismiss, dismissAll } = useBottomSheetModal();
 
@@ -73,41 +82,106 @@ const LifeTasksScreen = (props) => {
   }, [handlePresentAdd]);
 
   // renders
-  const renderBottomSheetContent = useCallback(
-    (type) => {
-      if (type === "Add") {
-        return (
-          <AddTask
-            type={type}
-            onPress={{
-              action: handlePresentAction,
-              occupation: handlePresentOccupation,
-            }}
-          />
-        );
-      } else if (type === "Action") {
-        return (
-          <AddByAction type={type} onPress={{ back: handleDismissAction }} />
-        );
-      } else if (type === "Occupation") {
-        return (
-          <AddByOccupation
-            type={type}
-            onPress={{ back: handleDismissOccupation }}
-          />
-        );
-      } else {
-        return <Text>Error</Text>;
-      }
-    }, []
-  );
+  const renderBottomSheetContent = useCallback((type) => {
+    if (type === "Add") {
+      return (
+        <AddTask
+          type={type}
+          onPress={{
+            action: handlePresentAction,
+            occupation: handlePresentOccupation,
+          }}
+        />
+      );
+    } else if (type === "Action") {
+      return (
+        <AddByAction type={type} onPress={{ back: handleDismissAction }} />
+      );
+    } else if (type === "Occupation") {
+      return (
+        <AddByOccupation
+          type={type}
+          onPress={{ back: handleDismissOccupation }}
+        />
+      );
+    } else {
+      return <Text>Error</Text>;
+    }
+  }, []);
 
   const renderTaskTiles = useCallback(
     (itemData) => {
-      return <TaskTile checkBoxEnabled={false}>{itemData.item.task}</TaskTile>;
+      return (
+        <TaskTile
+          deleteMode={deleteMode}
+          checkBoxEnabled={!deleteMode}
+          checkBoxEnabled={false}
+          onLongPress={() => {
+            console.log("Delete Mode: " + deleteMode);
+            Vibration.vibrate();
+            setDeleteMode(!deleteMode);
+          }}
+          onClick={() => {
+            console.log("I have been clicked!");
+          }}
+        >
+          {itemData.item.task}
+        </TaskTile>
+      );
     },
-    [storeTasks]
+    [storeTasks, deleteMode]
   );
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: "Onboarding",
+      headerRight: () => (
+        <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+          <Item
+            title="Help"
+            iconName={deleteMode ? "trash-outline" : "help-circle-outline"}
+            onPress={() => {
+              Alert.alert(
+                deleteMode ? "Delete" : "Help",
+                deleteMode
+                  ? "Are you sure you want to delete these tasks?"
+                  : "Select tasks that you have done in past jobs or outside work!",
+
+                deleteMode
+                  ? [
+                      {
+                        text: "Cancel",
+                        onPress: () => console.log("Cancel"),
+                        style: "cancel",
+                      },
+                      { text: "Delete", onPress: () => console.log("Delete") },
+                    ]
+                  : [{ text: "OK" }]
+              );
+            }}
+          />
+        </HeaderButtons>
+      ),
+      headerLeft: deleteMode
+        ? () => (
+            <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+              <Item iconName="close-outline" onPress={() => {}} />
+            </HeaderButtons>
+          )
+        : () => (
+            <HeaderBackButton
+              tintColor={Platform.OS === "android" ? "white" : Colors.primary}
+              onPress={() => {
+                navigation.pop();
+              }}
+            />
+          ),
+      headerStyle: {
+        backgroundColor: deleteMode ? "red" : Colors.primary,
+      },
+      headerTitle: deleteMode ? "Delete Tasks" : "Onboarding",
+    });
+  });
 
   return (
     <DefaultScreen title="What other tasks have you done in past jobs, or outside work?">
@@ -180,21 +254,21 @@ const styles = StyleSheet.create({
 export const screenOptions = (navigationData) => {
   return {
     headerTitle: "Onboarding",
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-        <Item
-          title="Help"
-          iconName="help-circle-outline"
-          onPress={() => {
-            Alert.alert(
-              "Help",
-              "Select tasks that you have done in past jobs or outside work!",
-              [{ text: "OK" }]
-            );
-          }}
-        />
-      </HeaderButtons>
-    ),
+    // headerRight: () => (
+    //   <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+    //     <Item
+    //       title="Help"
+    //       iconName="help-circle-outline"
+    //       onPress={() => {
+    //         Alert.alert(
+    //           "Help",
+    //           "Select tasks that you have done in past jobs or outside work!",
+    //           [{ text: "OK" }]
+    //         );
+    //       }}
+    //     />
+    //   </HeaderButtons>
+    // ),
   };
 };
 

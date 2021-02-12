@@ -12,6 +12,7 @@ import Colors from "../constants/Colors";
 
 const TaskTile = (props) => {
   const [checked, setChecked] = useState(false);
+  const [selectedDelete, setSelectedDelete] = useState(false);
   const { isChecked } = props;
 
   useEffect(() => {
@@ -23,9 +24,35 @@ const TaskTile = (props) => {
     TouchableCustom = TouchableNativeFeedback;
   }
 
+  useEffect(() => {
+    if (!props.deleteMode) {
+      setSelectedDelete(false);
+    }
+  }, [props.deleteMode]);
+
   return (
-    <TouchableCustom onPress={props.onClick} onLongPress={props.onLongPress}>
-      <View style={styles.container}>
+    <TouchableCustom
+      onPress={() => {
+        props.onClick();
+        if (props.deleteMode) {
+          setSelectedDelete(!selectedDelete);
+        }
+      }}
+      onLongPress={() => {
+        props.onLongPress();
+        setSelectedDelete(!selectedDelete);
+      }}
+    >
+      <View
+        style={{
+          ...styles.container,
+          backgroundColor: props.deleteMode
+            ? selectedDelete
+              ? Colors.tileBackgroundDelete
+              : Colors.tileBackground
+            : Colors.tileBackground,
+        }}
+      >
         <View style={styles.textContainer}>
           <Text style={styles.text} numberOfLines={2}>
             {props.children}
@@ -57,7 +84,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
-    backgroundColor: Colors.tileBackground,
     paddingTop: 10,
     paddingBottom: 10,
     paddingLeft: 20,

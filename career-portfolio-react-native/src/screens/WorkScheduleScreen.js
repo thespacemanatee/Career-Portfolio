@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Text } from "react-native-paper";
 import { useSelector, useDispatch } from "react-redux";
+import { HeaderBackButton } from "@react-navigation/stack";
 
 import Task from "../models/task";
 import DefaultScreen from "../components/ui/DefaultScreen";
@@ -35,10 +36,14 @@ const WorkScheduleScreen = ({ route, navigation }) => {
     dispatch(taskActions.toggleCoreTask(task));
   };
 
+  const toggleDeleteHandler = () => {};
+
   const renderTaskTiles = useCallback(
     (itemData) => {
       return (
         <TaskTile
+          deleteMode={deleteMode}
+          checkBoxEnabled={!deleteMode}
           isChecked={storeTasks.find((task) => {
             if (task.taskId === itemData.item.taskId) {
               if (task.task_type === "core") {
@@ -51,9 +56,12 @@ const WorkScheduleScreen = ({ route, navigation }) => {
             toggleCoreTaskHandler(itemData.item);
           }}
           onLongPress={() => {
-            console.log("Long press mode:" + deleteMode);
+            console.log("Delete Mode: " + deleteMode);
             Vibration.vibrate();
             setDeleteMode(!deleteMode);
+          }}
+          onClick={() => {
+            console.log("I have been clicked!");
           }}
         >
           {itemData.item.task}
@@ -107,20 +115,47 @@ const WorkScheduleScreen = ({ route, navigation }) => {
         <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
           <Item
             title="Help"
-            iconName="help-circle-outline"
+            iconName={deleteMode ? "trash-outline" : "help-circle-outline"}
             onPress={() => {
               Alert.alert(
-                "Help",
-                `These are the tasks typically done by ${route.params.chosenOccupation}. Indicate if your task is a Core task, or not. Select and hold to delete tasks!`,
-                [{ text: "OK" }]
+                deleteMode ? "Delete" : "Help",
+                deleteMode
+                  ? "Are you sure you want to delete these tasks?"
+                  : `These are the tasks typically done by ${route.params.chosenOccupation}. Indicate if your task is a Core task, or not. Select and hold to delete tasks!`,
+
+                deleteMode
+                  ? [
+                      {
+                        text: "Cancel",
+                        onPress: () => console.log("Cancel"),
+                        style: "cancel",
+                      },
+                      { text: "Delete", onPress: () => console.log("Delete") },
+                    ]
+                  : [{ text: "OK" }]
               );
             }}
           />
         </HeaderButtons>
       ),
+      headerLeft: deleteMode
+        ? () => (
+            <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+              <Item iconName="close-outline" onPress={() => {}} />
+            </HeaderButtons>
+          )
+        : () => (
+            <HeaderBackButton
+              tintColor={Platform.OS === "android" ? "white" : Colors.primary}
+              onPress={() => {
+                navigation.pop();
+              }}
+            />
+          ),
       headerStyle: {
         backgroundColor: deleteMode ? "red" : Colors.primary,
       },
+      headerTitle: deleteMode ? "Delete Tasks" : "Onboarding",
     });
   });
 

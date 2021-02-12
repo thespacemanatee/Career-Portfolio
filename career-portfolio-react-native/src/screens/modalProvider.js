@@ -1,10 +1,10 @@
-import React from 'react';
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import React from "react";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
-const withModalProvider = (Component) => () => {
+const withModalProvider = (Component) => (props) => {
   return (
     <BottomSheetModalProvider>
-      <Component />
+      <Component {...props} />
     </BottomSheetModalProvider>
   );
 };

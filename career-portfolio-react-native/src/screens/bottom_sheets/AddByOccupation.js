@@ -6,6 +6,7 @@ import { Title, Button } from "react-native-paper";
 import { BottomSheetView, BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import _ from "lodash";
 
+import Task from "../../models/task";
 import TaskTile from "../../components/TaskTile";
 import * as taskActions from "../../store/actions/task";
 
@@ -36,7 +37,7 @@ const AddByOccupation = (props) => {
             toggleLifeTaskHandler(itemData.item);
           }}
         >
-          {itemData.item["Task"]}
+          {itemData.item.task}
         </TaskTile>
       );
     },
@@ -53,13 +54,17 @@ const AddByOccupation = (props) => {
       if (
         !tempArray.find((v) => _.isEqual(v["Task"], Task)) &&
         Title === selectedValue &&
-        !storeLifeTasks.find((u) => _.isEqual(u["Task ID"], taskId))
+        !storeLifeTasks.find((u) => _.isEqual(u.taskId, taskId))
       ) {
         tempArray.push(element);
       }
     });
-    // console.log(tempArray);
-    setResultTasks(tempArray);
+    const newResult = [];
+    tempArray.forEach((task) => {
+      const newObject = new Task(task);
+      newResult.push(newObject);
+    });
+    setResultTasks(newResult);
   }, [dataArray, selectedValue]);
 
   useEffect(() => {
@@ -94,7 +99,7 @@ const AddByOccupation = (props) => {
       </BottomSheetView>
       <BottomSheetFlatList
         data={resultTasks}
-        keyExtractor={(i) => i["Task ID"].toString()}
+        keyExtractor={(i) => i.taskId.toString()}
         renderItem={renderTaskTiles}
         contentContainerStyle={styles.contentContainer}
       />

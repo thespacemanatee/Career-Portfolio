@@ -165,7 +165,12 @@ const LifeTasksScreen = ({ route, navigation }) => {
       headerLeft: deleteMode
         ? () => (
             <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-              <Item iconName="close-outline" onPress={() => {}} />
+              <Item
+                iconName="close-outline"
+                onPress={() => {
+                  setDeleteMode(!deleteMode);
+                }}
+              />
             </HeaderButtons>
           )
         : () => (

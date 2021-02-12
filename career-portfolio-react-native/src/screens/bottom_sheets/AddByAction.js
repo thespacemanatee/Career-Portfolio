@@ -54,6 +54,7 @@ const AddByAction = (props) => {
             // console.log(typeof itemData.item);
             toggleLifeTaskHandler(itemData.item);
           }}
+          onClick={() => {}}
         >
           {itemData.item.task}
         </TaskTile>

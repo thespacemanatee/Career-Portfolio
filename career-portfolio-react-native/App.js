@@ -18,6 +18,7 @@ import FABNavigator from "./src/components/FABNavigator";
 import tasksReducer from "./src/store/reducers/task";
 import verbsReducer from "./src/store/reducers/verbs";
 import occupationsReducer from "./src/store/reducers/occupations";
+import databaseReducer from "./src/store/reducers/database";
 import { RootNavigator } from "./src/navigation/AppNavigator";
 import Colors from "./src/constants/Colors";
 
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   tasks: tasksReducer,
   verbs: verbsReducer,
   occupations: occupationsReducer,
+  database: databaseReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));

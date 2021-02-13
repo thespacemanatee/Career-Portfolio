@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 export const STORE_OCCUPATIONS = "STORE_OCCUPATIONS";
 
 export const storeOccupations = (occupations) => {

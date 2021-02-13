@@ -1,10 +1,18 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useState } from "react";
 import { StyleSheet, Text, View, Alert } from "react-native";
 import { FAB } from "react-native-paper";
 import { useSelector, useDispatch } from "react-redux";
 
+import * as databaseActions from "../store/actions/database";
+
 const FABNavigator = forwardRef((props, ref) => {
   const storeState = useSelector((state) => state.tasks);
+
+  const dispatch = useDispatch();
+
+  const postResult = async (result) => {
+    dispatch(databaseActions.postResult(result));
+  };
 
   const navigationHandler = () => {
     console.log(ref.current.getCurrentRoute());
@@ -26,12 +34,13 @@ const FABNavigator = forwardRef((props, ref) => {
       ref.current?.navigate("Ranking");
     }
     if (currentRoute.name === "Ranking") {
-      const finalResult = {
+      const result = {
         input_title: storeState.chosenOccupation,
         title_id: Date.now(),
         task_list: storeState.combinedTasks,
       };
-      console.log(finalResult);
+    //   console.log(result);
+      postResult(result);
     }
   };
   return (

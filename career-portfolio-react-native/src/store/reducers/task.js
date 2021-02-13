@@ -25,6 +25,7 @@ const tasksReducer = (state = initialState, action) => {
       };
 
     case ADD_COMBINED_TASKS:
+      console.log("ADDING COMBINED TASK NOW");
       return {
         ...state,
         combinedTasks: action.tasks,

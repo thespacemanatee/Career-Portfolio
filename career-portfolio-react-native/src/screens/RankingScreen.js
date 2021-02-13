@@ -1,9 +1,7 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import DraggableFlatList, {
-  RenderItemParams,
-} from "react-native-draggable-flatlist";
+import DraggableFlatList from "react-native-draggable-flatlist";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 import CustomHeaderButton from "../components/ui/CustomHeaderButton";
@@ -14,13 +12,14 @@ import * as taskActions from "../store/actions/task";
 const RankingScreen = ({ route, navigation }) => {
   const storeTasks = useSelector((state) => state.tasks.tasks);
   const storeLifeTasks = useSelector((state) => state.tasks.lifeTasks);
-  const [combinedTasks, setCombinedTasks] = useState([]);
+  const combinedTasks = useSelector((state) => state.tasks.combinedTasks);
+  //   const [combinedTasks, setCombinedTasks] = useState([]);
 
   const dispatch = useDispatch();
 
-  const savePreferencesToStore = useCallback(() => {
-    dispatch(taskActions.addCombinedTasks(combinedTasks));
-  }, [combinedTasks]);
+  const savePreferencesToStore = useCallback((result) => {
+    dispatch(taskActions.addCombinedTasks(result));
+  }, []);
 
   const renderTaskTiles = useCallback(
     ({ item, index, drag, isActive }) => {
@@ -34,12 +33,13 @@ const RankingScreen = ({ route, navigation }) => {
   );
 
   useEffect(() => {
-    setCombinedTasks(storeTasks.concat(storeLifeTasks));
+    const tempArray = storeTasks.concat(storeLifeTasks);
+    savePreferencesToStore(tempArray);
   }, [storeTasks, storeLifeTasks]);
 
-  useEffect(() => {
-    savePreferencesToStore();
-  }, [combinedTasks]);
+  //   useEffect(() => {
+  //     savePreferencesToStore();
+  //   }, [combinedTasks]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -68,8 +68,7 @@ const RankingScreen = ({ route, navigation }) => {
         renderItem={renderTaskTiles}
         keyExtractor={(item, index) => index.toString()}
         onDragEnd={({ data }) => {
-          setCombinedTasks(data);
-          savePreferencesToStore();
+          savePreferencesToStore(data);
         }}
       />
     </DefaultScreen>

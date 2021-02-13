@@ -15,11 +15,6 @@ const DefaultScreen = (props) => {
         {props.title}
       </ScreenTitle>
       <View style={styles.container}>{props.children}</View>
-      {/* <Portal>
-        <View style={styles.fabContainer}>
-          <FAB icon="arrow-forward-outline" onPress={props.onPressFAB} />
-        </View>
-      </Portal> */}
     </View>
   );
 };
@@ -34,11 +29,5 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-  },
-  fabContainer: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
-    margin: 20,
   },
 });

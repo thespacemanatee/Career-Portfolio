@@ -5,6 +5,7 @@ import {
   TOGGLE_CORE_TASK,
   DELETE_TASKS,
   DELETE_LIFE_TASKS,
+  ADD_COMBINED_TASKS,
 } from "../actions/task";
 import _ from "lodash";
 
@@ -12,6 +13,7 @@ const initialState = {
   chosenOccupation: null,
   tasks: [],
   lifeTasks: [],
+  combinedTasks: [],
 };
 
 const tasksReducer = (state = initialState, action) => {
@@ -20,6 +22,12 @@ const tasksReducer = (state = initialState, action) => {
       return {
         ...state,
         tasks: action.tasks,
+      };
+
+    case ADD_COMBINED_TASKS:
+      return {
+        ...state,
+        combinedTasks: action.tasks,
       };
 
     case TOGGLE_CORE_TASK:

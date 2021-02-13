@@ -9,11 +9,18 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from "../components/ui/CustomHeaderButton";
 import DefaultScreen from "../components/ui/DefaultScreen";
 import TaskTile from "../components/TaskTile";
+import * as taskActions from "../store/actions/task";
 
 const RankingScreen = ({ route, navigation }) => {
   const storeTasks = useSelector((state) => state.tasks.tasks);
   const storeLifeTasks = useSelector((state) => state.tasks.lifeTasks);
   const [combinedTasks, setCombinedTasks] = useState([]);
+
+  const dispatch = useDispatch();
+
+  const savePreferencesToStore = useCallback(() => {
+    dispatch(taskActions.addCombinedTasks(combinedTasks));
+  }, [combinedTasks]);
 
   const renderTaskTiles = useCallback(
     ({ item, index, drag, isActive }) => {
@@ -29,6 +36,10 @@ const RankingScreen = ({ route, navigation }) => {
   useEffect(() => {
     setCombinedTasks(storeTasks.concat(storeLifeTasks));
   }, [storeTasks, storeLifeTasks]);
+
+  useEffect(() => {
+    savePreferencesToStore();
+  }, [combinedTasks]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -56,7 +67,10 @@ const RankingScreen = ({ route, navigation }) => {
         data={combinedTasks}
         renderItem={renderTaskTiles}
         keyExtractor={(item, index) => index.toString()}
-        onDragEnd={({ data }) => setCombinedTasks(data)}
+        onDragEnd={({ data }) => {
+          setCombinedTasks(data);
+          savePreferencesToStore();
+        }}
       />
     </DefaultScreen>
   );

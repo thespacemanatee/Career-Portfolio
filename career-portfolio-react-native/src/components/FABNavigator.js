@@ -25,6 +25,14 @@ const FABNavigator = forwardRef((props, ref) => {
     if (currentRoute.name === "LifeTasks") {
       ref.current?.navigate("Ranking");
     }
+    if (currentRoute.name === "Ranking") {
+      const finalResult = {
+        input_title: storeState.chosenOccupation,
+        title_id: Date.now(),
+        task_list: storeState.combinedTasks,
+      };
+      console.log(finalResult);
+    }
   };
   return (
     <View style={styles.fabContainer}>

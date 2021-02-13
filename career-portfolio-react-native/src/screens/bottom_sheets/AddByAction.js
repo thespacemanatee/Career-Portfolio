@@ -22,24 +22,6 @@ const AddByAction = (props) => {
 
   const dispatch = useDispatch();
 
-  // const postRequest = async () => {
-  //   console.log("postRequest");
-  //   try {
-  //     let response = await fetch("http://192.168.1.97:3001/", {
-  //       method: "POST",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(storeTasks),
-  //     });
-  //     let json = await response.json();
-  //     return json;
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
   const toggleLifeTaskHandler = (task) => {
     console.log("TASK CHECKED: " + task);
     dispatch(taskActions.toggleLifeTask(task));

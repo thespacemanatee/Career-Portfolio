@@ -1,22 +1,28 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-
 import { Text, FAB } from "react-native-paper";
+
+import DefaultScreen from "../components/ui/DefaultScreen";
 
 const WelcomeScreen = (props) => {
   return (
-    <View style={styles.screen}>
-      <View style={styles.textContainer}>
-        <Text style={styles.titleText}>DISCOVERING YOUR PORTFOLIO</Text>
-      </View>
+    <DefaultScreen
+      title="DISCOVERING YOUR PORTFOLIO"
+      onPressFAB={() => props.navigation.push("SelectOccupation")}
+      titleStyle={styles.titleText}
+    ></DefaultScreen>
+    // <View style={styles.screen}>
+    //   <View style={styles.textContainer}>
+    //     <Text style={styles.titleText}>DISCOVERING YOUR PORTFOLIO</Text>
+    //   </View>
 
-      <View style={styles.fabContainer}>
-        <FAB
-          icon="arrow-forward-outline"
-          onPress={() => props.navigation.push("SelectOccupation")}
-        />
-      </View>
-    </View>
+    //   <View style={styles.fabContainer}>
+    //     <FAB
+    //       icon="arrow-forward-outline"
+    //       onPress={() => props.navigation.push("SelectOccupation")}
+    //     />
+    //   </View>
+    // </View>
   );
 };
 

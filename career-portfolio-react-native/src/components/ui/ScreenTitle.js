@@ -4,8 +4,8 @@ import { Text } from "react-native-paper";
 
 const ScreenTitle = (props) => {
   return (
-    <View style={styles.textContainer}>
-      <Text style={styles.titleText}>{props.children}</Text>
+    <View style={{...styles.textContainer}}>
+      <Text style={{...styles.titleText, ...props.style}}>{props.children}</Text>
     </View>
   );
 };

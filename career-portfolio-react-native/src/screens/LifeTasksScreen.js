@@ -217,7 +217,12 @@ const LifeTasksScreen = ({ route, navigation }) => {
   });
 
   return (
-    <DefaultScreen title="What other tasks have you done in past jobs, or outside work?">
+    <DefaultScreen
+      title="What other tasks have you done in past jobs, or outside work?"
+      onPressFAB={() => {
+        navigation.push("Ranking");
+      }}
+    >
       {storeTasks.length === 0 && (
         <View style={styles.centered}>
           <Text>No tasks found. Start adding some!</Text>

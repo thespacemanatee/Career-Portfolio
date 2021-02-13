@@ -1,17 +1,20 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { FAB } from "react-native-paper";
+import { Portal } from "react-native-paper";
 
 import ScreenTitle from "../ui/ScreenTitle";
 
 const DefaultScreen = (props) => {
   return (
     <View style={styles.screen}>
-      <ScreenTitle>{props.title}</ScreenTitle>
-      {props.children}
-      <View style={styles.fabContainer}>
-        <FAB icon="arrow-forward-outline" onPress={props.onPress} />
-      </View>
+      <ScreenTitle style={props.titleStyle}>{props.title}</ScreenTitle>
+      <View style={styles.container}>{props.children}</View>
+      <Portal>
+        <View style={styles.fabContainer}>
+          <FAB icon="arrow-forward-outline" onPress={props.onPressFAB} />
+        </View>
+      </Portal>
     </View>
   );
 };
@@ -24,9 +27,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     margin: 30,
   },
+  container: {
+    flex: 1,
+  },
   fabContainer: {
+    flex: 1,
     justifyContent: "flex-end",
     alignItems: "flex-end",
-    marginTop: 10,
+    margin: 20,
   },
 });

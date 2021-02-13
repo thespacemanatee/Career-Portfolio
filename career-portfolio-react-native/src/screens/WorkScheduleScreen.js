@@ -215,7 +215,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
   return (
     <DefaultScreen
       title="What does your work schedule look like?"
-      onPress={() => {
+      onPressFAB={() => {
         navigation.push("LifeTasks");
       }}
     >

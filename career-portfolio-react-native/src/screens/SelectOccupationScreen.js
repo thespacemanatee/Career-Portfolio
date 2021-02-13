@@ -86,7 +86,7 @@ const SelectOccupationScreen = (props) => {
   return (
     <DefaultScreen
       title="What is your occupation?"
-      onPress={() => {
+      onPressFAB={() => {
         if (chosenOccupation) {
           props.navigation.push("WorkSchedule", {
             chosenOccupation: chosenOccupation,

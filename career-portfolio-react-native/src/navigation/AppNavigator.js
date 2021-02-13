@@ -6,6 +6,7 @@ import WelcomeScreen from "../screens/WelcomeScreen";
 import SelectOccupationScreen from "../screens/SelectOccupationScreen";
 import WorkScheduleScreen from "../screens/WorkScheduleScreen";
 import LifeTasksScreen from "../screens/LifeTasksScreen";
+import RankingScreen from "../screens/RankingScreen";
 import Colors from "../constants/Colors";
 import { storeVerbs } from "../store/actions/verbs";
 import { storeOccupations } from "../store/actions/occupations";
@@ -72,6 +73,11 @@ export const RootNavigator = (props) => {
         name="LifeTasks"
         component={LifeTasksScreen}
         options={lifeTasksScreenOptions}
+      />
+      <Stack.Screen
+        name="Ranking"
+        component={RankingScreen}
+        // options={}
       />
     </Stack.Navigator>
   );

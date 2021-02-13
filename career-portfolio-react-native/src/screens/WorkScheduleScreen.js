@@ -79,7 +79,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
           }}
           onLongPress={() => {
             console.log("Delete Mode: " + deleteMode);
-            Vibration.vibrate();
+            Vibration.vibrate(50);
             setDeleteMode(!deleteMode);
             toggleDeleteHandler(itemData.item.taskId);
           }}

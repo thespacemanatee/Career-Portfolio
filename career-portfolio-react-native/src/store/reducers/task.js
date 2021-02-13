@@ -3,6 +3,7 @@ import {
   TOGGLE_LIFE_TASK,
   RESET_CORE_TASKS,
   TOGGLE_CORE_TASK,
+  DELETE_TASKS,
 } from "../actions/task";
 import _ from "lodash";
 
@@ -49,12 +50,7 @@ const tasksReducer = (state = initialState, action) => {
     case TOGGLE_LIFE_TASK:
       const lifeTask = { ...action.lifeTask };
       lifeTask.task_type = "life";
-      // console.log(lifeTask);
-      // const existingIndex = state.tasks.findIndex((task) => task === lifeTask);
-      // console.log(existingIndex);
-      if (
-        state.lifeTasks.some((item) => item.taskId === lifeTask.taskId)
-      ) {
+      if (state.lifeTasks.some((item) => item.taskId === lifeTask.taskId)) {
         const updatedLifeTasks = [...state.lifeTasks];
         // updatedLifeTasks.splice(existingIndex, 1);
         const filtered = updatedLifeTasks.filter(
@@ -75,18 +71,15 @@ const tasksReducer = (state = initialState, action) => {
           lifeTasks: state.lifeTasks.concat(lifeTask),
         };
       }
-
-    // console.log("updatedLifeTasks: " + updatedLifeTasks);
-    // updatedLifeTasks.map((item) => {
-    //   if (item["Task ID"] === action.lifeTask["Task ID"]) {
-    //     item.lifeTask = !item.lifeTask;
-    //   }
-    // });
-    // return {
-    //   ...state,
-    //   tasks: updatedLifeTasks,
-    // };
-
+    case DELETE_TASKS:
+      let updatedTasks = [...state.tasks];
+      updatedTasks = updatedTasks.filter(
+        (task) => !action.tasks.includes(task.taskId)
+      );
+      return {
+        ...state,
+        tasks: updatedTasks,
+      };
     default:
       return state;
   }

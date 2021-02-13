@@ -33,9 +33,9 @@ const TaskTile = (props) => {
   return (
     <TouchableCustom
       onPress={() => {
-        props.onClick();
         if (props.deleteMode) {
           setSelectedDelete(!selectedDelete);
+          props.onClick();
         }
       }}
       onLongPress={() => {
@@ -76,6 +76,8 @@ export default TaskTile;
 
 TaskTile.defaultProps = {
   checkBoxEnabled: true,
+  onPress: () => {},
+  onLongPress: () => {},
 };
 
 const styles = StyleSheet.create({

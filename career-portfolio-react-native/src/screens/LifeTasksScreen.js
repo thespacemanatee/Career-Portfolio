@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
   flatListContainer: {
     flex: 1,
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 80,
     borderRadius: 10,
     overflow: "hidden",
   },

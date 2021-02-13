@@ -6,11 +6,14 @@ import DefaultScreen from "../components/ui/DefaultScreen";
 
 const WelcomeScreen = (props) => {
   return (
-    <DefaultScreen
-      title="DISCOVERING YOUR PORTFOLIO"
-      onPressFAB={() => props.navigation.push("SelectOccupation")}
-      titleStyle={styles.titleText}
-    ></DefaultScreen>
+    <View style={styles.screen}>
+      <DefaultScreen
+        title="DISCOVERING YOUR PORTFOLIO"
+        onPressFAB={() => props.navigation.push("SelectOccupation")}
+        titleStyle={styles.titleText}
+        containerStyle={styles.textContainer}
+      ></DefaultScreen>
+    </View>
     // <View style={styles.screen}>
     //   <View style={styles.textContainer}>
     //     <Text style={styles.titleText}>DISCOVERING YOUR PORTFOLIO</Text>
@@ -44,8 +47,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 20,
   },
-  fabContainer: {
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
-  },
+  // fabContainer: {
+  //   justifyContent: "flex-end",
+  //   alignItems: "flex-end",
+  // },
 });

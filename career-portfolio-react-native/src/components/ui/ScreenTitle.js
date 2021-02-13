@@ -4,8 +4,12 @@ import { Text } from "react-native-paper";
 
 const ScreenTitle = (props) => {
   return (
-    <View style={{...styles.textContainer}}>
-      <Text style={{...styles.titleText, ...props.style}}>{props.children}</Text>
+    <View
+      style={props.containerStyle ? props.containerStyle : styles.textContainer}
+    >
+      <Text style={props.titleStyle ? props.titleStyle : styles.titleText}>
+        {props.children}
+      </Text>
     </View>
   );
 };
@@ -15,7 +19,7 @@ export default ScreenTitle;
 const styles = StyleSheet.create({
   textContainer: {
     marginLeft: 5,
-    marginRight: 40,
+    marginRight: 20,
     marginBottom: 10,
     height: 40,
   },

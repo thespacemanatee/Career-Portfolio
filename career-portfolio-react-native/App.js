@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
+import { LogBox } from "react-native";
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import AppLoading from "expo-app-loading";
@@ -18,6 +19,10 @@ import Colors from "./src/constants/Colors";
 
 import * as data from "./src/data/career_data.json";
 const dataArray = Object.values(data);
+
+LogBox.ignoreLogs([
+  "Calling getNode() on the ref of an Animated component is no longer necessary.",
+]);
 
 const rootReducer = combineReducers({
   tasks: tasksReducer,

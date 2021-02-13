@@ -139,7 +139,8 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   contentContainer: {
-    margin: 20,
+    marginLeft: 20,
+    marginRight: 20,
     borderRadius: 6,
   },
   buttonContainer: {

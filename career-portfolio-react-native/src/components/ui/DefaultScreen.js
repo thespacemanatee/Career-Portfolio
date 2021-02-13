@@ -8,7 +8,12 @@ import ScreenTitle from "../ui/ScreenTitle";
 const DefaultScreen = (props) => {
   return (
     <View style={styles.screen}>
-      <ScreenTitle style={props.titleStyle}>{props.title}</ScreenTitle>
+      <ScreenTitle
+        titleStyle={props.titleStyle}
+        containerStyle={props.containerStyle}
+      >
+        {props.title}
+      </ScreenTitle>
       <View style={styles.container}>{props.children}</View>
       <Portal>
         <View style={styles.fabContainer}>

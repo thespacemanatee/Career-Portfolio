@@ -77,6 +77,7 @@ const TaskTile = (props) => {
 export default TaskTile;
 
 TaskTile.defaultProps = {
+  deleteMode: false,
   checkBoxEnabled: true,
   onPress: () => {},
   onLongPress: () => {},

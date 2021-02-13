@@ -18,6 +18,7 @@ const AddByAction = (props) => {
   const actionVerbs = useSelector((state) => state.verbs.verbs);
   const [selectedValue, setSelectedValue] = useState("Accept");
   const [resultTasks, setResultTasks] = useState([]);
+  const [addedTasks, setAddedTasks] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -42,6 +43,16 @@ const AddByAction = (props) => {
   const toggleLifeTaskHandler = (task) => {
     console.log("TASK CHECKED: " + task);
     dispatch(taskActions.toggleLifeTask(task));
+
+    const index = addedTasks.indexOf(task.taskId);
+    const updatedAddedTask = [...addedTasks];
+    if (index > -1) {
+      updatedAddedTask.splice(index, 1);
+    } else {
+      updatedAddedTask.push(task.taskId);
+    }
+
+    setAddedTasks(updatedAddedTask);
   };
 
   const renderTaskTiles = useCallback(
@@ -49,12 +60,11 @@ const AddByAction = (props) => {
       // console.log(itemData.item);
       return (
         <TaskTile
-          // isChecked={coreTasks.find((task) => task === itemData.item)}
-          checked={() => {
-            // console.log(typeof itemData.item);
+          addLifeTaskMode={true}
+          checkBoxEnabled={false}
+          onClick={() => {
             toggleLifeTaskHandler(itemData.item);
           }}
-          onClick={() => {}}
         >
           {itemData.item.task}
         </TaskTile>
@@ -88,7 +98,7 @@ const AddByAction = (props) => {
     });
 
     setResultTasks(newResult);
-  }, [dataArray, selectedValue]);
+  }, [dataArray, selectedValue, addedTasks]);
 
   useEffect(() => {
     // console.log("useEffect");

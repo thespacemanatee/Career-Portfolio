@@ -11,6 +11,7 @@ import TaskTile from "../../components/TaskTile";
 import * as taskActions from "../../store/actions/task";
 
 import * as data from "../../data/career_data.json";
+import { add } from "react-native-reanimated";
 const dataArray = Object.values(data);
 
 const AddByOccupation = (props) => {
@@ -18,12 +19,23 @@ const AddByOccupation = (props) => {
   const occupations = useSelector((state) => state.occupations.occupations);
   const [selectedValue, setSelectedValue] = useState("Accept");
   const [resultTasks, setResultTasks] = useState([]);
+  const [addedTasks, setAddedTasks] = useState([]);
 
   const dispatch = useDispatch();
 
   const toggleLifeTaskHandler = (task) => {
     console.log("TASK CHECKED: " + task);
     dispatch(taskActions.toggleLifeTask(task));
+
+    const index = addedTasks.indexOf(task.taskId);
+    const updatedAddedTask = [...addedTasks];
+    if (index > -1) {
+      updatedAddedTask.splice(index, 1);
+    } else {
+      updatedAddedTask.push(task.taskId);
+    }
+
+    setAddedTasks(updatedAddedTask);
   };
 
   const renderTaskTiles = useCallback(
@@ -31,9 +43,9 @@ const AddByOccupation = (props) => {
       // console.log(itemData.item);
       return (
         <TaskTile
-          // isChecked={coreTasks.find((task) => task === itemData.item)}
-          checked={() => {
-            // console.log(typeof itemData.item);
+          addLifeTaskMode={true}
+          checkBoxEnabled={false}
+          onClick={() => {
             toggleLifeTaskHandler(itemData.item);
           }}
         >
@@ -65,7 +77,7 @@ const AddByOccupation = (props) => {
       newResult.push(newObject);
     });
     setResultTasks(newResult);
-  }, [dataArray, selectedValue]);
+  }, [dataArray, selectedValue, addedTasks]);
 
   useEffect(() => {
     // console.log("useEffect");

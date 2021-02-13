@@ -36,6 +36,8 @@ const TaskTile = (props) => {
         if (props.deleteMode) {
           setSelectedDelete(!selectedDelete);
           props.onClick();
+        } else if (props.addLifeTaskMode) {
+          props.onClick();
         }
       }}
       onLongPress={() => {

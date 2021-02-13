@@ -24,10 +24,12 @@ import TaskTile from "../components/TaskTile";
 import AddTask from "../screens/bottom_sheets/AddTask";
 import AddByAction from "../screens/bottom_sheets/AddByAction";
 import AddByOccupation from "../screens/bottom_sheets/AddByOccupation";
+import * as taskActions from "../store/actions/task";
 
 const LifeTasksScreen = ({ route, navigation }) => {
   const storeTasks = useSelector((state) => state.tasks.lifeTasks);
   const [deleteMode, setDeleteMode] = useState(false);
+  const [deleteList, setDeleteList] = useState([]);
   // hooks
   const { dismiss, dismissAll } = useBottomSheetModal();
 
@@ -70,16 +72,34 @@ const LifeTasksScreen = ({ route, navigation }) => {
       bottomSheetOccupationRef.current.dismiss();
     }
   }, []);
-  const handleDismissAllPress = useCallback(() => {
-    dismissAll();
-  }, [dismissAll]);
-  const handleDismissByHookPress = useCallback(() => {
-    dismiss("A");
-  }, [dismiss]);
 
   useEffect(() => {
     handlePresentAdd();
   }, [handlePresentAdd]);
+
+  const dispatch = useDispatch();
+
+  const toggleDeleteHandler = useCallback(
+    (taskId) => {
+      const index = deleteList.indexOf(taskId);
+      const updatedDeleteList = [...deleteList];
+      if (index > -1) {
+        updatedDeleteList.splice(index, 1);
+      } else {
+        updatedDeleteList.push(taskId);
+      }
+
+      setDeleteList(updatedDeleteList);
+      console.log(deleteList);
+    },
+    [deleteList]
+  );
+
+  useEffect(() => {
+    if (!deleteMode) {
+      setDeleteList([]);
+    }
+  }, [deleteMode, setDeleteList]);
 
   // renders
   const renderBottomSheetContent = useCallback((type) => {
@@ -114,22 +134,23 @@ const LifeTasksScreen = ({ route, navigation }) => {
       return (
         <TaskTile
           deleteMode={deleteMode}
-          checkBoxEnabled={!deleteMode}
           checkBoxEnabled={false}
           onLongPress={() => {
             console.log("Delete Mode: " + deleteMode);
             Vibration.vibrate();
             setDeleteMode(!deleteMode);
+            toggleDeleteHandler(itemData.item.taskId);
           }}
           onClick={() => {
             console.log("I have been clicked!");
+            toggleDeleteHandler(itemData.item.taskId);
           }}
         >
           {itemData.item.task}
         </TaskTile>
       );
     },
-    [storeTasks, deleteMode]
+    [storeTasks, deleteMode, deleteList]
   );
 
   useEffect(() => {
@@ -154,7 +175,14 @@ const LifeTasksScreen = ({ route, navigation }) => {
                         onPress: () => console.log("Cancel"),
                         style: "cancel",
                       },
-                      { text: "Delete", onPress: () => console.log("Delete") },
+                      {
+                        text: "Delete",
+                        onPress: () => {
+                          console.log("Delete");
+                          dispatch(taskActions.deleteLifeTasks(deleteList));
+                          setDeleteMode(false);
+                        },
+                      },
                     ]
                   : [{ text: "OK" }]
               );
@@ -259,21 +287,6 @@ const styles = StyleSheet.create({
 export const screenOptions = (navigationData) => {
   return {
     headerTitle: "Onboarding",
-    // headerRight: () => (
-    //   <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-    //     <Item
-    //       title="Help"
-    //       iconName="help-circle-outline"
-    //       onPress={() => {
-    //         Alert.alert(
-    //           "Help",
-    //           "Select tasks that you have done in past jobs or outside work!",
-    //           [{ text: "OK" }]
-    //         );
-    //       }}
-    //     />
-    //   </HeaderButtons>
-    // ),
   };
 };
 

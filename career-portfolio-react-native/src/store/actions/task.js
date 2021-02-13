@@ -5,8 +5,8 @@ export const TOGGLE_LIFE_TASK = "TOGGLE_LIFE_TASK";
 export const DELETE_TASKS = "DELETE_TASKS";
 export const DELETE_LIFE_TASKS = "DELETE_LIFE_TASKS";
 
-export const addAllTasks = (tasks, occupation) => {
-  return { type: ADD_ALL_TASKS, tasks: tasks, chosenOccupation: occupation };
+export const addAllTasks = (tasks) => {
+  return { type: ADD_ALL_TASKS, tasks: tasks };
 };
 
 export const toggleCoreTask = (task) => {

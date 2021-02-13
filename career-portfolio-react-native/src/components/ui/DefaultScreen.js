@@ -15,11 +15,11 @@ const DefaultScreen = (props) => {
         {props.title}
       </ScreenTitle>
       <View style={styles.container}>{props.children}</View>
-      <Portal>
+      {/* <Portal>
         <View style={styles.fabContainer}>
           <FAB icon="arrow-forward-outline" onPress={props.onPressFAB} />
         </View>
-      </Portal>
+      </Portal> */}
     </View>
   );
 };

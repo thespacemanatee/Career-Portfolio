@@ -24,6 +24,7 @@ const dataArray = Object.values(data);
 
 const WorkScheduleScreen = ({ route, navigation }) => {
   const storeTasks = useSelector((state) => state.tasks.tasks);
+  const chosenOccupation = useSelector((state) => state.tasks.chosenOccupation);
   // const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [deleteMode, setDeleteMode] = useState(false);
@@ -97,7 +98,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
   const getTasks = useCallback(() => {
     console.log("useCallback");
     const tempArray = dataArray.filter(
-      (occupation) => occupation["Title"] === route.params.chosenOccupation
+      (occupation) => occupation["Title"] === chosenOccupation
     );
 
     return tempArray.filter(function (item) {
@@ -122,9 +123,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
       });
       // console.log(newResult);
       // setTasks(newResult);
-      dispatch(
-        taskActions.addAllTasks(newResult, route.params.chosenOccupation)
-      );
+      dispatch(taskActions.addAllTasks(newResult));
     } else {
       // result = storeTasks;
       // setTasks(result);
@@ -144,7 +143,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
                 deleteMode ? "Delete" : "Help",
                 deleteMode
                   ? "Are you sure you want to delete these tasks?"
-                  : `These are the tasks typically done by ${route.params.chosenOccupation}. Indicate if your task is a Core task, or not. Select and hold to delete tasks!`,
+                  : `These are the tasks typically done by ${chosenOccupation}. Indicate if your task is a Core task, or not. Select and hold to delete tasks!`,
 
                 deleteMode
                   ? [

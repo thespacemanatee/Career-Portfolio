@@ -86,17 +86,17 @@ const SelectOccupationScreen = (props) => {
   return (
     <DefaultScreen
       title="What is your occupation?"
-      onPressFAB={() => {
-        if (chosenOccupation) {
-          props.navigation.push("WorkSchedule", {
-            chosenOccupation: chosenOccupation,
-          });
-        } else {
-          Alert.alert("Error", "Please choose an occupation!", [
-            { text: "OK" },
-          ]);
-        }
-      }}
+      // onPressFAB={() => {
+      //   if (chosenOccupation) {
+      //     props.navigation.push("WorkSchedule", {
+      //       chosenOccupation: chosenOccupation,
+      //     });
+      //   } else {
+      //     Alert.alert("Error", "Please choose an occupation!", [
+      //       { text: "OK" },
+      //     ]);
+      //   }
+      // }}
     >
       <TextInput
         label="Please enter your occupation"

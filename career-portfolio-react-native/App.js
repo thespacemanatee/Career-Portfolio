@@ -1,16 +1,20 @@
-import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { LogBox } from "react-native";
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 import ReduxThunk from "redux-thunk";
-import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
+import {
+  DefaultTheme,
+  Provider as PaperProvider,
+  Portal,
+} from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
 
+import FABNavigator from "./src/components/FABNavigator";
 import tasksReducer from "./src/store/reducers/task";
 import verbsReducer from "./src/store/reducers/verbs";
 import occupationsReducer from "./src/store/reducers/occupations";
@@ -77,6 +81,7 @@ export default function App() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [actionVerbs, setActionVerbs] = useState([]);
   const [occupations, setOccupations] = useState([]);
+  const navigationRef = useRef(null);
 
   if (!isLoaded) {
     return (
@@ -103,11 +108,14 @@ export default function App() {
           icon: (props) => <Ionicons {...props} />,
         }}
       >
-        <NavigationContainer>
+        <NavigationContainer ref={navigationRef}>
           <RootNavigator
             data={{ actionVerbs: actionVerbs, occupations: occupations }}
           />
         </NavigationContainer>
+        <Portal>
+          <FABNavigator ref={navigationRef} />
+        </Portal>
       </PaperProvider>
     </Provider>
   );

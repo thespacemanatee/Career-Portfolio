@@ -19,7 +19,6 @@ const tasksReducer = (state = initialState, action) => {
     case ADD_ALL_TASKS:
       return {
         ...state,
-        chosenOccupation: action.chosenOccupation,
         tasks: action.tasks,
       };
 
@@ -46,7 +45,7 @@ const tasksReducer = (state = initialState, action) => {
       if (action.chosenOccupation === state.chosenOccupation) {
         return state;
       }
-      return { ...state, chosenOccupation: null, tasks: [] };
+      return { ...state, chosenOccupation: action.chosenOccupation, tasks: [] };
 
     case TOGGLE_LIFE_TASK:
       const lifeTask = { ...action.lifeTask };

@@ -20,6 +20,7 @@ import { HeaderBackButton } from "@react-navigation/stack";
 import Colors from "../constants/Colors";
 import DefaultScreen from "../components/ui/DefaultScreen";
 import CustomHeaderButton from "../components/ui/CustomHeaderButton";
+import CustomFlatList from "../components/ui/CustomFlatList";
 import TaskTile from "../components/TaskTile";
 import AddTask from "../screens/bottom_sheets/AddTask";
 import AddByAction from "../screens/bottom_sheets/AddByAction";
@@ -228,14 +229,12 @@ const LifeTasksScreen = ({ route, navigation }) => {
           <Text>No tasks found. Start adding some!</Text>
         </View>
       )}
-      <View style={styles.flatListContainer}>
-        <FlatList
-          data={storeTasks}
-          renderItem={renderTaskTiles}
-          contentContainerStyle={styles.flatList}
-          keyExtractor={(item) => item.taskId.toString()}
-        />
-      </View>
+
+      <CustomFlatList
+        data={storeTasks}
+        renderItem={renderTaskTiles}
+        keyExtractor={(item) => item.taskId.toString()}
+      />
 
       <BottomSheetModal
         name="Add"
@@ -244,7 +243,6 @@ const LifeTasksScreen = ({ route, navigation }) => {
         snapPoints={["10%", "20%"]}
         dismissOnPanDown={false}
         children={renderBottomSheetContent("Add")}
-        // backdropComponent={BottomSheetBackdrop}
       />
 
       <BottomSheetModal
@@ -275,17 +273,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  flatListContainer: {
-    flex: 1,
-    marginTop: 10,
-    marginBottom: 80,
-    borderRadius: 10,
-    overflow: "hidden",
-  },
-  flatList: {
-    borderRadius: 10,
-    overflow: "hidden",
   },
 });
 

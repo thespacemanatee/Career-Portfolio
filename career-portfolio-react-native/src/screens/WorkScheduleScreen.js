@@ -16,6 +16,7 @@ import DefaultScreen from "../components/ui/DefaultScreen";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import TaskTile from "../components/TaskTile";
 import CustomHeaderButton from "../components/ui/CustomHeaderButton";
+import CustomFlatList from "../components/ui/CustomFlatList";
 import Colors from "../constants/Colors";
 import * as taskActions from "../store/actions/task";
 
@@ -218,14 +219,11 @@ const WorkScheduleScreen = ({ route, navigation }) => {
         navigation.push("LifeTasks");
       }}
     >
-      <View style={styles.flatListContainer}>
-        <FlatList
-          data={storeTasks}
-          renderItem={renderTaskTiles}
-          contentContainerStyle={styles.flatList}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </View>
+      <CustomFlatList
+        data={storeTasks}
+        renderItem={renderTaskTiles}
+        keyExtractor={(item, index) => index.toString()}
+      />
     </DefaultScreen>
   );
 };
@@ -248,21 +246,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     margin: 30,
-  },
-  flatListContainer: {
-    flex: 1,
-    marginTop: 20,
-    marginBottom: 20,
-    borderRadius: 10,
-    overflow: "hidden",
-  },
-  flatList: {
-    borderRadius: 10,
-    overflow: "hidden",
-  },
-  fabContainer: {
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
-    marginTop: 10,
   },
 });

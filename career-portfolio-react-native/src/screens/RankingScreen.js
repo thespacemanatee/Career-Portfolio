@@ -37,10 +37,6 @@ const RankingScreen = ({ route, navigation }) => {
     savePreferencesToStore(tempArray);
   }, [storeTasks, storeLifeTasks]);
 
-  //   useEffect(() => {
-  //     savePreferencesToStore();
-  //   }, [combinedTasks]);
-
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -63,18 +59,33 @@ const RankingScreen = ({ route, navigation }) => {
 
   return (
     <DefaultScreen title="Rank your tasks!">
-      <DraggableFlatList
-        data={combinedTasks}
-        renderItem={renderTaskTiles}
-        keyExtractor={(item, index) => index.toString()}
-        onDragEnd={({ data }) => {
-          savePreferencesToStore(data);
-        }}
-      />
+      <View style={styles.flatListContainer}>
+        <DraggableFlatList
+          data={combinedTasks}
+          renderItem={renderTaskTiles}
+          keyExtractor={(item, index) => index.toString()}
+          onDragEnd={({ data }) => {
+            savePreferencesToStore(data);
+          }}
+          contentContainerStyle={styles.flatList}
+        />
+      </View>
     </DefaultScreen>
   );
 };
 
 export default RankingScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  flatListContainer: {
+    flex: 1,
+    marginTop: 20,
+    marginBottom: 20,
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  flatList: {
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+});

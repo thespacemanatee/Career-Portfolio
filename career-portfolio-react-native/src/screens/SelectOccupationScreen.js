@@ -1,12 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { StyleSheet, View, FlatList, Alert, Image } from "react-native";
-import {
-  Card,
-  Title,
-  TextInput,
-  Button,
-  Paragraph,
-} from "react-native-paper";
+import { Card, Title, TextInput, Button, Paragraph } from "react-native-paper";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
@@ -15,6 +9,7 @@ import { Buffer } from "buffer";
 import DefaultScreen from "../components/ui/DefaultScreen";
 import OccupationTile from "../components/OccupationTile";
 import CustomHeaderButton from "../components/ui/CustomHeaderButton";
+import CustomFlatList from "../components/ui/CustomFlatList";
 import { resetCoreTasks } from "../store/actions/task";
 
 const username = "singapore_university";
@@ -132,14 +127,12 @@ const SelectOccupationScreen = (props) => {
           </Card.Content>
         </Card>
       )}
-      <View style={styles.flatListContainer}>
-        <FlatList
-          data={occupations}
-          renderItem={renderOccupationTiles}
-          keyExtractor={(item, index) => item}
-          contentContainerStyle={styles.flatList}
-        />
-      </View>
+
+      <CustomFlatList
+        data={occupations}
+        renderItem={renderOccupationTiles}
+        keyExtractor={(item, index) => item}
+      />
     </DefaultScreen>
   );
 };
@@ -181,16 +174,5 @@ const styles = StyleSheet.create({
   errorImage: {
     flex: 1,
     aspectRatio: 1,
-  },
-  flatListContainer: {
-    flex: 1,
-    marginTop: 10,
-    marginBottom: 10,
-    borderRadius: 10,
-    overflow: "hidden",
-  },
-  flatList: {
-    borderRadius: 10,
-    overflow: "hidden",
   },
 });

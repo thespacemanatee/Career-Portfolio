@@ -1,7 +1,7 @@
 import { POST_RESULT } from "../actions/database";
 
 const initialState = {
-  result: [],
+  result: null,
 };
 
 const databaseReducer = (state = initialState, action) => {

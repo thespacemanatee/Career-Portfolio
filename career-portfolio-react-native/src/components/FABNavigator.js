@@ -1,17 +1,23 @@
 import React, { forwardRef, useState } from "react";
-import { StyleSheet, Text, View, Alert } from "react-native";
-import { FAB } from "react-native-paper";
+import { StyleSheet, Text, View, Alert, ActivityIndicator } from "react-native";
+import { FAB, Dialog } from "react-native-paper";
 import { useSelector, useDispatch } from "react-redux";
 
+import Colors from "../constants/Colors";
 import * as databaseActions from "../store/actions/database";
 
 const FABNavigator = forwardRef((props, ref) => {
   const storeState = useSelector((state) => state.tasks);
+  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
 
-  const postResult = async (result) => {
-    dispatch(databaseActions.postResult(result));
+  const postResult = (result) => {
+    setLoading(true);
+    dispatch(databaseActions.postResult(result)).then(() => {
+      setLoading(false);
+      ref.current?.navigate("Results");
+    });
   };
 
   const navigationHandler = () => {
@@ -44,9 +50,24 @@ const FABNavigator = forwardRef((props, ref) => {
       postResult(result);
     }
   };
+
   return (
-    <View style={styles.fabContainer}>
-      <FAB icon="arrow-forward-outline" onPress={navigationHandler} />
+    <View style={styles.screen}>
+      <Dialog visible={loading ? true : false} dismissable={false}>
+        <Dialog.Content>
+          <ActivityIndicator
+            animating={true}
+            size="large"
+            color={Colors.primary}
+          />
+        </Dialog.Content>
+      </Dialog>
+
+      {!loading && (
+        <View style={styles.fabContainer}>
+          <FAB icon="arrow-forward-outline" onPress={navigationHandler} />
+        </View>
+      )}
     </View>
   );
 });
@@ -54,9 +75,17 @@ const FABNavigator = forwardRef((props, ref) => {
 export default FABNavigator;
 
 const styles = StyleSheet.create({
-  fabContainer: {
+  screen: {
     flex: 1,
     justifyContent: "flex-end",
+  },
+  // centered: {
+  //   // flex: 1,
+  //   height: "20%",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  // },
+  fabContainer: {
     alignItems: "flex-end",
     margin: 20,
   },

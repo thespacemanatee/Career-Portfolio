@@ -11,6 +11,7 @@ import OccupationTile from "../components/OccupationTile";
 import CustomHeaderButton from "../components/ui/CustomHeaderButton";
 import CustomFlatList from "../components/ui/CustomFlatList";
 import { resetCoreTasks } from "../store/actions/task";
+import * as taskActions from "../store/actions/task";
 
 const username = "singapore_university";
 const password = "3594cgj";
@@ -48,6 +49,7 @@ const SelectOccupationScreen = (props) => {
 
   const getSearchResults = (occupationKeyword) => {
     setOccupations();
+    taskActions.setUserInput(occupationKeyword);
     const url = `https://services.onetcenter.org/ws/online/search?keyword=${occupationKeyword}&start=1&end=100`;
     axios
       .get(url, {
@@ -70,29 +72,8 @@ const SelectOccupationScreen = (props) => {
       });
   };
 
-  // const showHelp = () => {
-  //   Alert.alert(
-  //     "Help",
-  //     "If you are unemployed, please enter your previous occupation!",
-  //     [{ text: "OK" }]
-  //   );
-  // };
-
   return (
-    <DefaultScreen
-      title="What is your occupation?"
-      // onPressFAB={() => {
-      //   if (chosenOccupation) {
-      //     props.navigation.push("WorkSchedule", {
-      //       chosenOccupation: chosenOccupation,
-      //     });
-      //   } else {
-      //     Alert.alert("Error", "Please choose an occupation!", [
-      //       { text: "OK" },
-      //     ]);
-      //   }
-      // }}
-    >
+    <DefaultScreen title="What is your occupation?">
       <TextInput
         label="Please enter your occupation"
         mode="outlined"

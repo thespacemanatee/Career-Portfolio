@@ -35,11 +35,12 @@ const FABNavigator = forwardRef((props, ref) => {
     }
     if (currentRoute.name === "Ranking") {
       const result = {
+        // input_title: storeState.userInput,
         input_title: storeState.chosenOccupation,
         title_id: Date.now(),
         task_list: storeState.combinedTasks,
       };
-    //   console.log(result);
+      //   console.log(result);
       postResult(result);
     }
   };

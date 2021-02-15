@@ -6,10 +6,12 @@ import {
   DELETE_TASKS,
   DELETE_LIFE_TASKS,
   ADD_COMBINED_TASKS,
+  SET_USER_INPUT,
 } from "../actions/task";
 import _ from "lodash";
 
 const initialState = {
+  userInput: null,
   chosenOccupation: null,
   tasks: [],
   lifeTasks: [],
@@ -103,6 +105,12 @@ const tasksReducer = (state = initialState, action) => {
         ...state,
         lifeTasks: updatedDeleteLifeTasks,
       };
+    case SET_USER_INPUT:
+      return {
+        ...state,
+        userInput: action.input,
+      };
+
     default:
       return state;
   }

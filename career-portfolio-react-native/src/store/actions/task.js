@@ -5,6 +5,7 @@ export const RESET_CORE_TASKS = "RESET_CORE_TASKS";
 export const TOGGLE_LIFE_TASK = "TOGGLE_LIFE_TASK";
 export const DELETE_TASKS = "DELETE_TASKS";
 export const DELETE_LIFE_TASKS = "DELETE_LIFE_TASKS";
+export const SET_USER_INPUT = "SET_USER_INPUT";
 
 export const addAllTasks = (tasks) => {
   return { type: ADD_ALL_TASKS, tasks: tasks };
@@ -31,4 +32,8 @@ export const deleteTasks = (tasks) => {
 
 export const deleteLifeTasks = (tasks) => {
   return { type: DELETE_LIFE_TASKS, tasks: tasks };
+};
+
+export const setUserInput = (input) => {
+  return { type: SET_USER_INPUT, input: input };
 };

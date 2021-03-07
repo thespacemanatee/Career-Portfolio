@@ -162,6 +162,7 @@ const LifeTasksScreen = ({ route, navigation }) => {
           <Item
             title="Help"
             iconName={deleteMode ? "trash-outline" : "help-circle-outline"}
+            buttonStyle={{ color: "white" }}
             onPress={() => {
               Alert.alert(
                 deleteMode ? "Delete" : "Help",
@@ -196,6 +197,7 @@ const LifeTasksScreen = ({ route, navigation }) => {
             <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
               <Item
                 iconName="close-outline"
+                buttonStyle={{ color: "white" }}
                 onPress={() => {
                   setDeleteMode(!deleteMode);
                 }}
@@ -211,9 +213,18 @@ const LifeTasksScreen = ({ route, navigation }) => {
             />
           ),
       headerStyle: {
-        backgroundColor: deleteMode ? "red" : Colors.primary,
+        backgroundColor: deleteMode
+          ? "red"
+          : Platform.OS === "android"
+          ? Colors.primary
+          : undefined,
       },
       headerTitle: deleteMode ? "Delete Tasks" : "Onboarding",
+      headerTintColor: deleteMode
+        ? "white"
+        : Platform.OS === "android"
+        ? "white"
+        : Colors.primary,
     });
   });
 

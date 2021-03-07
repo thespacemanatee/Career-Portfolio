@@ -1,5 +1,12 @@
-import React, { forwardRef, useState } from "react";
-import { StyleSheet, Text, View, Alert, ActivityIndicator } from "react-native";
+import React, { forwardRef, Fragment, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  ActivityIndicator,
+  Platform,
+} from "react-native";
 import { FAB, Dialog } from "react-native-paper";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -14,10 +21,15 @@ const FABNavigator = forwardRef((props, ref) => {
 
   const postResult = (result) => {
     setLoading(true);
-    dispatch(databaseActions.postResult(result)).then(() => {
-      setLoading(false);
-      ref.current?.navigate("Results");
-    });
+    dispatch(databaseActions.postResult(result))
+      .then((res) => {
+        console.log("RESPONSE: ", res);
+        setLoading(false);
+        ref.current?.navigate("Results");
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   const navigationHandler = () => {
@@ -52,23 +64,27 @@ const FABNavigator = forwardRef((props, ref) => {
   };
 
   return (
-    <View style={styles.screen}>
-      <Dialog visible={loading ? true : false} dismissable={false}>
-        <Dialog.Content>
-          <ActivityIndicator
-            animating={true}
-            size="large"
-            color={Colors.primary}
-          />
-        </Dialog.Content>
-      </Dialog>
+    <Fragment>
+      {loading && (
+        <View style={styles.screen}>
+          <Dialog visible dismissable={false}>
+            <Dialog.Content>
+              <ActivityIndicator
+                animating={true}
+                size="large"
+                color={Colors.primary}
+              />
+            </Dialog.Content>
+          </Dialog>
+        </View>
+      )}
 
       {!loading && (
         <View style={styles.fabContainer}>
           <FAB icon="arrow-forward-outline" onPress={navigationHandler} />
         </View>
       )}
-    </View>
+    </Fragment>
   );
 });
 
@@ -79,14 +95,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
   },
-  // centered: {
-  //   // flex: 1,
-  //   height: "20%",
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  // },
   fabContainer: {
     alignItems: "flex-end",
     margin: 20,
+    position: "absolute",
+    right: 0,
+    top: Platform.OS === "android" ? 580 : 800,
   },
 });

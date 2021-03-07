@@ -2,10 +2,10 @@ import React, { useCallback, useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
-  FlatList,
   Alert,
   ActivityIndicator,
   Vibration,
+  Platform,
 } from "react-native";
 import { Text } from "react-native-paper";
 import { useSelector, useDispatch } from "react-redux";
@@ -139,6 +139,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
           <Item
             title="Help"
             iconName={deleteMode ? "trash-outline" : "help-circle-outline"}
+            buttonStyle={{ color: "white" }}
             onPress={() => {
               Alert.alert(
                 deleteMode ? "Delete" : "Help",
@@ -173,6 +174,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
             <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
               <Item
                 iconName="close-outline"
+                buttonStyle={{ color: "white" }}
                 onPress={() => {
                   setDeleteMode(!deleteMode);
                 }}
@@ -188,9 +190,18 @@ const WorkScheduleScreen = ({ route, navigation }) => {
             />
           ),
       headerStyle: {
-        backgroundColor: deleteMode ? "red" : Colors.primary,
+        backgroundColor: deleteMode
+          ? "red"
+          : Platform.OS === "android"
+          ? Colors.primary
+          : undefined,
       },
       headerTitle: deleteMode ? "Delete Tasks" : "Onboarding",
+      headerTintColor: deleteMode
+        ? "white"
+        : Platform.OS === "android"
+        ? "white"
+        : Colors.primary,
     });
   });
 

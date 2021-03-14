@@ -1,0 +1,9 @@
+diff --git a/node_modules/@gorhom/bottom-sheet/lib/module/components/touchables/Touchables.web.js b/node_modules/@gorhom/bottom-sheet/lib/module/components/touchables/Touchables.web.js
+new file mode 100644
+index 0000000..f53e4cd
+--- /dev/null
++++ b/node_modules/@gorhom/bottom-sheet/lib/module/components/touchables/Touchables.web.js
+@@ -0,0 +1,2 @@
++export { TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
++//# sourceMappingURL=Touchables.ios.js.map
+\ No newline at end of file

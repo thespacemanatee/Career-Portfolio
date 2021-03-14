@@ -100,6 +100,6 @@ const styles = StyleSheet.create({
     margin: 20,
     position: "absolute",
     right: 0,
-    top: Platform.OS === "android" ? 580 : 800,
+    bottom: 0,
   },
 });

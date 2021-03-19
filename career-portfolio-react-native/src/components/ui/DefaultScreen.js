@@ -1,19 +1,19 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { FAB, Portal } from "react-native-paper";
 
 import ScreenTitle from "./ScreenTitle";
 
 const DefaultScreen = (props) => {
+  const { titleStyle } = props;
+  const { containerStyle } = props;
+  const { title } = props;
+  const { children } = props;
   return (
     <View style={styles.screen}>
-      <ScreenTitle
-        titleStyle={props.titleStyle}
-        containerStyle={props.containerStyle}
-      >
-        {props.title}
+      <ScreenTitle titleStyle={titleStyle} containerStyle={containerStyle}>
+        {title}
       </ScreenTitle>
-      <View style={styles.container}>{props.children}</View>
+      <View style={styles.container}>{children}</View>
     </View>
   );
 };

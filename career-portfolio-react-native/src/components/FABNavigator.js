@@ -1,12 +1,5 @@
 import React, { forwardRef, Fragment, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Alert,
-  ActivityIndicator,
-  Platform,
-} from "react-native";
+import { StyleSheet, Text, View, Alert, ActivityIndicator } from "react-native";
 import { FAB, Dialog, Button } from "react-native-paper";
 import { useSelector, useDispatch } from "react-redux";
 

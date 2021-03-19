@@ -19,10 +19,11 @@ import tasksReducer from "./src/store/reducers/task";
 import verbsReducer from "./src/store/reducers/verbs";
 import occupationsReducer from "./src/store/reducers/occupations";
 import databaseReducer from "./src/store/reducers/database";
-import { RootNavigator } from "./src/navigation/AppNavigator";
+import RootNavigator from "./src/navigation/AppNavigator";
 import Colors from "./src/constants/Colors";
 
 import * as data from "./src/data/career_data.json";
+
 const dataArray = Object.values(data);
 
 LogBox.ignoreLogs([
@@ -53,10 +54,10 @@ const getActionVerbsArray = () => {
     const tempArray = [];
     dataArray.forEach((element) => {
       const { Task } = element;
-      const actionVerb = (Task + "").split(/[ ,]+/, 1).toString();
+      const actionVerb = `${Task}`.split(/[ ,]+/, 1).toString();
       if (
         !tempArray.find((v) =>
-          _.isEqual((v + "").split(/[ ,]+/, 1).toString(), actionVerb)
+          _.isEqual(`${v}`.split(/[ ,]+/, 1).toString(), actionVerb)
         )
       )
         tempArray.push(actionVerb);
@@ -111,9 +112,7 @@ export default function App() {
         }}
       >
         <NavigationContainer ref={navigationRef}>
-          <RootNavigator
-            data={{ actionVerbs: actionVerbs, occupations: occupations }}
-          />
+          <RootNavigator data={{ actionVerbs, occupations }} />
         </NavigationContainer>
         <Portal>
           <FABNavigator ref={navigationRef} />

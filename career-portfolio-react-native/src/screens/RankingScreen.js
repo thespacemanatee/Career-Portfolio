@@ -1,5 +1,5 @@
-import React, { useCallback, useState, useEffect } from "react";
-import { Alert, StyleSheet, Text, View } from "react-native";
+import React, { useCallback, useEffect } from "react";
+import { Alert, StyleSheet, View } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -9,7 +9,7 @@ import DefaultScreen from "../components/ui/DefaultScreen";
 import TaskTile from "../components/TaskTile";
 import * as taskActions from "../store/actions/task";
 
-const RankingScreen = ({ route, navigation }) => {
+const RankingScreen = ({ navigation }) => {
   const storeTasks = useSelector((state) => state.tasks.tasks);
   const storeLifeTasks = useSelector((state) => state.tasks.lifeTasks);
   const combinedTasks = useSelector((state) => state.tasks.combinedTasks);
@@ -21,21 +21,18 @@ const RankingScreen = ({ route, navigation }) => {
     dispatch(taskActions.addCombinedTasks(result));
   }, []);
 
-  const renderTaskTiles = useCallback(
-    ({ item, index, drag, isActive }) => {
-      return (
-        <TaskTile onLongPress={drag} checkBoxEnabled={false}>
-          {item.task}
-        </TaskTile>
-      );
-    },
-    [combinedTasks]
-  );
+  const renderTaskTiles = useCallback(({ item, index, drag, isActive }) => {
+    return (
+      <TaskTile onLongPress={drag} checkBoxEnabled={false}>
+        {item.task}
+      </TaskTile>
+    );
+  }, []);
 
   useEffect(() => {
     const tempArray = storeTasks.concat(storeLifeTasks);
     savePreferencesToStore(tempArray);
-  }, [storeTasks, storeLifeTasks]);
+  }, [storeTasks, storeLifeTasks, savePreferencesToStore]);
 
   useEffect(() => {
     navigation.setOptions({

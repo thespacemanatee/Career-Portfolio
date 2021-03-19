@@ -3,13 +3,12 @@ import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 
 const ScreenTitle = (props) => {
+  const { containerStyle } = props;
+  const { titleStyle } = props;
+  const { children } = props;
   return (
-    <View
-      style={props.containerStyle ? props.containerStyle : styles.textContainer}
-    >
-      <Text style={props.titleStyle ? props.titleStyle : styles.titleText}>
-        {props.children}
-      </Text>
+    <View style={containerStyle || styles.textContainer}>
+      <Text style={titleStyle || styles.titleText}>{children}</Text>
     </View>
   );
 };

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { StyleSheet, Text } from "react-native";
-import { Picker, PickerIOS } from "@react-native-picker/picker";
+import { Picker } from "@react-native-picker/picker";
 import { useSelector, useDispatch } from "react-redux";
 import { Title, Button } from "react-native-paper";
 import { BottomSheetView, BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import _ from "lodash";
 
-import Task from "../../models/task";
+import TaskModel from "../../models/task";
 import TaskTile from "../../components/TaskTile";
 import * as taskActions from "../../store/actions/task";
 
@@ -20,23 +20,27 @@ const AddByAction = (props) => {
   const [selectedValue, setSelectedValue] = useState("Accept");
   const [resultTasks, setResultTasks] = useState([]);
   const [addedTasks, setAddedTasks] = useState([]);
+  const { onPress } = props;
 
   const dispatch = useDispatch();
 
-  const toggleLifeTaskHandler = (task) => {
-    console.log(`TASK CHECKED: ${task}`);
-    dispatch(taskActions.toggleLifeTask(task));
+  const toggleLifeTaskHandler = useCallback(
+    (task) => {
+      console.log(`TASK CHECKED: ${task}`);
+      dispatch(taskActions.toggleLifeTask(task));
 
-    const index = addedTasks.indexOf(task.taskId);
-    const updatedAddedTask = [...addedTasks];
-    if (index > -1) {
-      updatedAddedTask.splice(index, 1);
-    } else {
-      updatedAddedTask.push(task.taskId);
-    }
+      const index = addedTasks.indexOf(task.taskId);
+      const updatedAddedTask = [...addedTasks];
+      if (index > -1) {
+        updatedAddedTask.splice(index, 1);
+      } else {
+        updatedAddedTask.push(task.taskId);
+      }
 
-    setAddedTasks(updatedAddedTask);
-  };
+      setAddedTasks(updatedAddedTask);
+    },
+    [addedTasks, dispatch]
+  );
 
   const renderTaskTiles = useCallback(
     (itemData) => {
@@ -53,7 +57,7 @@ const AddByAction = (props) => {
         </TaskTile>
       );
     },
-    [resultTasks]
+    [toggleLifeTaskHandler]
   );
 
   const getNewArray = useCallback(() => {
@@ -75,7 +79,7 @@ const AddByAction = (props) => {
     });
     const newResult = [];
     tempArray.forEach((task) => {
-      const newObject = new Task(task);
+      const newObject = new TaskModel(task);
       newResult.push(newObject);
       // console.log(newObject);
     });
@@ -116,7 +120,7 @@ const AddByAction = (props) => {
         contentContainerStyle={styles.contentContainer}
       />
       <BottomSheetView style={styles.buttonContainer}>
-        <Button onPress={props.onPress.back}>BACK</Button>
+        <Button onPress={onPress.back}>BACK</Button>
       </BottomSheetView>
     </BottomSheetView>
   );

@@ -2,13 +2,16 @@ import React from "react";
 import { StyleSheet, FlatList, View } from "react-native";
 
 const CustomFlatList = (props) => {
+  const { data } = props;
+  const { renderItem } = props;
+  const { keyExtractor } = props;
   return (
     <View style={styles.flatListContainer}>
       <FlatList
-        data={props.data}
-        renderItem={props.renderItem}
+        data={data}
+        renderItem={renderItem}
         contentContainerStyle={styles.flatList}
-        keyExtractor={props.keyExtractor}
+        keyExtractor={keyExtractor}
       />
     </View>
   );

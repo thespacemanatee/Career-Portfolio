@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Platform } from "react-native";
 import { useDispatch } from "react-redux";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -10,9 +10,7 @@ import SelectOccupationScreen, {
 import WorkScheduleScreen, {
   screenOptions as workScheduleScreenOptions,
 } from "../screens/WorkScheduleScreen";
-import LifeTasksScreen, {
-  screenOptions as lifeTasksScreenOptions,
-} from "../screens/LifeTasksScreen";
+import LifeTasksScreen from "../screens/LifeTasksScreen";
 import RankingScreen from "../screens/RankingScreen";
 import ResultsScreen from "../screens/ResultsScreen";
 import Colors from "../constants/Colors";
@@ -43,14 +41,15 @@ const defaultNavOptions = {
 
 const Stack = createStackNavigator();
 
-export const RootNavigator = (props) => {
-  const { actionVerbs } = props.data;
-  const { occupations } = props.data;
+const RootNavigator = (props) => {
+  const { data } = props;
+  const { actionVerbs } = data;
+  const { occupations } = data;
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(storeVerbs(actionVerbs));
     dispatch(storeOccupations(occupations));
-  }, [actionVerbs]);
+  }, [actionVerbs, dispatch, occupations]);
   return (
     <Stack.Navigator
       initialRouteName="Welcome"
@@ -74,11 +73,7 @@ export const RootNavigator = (props) => {
         component={WorkScheduleScreen}
         options={workScheduleScreenOptions}
       />
-      <Stack.Screen
-        name="LifeTasks"
-        component={LifeTasksScreen}
-        options={lifeTasksScreenOptions}
-      />
+      <Stack.Screen name="LifeTasks" component={LifeTasksScreen} />
       <Stack.Screen
         name="Ranking"
         component={RankingScreen}
@@ -92,3 +87,5 @@ export const RootNavigator = (props) => {
     </Stack.Navigator>
   );
 };
+
+export default RootNavigator;

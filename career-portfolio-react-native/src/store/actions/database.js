@@ -21,7 +21,7 @@ export const postResult = (result) => {
     }
 
     const responseData = await response.json();
-    await sendDB(responseData);
+    // await sendDB(responseData);
     dispatch({ type: POST_RESULT, result: responseData });
     return responseData;
   };

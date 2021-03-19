@@ -24,21 +24,23 @@ import * as data from "../data/career_data.json";
 
 const dataArray = Object.values(data);
 
-const WorkScheduleScreen = ({ route, navigation }) => {
+const WorkScheduleScreen = ({ navigation }) => {
   const storeTasks = useSelector((state) => state.tasks.tasks);
   const chosenOccupation = useSelector((state) => state.tasks.chosenOccupation);
   // const [tasks, setTasks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [deleteMode, setDeleteMode] = useState(false);
   const [deleteList, setDeleteList] = useState([]);
-  const [error, setError] = useState(undefined);
 
   const dispatch = useDispatch();
 
-  const toggleCoreTaskHandler = (task) => {
-    console.log(`TASK CHECKED: ${task}`);
-    dispatch(taskActions.toggleCoreTask(task));
-  };
+  const toggleCoreTaskHandler = useCallback(
+    (task) => {
+      console.log(`TASK CHECKED: ${task}`);
+      dispatch(taskActions.toggleCoreTask(task));
+    },
+    [dispatch]
+  );
 
   const toggleDeleteHandler = useCallback(
     (taskId) => {
@@ -73,8 +75,8 @@ const WorkScheduleScreen = ({ route, navigation }) => {
               if (task.task_type === "core") {
                 return true;
               }
-              return false;
             }
+            return false;
           })}
           checked={() => {
             toggleCoreTaskHandler(itemData.item);
@@ -94,7 +96,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
         </TaskTile>
       );
     },
-    [storeTasks, deleteMode, deleteList]
+    [deleteMode, storeTasks, toggleCoreTaskHandler, toggleDeleteHandler]
   );
 
   const getTasks = useCallback(() => {
@@ -110,7 +112,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
       }
       return false;
     }, Object.create(null));
-  }, [dataArray]);
+  }, [chosenOccupation]);
 
   useEffect(() => {
     console.log("useEffect");
@@ -131,7 +133,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
       // setTasks(result);
     }
     setIsLoading(false);
-  }, [setIsLoading, getTasks]);
+  }, [setIsLoading, getTasks, storeTasks.length, dispatch]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -191,6 +193,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
             />
           ),
       headerStyle: {
+        // eslint-disable-next-line no-nested-ternary
         backgroundColor: deleteMode
           ? "red"
           : Platform.OS === "android"
@@ -198,6 +201,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
           : undefined,
       },
       headerTitle: deleteMode ? "Delete Tasks" : "Onboarding",
+      // eslint-disable-next-line no-nested-ternary
       headerTintColor: deleteMode
         ? "white"
         : Platform.OS === "android"
@@ -237,7 +241,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
   );
 };
 
-export const screenOptions = (navigationData) => {
+export const screenOptions = () => {
   return {
     headerTitle: "Onboarding",
   };
@@ -251,9 +255,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  screen: {
-    flex: 1,
-    justifyContent: "center",
-    margin: 30,
-  },
+  // screen: {
+  //   flex: 1,
+  //   justifyContent: "center",
+  //   margin: 30,
+  // },
 });

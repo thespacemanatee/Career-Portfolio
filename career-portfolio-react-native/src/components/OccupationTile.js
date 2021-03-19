@@ -6,7 +6,7 @@ import {
   TouchableNativeFeedback,
   TouchableOpacity,
 } from "react-native";
-import { Text, FAB } from "react-native-paper";
+import { Text } from "react-native-paper";
 
 import Colors from "../constants/Colors";
 
@@ -16,10 +16,13 @@ const OccupationTile = (props) => {
     TouchableCustom = TouchableNativeFeedback;
   }
 
+  const { onClick } = props;
+  const { children } = props;
+
   return (
-    <TouchableCustom onPress={props.onClick}>
+    <TouchableCustom onPress={onClick}>
       <View style={styles.container}>
-        <Text style={styles.text}>{props.children}</Text>
+        <Text style={styles.text}>{children}</Text>
       </View>
     </TouchableCustom>
   );

@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { StyleSheet, View, Text } from "react-native";
-import { Picker, PickerIOS } from "@react-native-picker/picker";
+import { StyleSheet, Text } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import { useSelector, useDispatch } from "react-redux";
 import { Title, Button } from "react-native-paper";
 import { BottomSheetView, BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import _ from "lodash";
 
-import { add } from "react-native-reanimated";
 import Task from "../../models/task";
 import TaskTile from "../../components/TaskTile";
 import * as taskActions from "../../store/actions/task";
@@ -21,23 +20,27 @@ const AddByOccupation = (props) => {
   const [selectedValue, setSelectedValue] = useState("Accept");
   const [resultTasks, setResultTasks] = useState([]);
   const [addedTasks, setAddedTasks] = useState([]);
+  const { onPress } = props;
 
   const dispatch = useDispatch();
 
-  const toggleLifeTaskHandler = (task) => {
-    console.log(`TASK CHECKED: ${task}`);
-    dispatch(taskActions.toggleLifeTask(task));
+  const toggleLifeTaskHandler = useCallback(
+    (task) => {
+      console.log(`TASK CHECKED: ${task}`);
+      dispatch(taskActions.toggleLifeTask(task));
 
-    const index = addedTasks.indexOf(task.taskId);
-    const updatedAddedTask = [...addedTasks];
-    if (index > -1) {
-      updatedAddedTask.splice(index, 1);
-    } else {
-      updatedAddedTask.push(task.taskId);
-    }
+      const index = addedTasks.indexOf(task.taskId);
+      const updatedAddedTask = [...addedTasks];
+      if (index > -1) {
+        updatedAddedTask.splice(index, 1);
+      } else {
+        updatedAddedTask.push(task.taskId);
+      }
 
-    setAddedTasks(updatedAddedTask);
-  };
+      setAddedTasks(updatedAddedTask);
+    },
+    [addedTasks, dispatch]
+  );
 
   const renderTaskTiles = useCallback(
     (itemData) => {
@@ -54,14 +57,16 @@ const AddByOccupation = (props) => {
         </TaskTile>
       );
     },
-    [resultTasks]
+    [toggleLifeTaskHandler]
   );
 
   const getNewArray = useCallback(() => {
     // console.log("useCallback");
     const tempArray = [];
     dataArray.forEach((element) => {
+      // eslint-disable-next-line no-shadow
       const { Title } = element;
+      // eslint-disable-next-line no-shadow
       const { Task } = element;
       const taskId = element["Task ID"];
       if (
@@ -78,7 +83,7 @@ const AddByOccupation = (props) => {
       newResult.push(newObject);
     });
     setResultTasks(newResult);
-  }, [dataArray, selectedValue, addedTasks]);
+  }, [selectedValue, storeLifeTasks]);
 
   useEffect(() => {
     // console.log("useEffect");
@@ -117,7 +122,7 @@ const AddByOccupation = (props) => {
         contentContainerStyle={styles.contentContainer}
       />
       <BottomSheetView style={styles.buttonContainer}>
-        <Button onPress={props.onPress.back}>BACK</Button>
+        <Button onPress={onPress.back}>BACK</Button>
       </BottomSheetView>
     </BottomSheetView>
   );

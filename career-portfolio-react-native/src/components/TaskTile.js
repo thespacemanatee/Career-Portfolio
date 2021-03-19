@@ -14,6 +14,9 @@ const TaskTile = (props) => {
   const [checked, setChecked] = useState(false);
   const [selectedDelete, setSelectedDelete] = useState(false);
   const { isChecked } = props;
+  const { deleteMode } = props;
+  const { children } = props;
+  const { checkBoxEnabled } = props;
 
   useEffect(() => {
     setChecked(isChecked);
@@ -25,10 +28,10 @@ const TaskTile = (props) => {
   }
 
   useEffect(() => {
-    if (!props.deleteMode) {
+    if (!deleteMode) {
       setSelectedDelete(false);
     }
-  }, [props.deleteMode]);
+  }, [deleteMode]);
 
   return (
     <TouchableCustom
@@ -48,7 +51,8 @@ const TaskTile = (props) => {
       <View
         style={{
           ...styles.container,
-          backgroundColor: props.deleteMode
+          // eslint-disable-next-line no-nested-ternary
+          backgroundColor: deleteMode
             ? selectedDelete
               ? Colors.tileBackgroundDelete
               : Colors.tileBackground
@@ -57,10 +61,10 @@ const TaskTile = (props) => {
       >
         <View style={styles.textContainer}>
           <Text style={styles.text} numberOfLines={2}>
-            {props.children}
+            {children}
           </Text>
         </View>
-        {props.checkBoxEnabled && (
+        {checkBoxEnabled && (
           <Checkbox
             status={checked ? "checked" : "unchecked"}
             onPress={() => {

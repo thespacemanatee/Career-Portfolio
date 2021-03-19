@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { StyleSheet, View, FlatList, Alert, Image } from "react-native";
+import React, { useState, useCallback } from "react";
+import { StyleSheet, View, Alert, Image } from "react-native";
 import { Card, Title, TextInput, Button, Paragraph } from "react-native-paper";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 import { Buffer } from "buffer";
 
@@ -13,11 +13,13 @@ import CustomFlatList from "../components/ui/CustomFlatList";
 import { resetCoreTasks } from "../store/actions/task";
 import * as taskActions from "../store/actions/task";
 
+const failImage = require("../../assets/fail.png");
+
 const username = "singapore_university";
 const password = "3594cgj";
 const token = Buffer.from(`${username}:${password}`, "utf8").toString("base64");
 
-const SelectOccupationScreen = (props) => {
+const SelectOccupationScreen = () => {
   const [text, setText] = useState("");
   const [occupations, setOccupations] = useState();
   const [chosenOccupation, setChosenOccupation] = useState();
@@ -30,10 +32,13 @@ const SelectOccupationScreen = (props) => {
     setSearching(true);
   };
 
-  const resetCoreTasksHandler = (occupation) => {
-    console.log("Resetting core tasks...");
-    dispatch(resetCoreTasks(occupation));
-  };
+  const resetCoreTasksHandler = useCallback(
+    (occupation) => {
+      console.log("Resetting core tasks...");
+      dispatch(resetCoreTasks(occupation));
+    },
+    [dispatch]
+  );
 
   const renderOccupationTiles = useCallback(
     (itemData) => {
@@ -49,7 +54,7 @@ const SelectOccupationScreen = (props) => {
         </OccupationTile>
       );
     },
-    [occupations]
+    [resetCoreTasksHandler]
   );
 
   const getSearchResults = (occupationKeyword) => {
@@ -72,7 +77,7 @@ const SelectOccupationScreen = (props) => {
         setOccupations(titles);
         setSearching(false);
       })
-      .catch((err) => {
+      .catch(() => {
         setSearching(false);
       });
   };
@@ -83,7 +88,7 @@ const SelectOccupationScreen = (props) => {
         label="Please enter your occupation"
         mode="outlined"
         value={text}
-        onChangeText={(text) => setText(text)}
+        onChangeText={(t) => setText(t)}
       />
       <View style={styles.buttonContainer}>
         <Button
@@ -96,10 +101,7 @@ const SelectOccupationScreen = (props) => {
       </View>
       {!occupations && searching === false && (
         <View style={styles.errorContainer}>
-          <Image
-            style={styles.errorImage}
-            source={require("../../assets/fail.png")}
-          />
+          <Image style={styles.errorImage} source={failImage} />
         </View>
       )}
       {chosenOccupation && (
@@ -114,13 +116,13 @@ const SelectOccupationScreen = (props) => {
       <CustomFlatList
         data={occupations}
         renderItem={renderOccupationTiles}
-        keyExtractor={(item, index) => item}
+        keyExtractor={(item) => item}
       />
     </DefaultScreen>
   );
 };
 
-export const screenOptions = (navigationData) => {
+export const screenOptions = () => {
   return {
     headerTitle: "Onboarding",
     headerRight: () => (

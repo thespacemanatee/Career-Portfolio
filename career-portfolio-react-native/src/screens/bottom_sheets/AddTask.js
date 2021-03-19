@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { Title, Text, Button } from "react-native-paper";
 
 const AddTask = (props) => {
+  const { onPress } = props;
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -10,8 +11,8 @@ const AddTask = (props) => {
         <Text>Search task by:</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Button onPress={props.onPress.action}>ACTION</Button>
-        <Button onPress={props.onPress.occupation}>OCCUPATION</Button>
+        <Button onPress={onPress.action}>ACTION</Button>
+        <Button onPress={onPress.occupation}>OCCUPATION</Button>
       </View>
     </View>
   );

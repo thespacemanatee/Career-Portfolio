@@ -1,3 +1,4 @@
+/* eslint-disable react/no-children-prop */
 import React, {
   useState,
   useCallback,
@@ -5,13 +6,9 @@ import React, {
   useMemo,
   useRef,
 } from "react";
-import { View, StyleSheet, FlatList, Alert, Vibration } from "react-native";
+import { View, StyleSheet, Alert, Vibration, Platform } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  BottomSheetModal,
-  useBottomSheetModal,
-  BottomSheetBackdrop,
-} from "@gorhom/bottom-sheet";
+import { BottomSheetModal, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { Text } from "react-native-paper";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { HeaderBackButton } from "@react-navigation/stack";
@@ -27,12 +24,12 @@ import AddByAction from "./bottom_sheets/AddByAction";
 import AddByOccupation from "./bottom_sheets/AddByOccupation";
 import * as taskActions from "../store/actions/task";
 
-const LifeTasksScreen = ({ route, navigation }) => {
+const LifeTasksScreen = ({ navigation }) => {
   const storeTasks = useSelector((state) => state.tasks.lifeTasks);
   const [deleteMode, setDeleteMode] = useState(false);
   const [deleteList, setDeleteList] = useState([]);
   // hooks
-  const { dismiss, dismissAll } = useBottomSheetModal();
+  // const { dismiss, dismissAll } = useBottomSheetModal();
 
   // refs
   const bottomSheetAddRef = useRef(null);
@@ -48,11 +45,11 @@ const LifeTasksScreen = ({ route, navigation }) => {
       bottomSheetAddRef.current.present();
     }
   }, []);
-  const handleDismissAdd = useCallback(() => {
-    if (bottomSheetAddRef.current) {
-      bottomSheetAddRef.current.dismiss();
-    }
-  }, []);
+  // const handleDismissAdd = useCallback(() => {
+  //   if (bottomSheetAddRef.current) {
+  //     bottomSheetAddRef.current.dismiss();
+  //   }
+  // }, []);
   const handlePresentAction = useCallback(() => {
     if (bottomSheetActionRef.current) {
       bottomSheetActionRef.current.present();
@@ -157,7 +154,6 @@ const LifeTasksScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: "Onboarding",
       headerRight: () => (
         <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
           <Item
@@ -214,6 +210,7 @@ const LifeTasksScreen = ({ route, navigation }) => {
             />
           ),
       headerStyle: {
+        // eslint-disable-next-line no-nested-ternary
         backgroundColor: deleteMode
           ? "red"
           : Platform.OS === "android"
@@ -221,6 +218,7 @@ const LifeTasksScreen = ({ route, navigation }) => {
           : undefined,
       },
       headerTitle: deleteMode ? "Delete Tasks" : "Onboarding",
+      // eslint-disable-next-line no-nested-ternary
       headerTintColor: deleteMode
         ? "white"
         : Platform.OS === "android"
@@ -287,11 +285,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-
-export const screenOptions = (navigationData) => {
-  return {
-    headerTitle: "Onboarding",
-  };
-};
 
 export default modalProvider(LifeTasksScreen);

@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   Platform,
 } from "react-native";
-import { FAB, Dialog } from "react-native-paper";
+import { FAB, Dialog, Button } from "react-native-paper";
 import { useSelector, useDispatch } from "react-redux";
 
 import Colors from "../constants/Colors";
@@ -16,8 +16,13 @@ import * as databaseActions from "../store/actions/database";
 const FABNavigator = forwardRef((props, ref) => {
   const storeState = useSelector((state) => state.tasks);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const dispatch = useDispatch();
+
+  const handleErrorDialog = () => {
+    setError(false);
+  };
 
   const postResult = (result) => {
     setLoading(true);
@@ -29,11 +34,12 @@ const FABNavigator = forwardRef((props, ref) => {
       })
       .catch((err) => {
         console.error(err);
+        setLoading(false);
+        setError(true);
       });
   };
 
   const navigationHandler = () => {
-    console.log(ref.current.getCurrentRoute());
     const currentRoute = ref.current.getCurrentRoute();
     if (currentRoute.name === "Welcome") {
       ref.current?.navigate("SelectOccupation");
@@ -64,17 +70,25 @@ const FABNavigator = forwardRef((props, ref) => {
   };
 
   return (
-    <Fragment>
-      {loading && (
+    <>
+      {(loading || error) && (
         <View style={styles.screen}>
           <Dialog visible dismissable={false}>
             <Dialog.Content>
-              <ActivityIndicator
-                animating={true}
-                size="large"
-                color={Colors.primary}
-              />
+              {loading && (
+                <ActivityIndicator
+                  animating
+                  size="large"
+                  color={Colors.primary}
+                />
+              )}
+              {error && <Text>An error has occurred. Please try again!</Text>}
             </Dialog.Content>
+            {error && (
+              <Dialog.Actions>
+                <Button onPress={handleErrorDialog}>Okay</Button>
+              </Dialog.Actions>
+            )}
           </Dialog>
         </View>
       )}
@@ -84,7 +98,7 @@ const FABNavigator = forwardRef((props, ref) => {
           <FAB icon="arrow-forward-outline" onPress={navigationHandler} />
         </View>
       )}
-    </Fragment>
+    </>
   );
 });
 

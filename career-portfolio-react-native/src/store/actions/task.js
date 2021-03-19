@@ -8,10 +8,10 @@ export const DELETE_LIFE_TASKS = "DELETE_LIFE_TASKS";
 export const SET_USER_INPUT = "SET_USER_INPUT";
 
 export const addAllTasks = (tasks) => {
-  return { type: ADD_ALL_TASKS, tasks: tasks };
+  return { type: ADD_ALL_TASKS, tasks };
 };
 export const addCombinedTasks = (tasks) => {
-  return { type: ADD_COMBINED_TASKS, tasks: tasks };
+  return { type: ADD_COMBINED_TASKS, tasks };
 };
 
 export const toggleCoreTask = (task) => {
@@ -27,13 +27,13 @@ export const toggleLifeTask = (task) => {
 };
 
 export const deleteTasks = (tasks) => {
-  return { type: DELETE_TASKS, tasks: tasks };
+  return { type: DELETE_TASKS, tasks };
 };
 
 export const deleteLifeTasks = (tasks) => {
-  return { type: DELETE_LIFE_TASKS, tasks: tasks };
+  return { type: DELETE_LIFE_TASKS, tasks };
 };
 
 export const setUserInput = (input) => {
-  return { type: SET_USER_INPUT, input: input };
+  return { type: SET_USER_INPUT, input };
 };

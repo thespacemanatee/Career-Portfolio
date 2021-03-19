@@ -11,6 +11,7 @@ import TaskTile from "../../components/TaskTile";
 import * as taskActions from "../../store/actions/task";
 
 import * as data from "../../data/career_data.json";
+
 const dataArray = Object.values(data);
 
 const AddByAction = (props) => {
@@ -23,7 +24,7 @@ const AddByAction = (props) => {
   const dispatch = useDispatch();
 
   const toggleLifeTaskHandler = (task) => {
-    console.log("TASK CHECKED: " + task);
+    console.log(`TASK CHECKED: ${task}`);
     dispatch(taskActions.toggleLifeTask(task));
 
     const index = addedTasks.indexOf(task.taskId);
@@ -42,7 +43,7 @@ const AddByAction = (props) => {
       // console.log(itemData.item);
       return (
         <TaskTile
-          addLifeTaskMode={true}
+          addLifeTaskMode
           checkBoxEnabled={false}
           onClick={() => {
             toggleLifeTaskHandler(itemData.item);
@@ -61,11 +62,11 @@ const AddByAction = (props) => {
     dataArray.forEach((element) => {
       const { Task } = element;
       const taskId = element["Task ID"];
-      let actionVerb = (Task + "").split(/[ ,]+/);
+      let actionVerb = `${Task}`.split(/[ ,]+/);
       actionVerb = actionVerb.map((verb) => verb.toLowerCase());
 
       if (
-        !tempArray.find((v) => _.isEqual(v["Task"], Task)) &&
+        !tempArray.find((v) => _.isEqual(v.Task, Task)) &&
         actionVerb.includes(selectedValue.toLowerCase()) &&
         !storeLifeTasks.find((u) => _.isEqual(u.taskId, taskId))
       ) {

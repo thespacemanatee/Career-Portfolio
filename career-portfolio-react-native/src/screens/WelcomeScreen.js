@@ -12,7 +12,7 @@ const WelcomeScreen = (props) => {
         onPressFAB={() => props.navigation.push("SelectOccupation")}
         titleStyle={styles.titleText}
         containerStyle={styles.textContainer}
-      ></DefaultScreen>
+      />
     </View>
     // <View style={styles.screen}>
     //   <View style={styles.textContainer}>

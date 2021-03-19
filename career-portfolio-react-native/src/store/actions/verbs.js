@@ -1,12 +1,13 @@
 import _ from "lodash";
 import * as data from "../../data/career_data.json";
+
 const dataArray = Object.values(data);
 
 export const STORE_VERBS = "STORE_VERBS";
 
 export const storeVerbs = (verbs) => {
   // console.log("action: " + verbs);
-  return { type: STORE_VERBS, verbs: verbs };
+  return { type: STORE_VERBS, verbs };
 };
 
 // const getActionVerbsArray = () => {

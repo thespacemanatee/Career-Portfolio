@@ -1,9 +1,8 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { FAB } from "react-native-paper";
-import { Portal } from "react-native-paper";
+import { FAB, Portal } from "react-native-paper";
 
-import ScreenTitle from "../ui/ScreenTitle";
+import ScreenTitle from "./ScreenTitle";
 
 const DefaultScreen = (props) => {
   return (

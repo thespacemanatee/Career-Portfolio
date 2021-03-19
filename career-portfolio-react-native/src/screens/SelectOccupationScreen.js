@@ -25,6 +25,11 @@ const SelectOccupationScreen = (props) => {
 
   const dispatch = useDispatch();
 
+  const handleSearchPress = () => {
+    getSearchResults(text);
+    setSearching(true);
+  };
+
   const resetCoreTasksHandler = (occupation) => {
     console.log("Resetting core tasks...");
     dispatch(resetCoreTasks(occupation));
@@ -83,10 +88,7 @@ const SelectOccupationScreen = (props) => {
       <View style={styles.buttonContainer}>
         <Button
           mode="contained"
-          onPress={() => {
-            getSearchResults(text);
-            setSearching(true);
-          }}
+          onPress={handleSearchPress}
           loading={searching}
         >
           Search

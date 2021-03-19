@@ -11,9 +11,9 @@ import { Text } from "react-native-paper";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderBackButton } from "@react-navigation/stack";
 
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import Task from "../models/task";
 import DefaultScreen from "../components/ui/DefaultScreen";
-import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import TaskTile from "../components/TaskTile";
 import CustomHeaderButton from "../components/ui/CustomHeaderButton";
 import CustomFlatList from "../components/ui/CustomFlatList";
@@ -21,6 +21,7 @@ import Colors from "../constants/Colors";
 import * as taskActions from "../store/actions/task";
 
 import * as data from "../data/career_data.json";
+
 const dataArray = Object.values(data);
 
 const WorkScheduleScreen = ({ route, navigation }) => {
@@ -35,7 +36,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
   const dispatch = useDispatch();
 
   const toggleCoreTaskHandler = (task) => {
-    console.log("TASK CHECKED: " + task);
+    console.log(`TASK CHECKED: ${task}`);
     dispatch(taskActions.toggleCoreTask(task));
   };
 
@@ -79,7 +80,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
             toggleCoreTaskHandler(itemData.item);
           }}
           onLongPress={() => {
-            console.log("Delete Mode: " + deleteMode);
+            console.log(`Delete Mode: ${deleteMode}`);
             Vibration.vibrate(50);
             setDeleteMode(!deleteMode);
             toggleDeleteHandler(itemData.item.taskId);
@@ -99,12 +100,12 @@ const WorkScheduleScreen = ({ route, navigation }) => {
   const getTasks = useCallback(() => {
     console.log("useCallback");
     const tempArray = dataArray.filter(
-      (occupation) => occupation["Title"] === chosenOccupation
+      (occupation) => occupation.Title === chosenOccupation
     );
 
     return tempArray.filter(function (item) {
-      if (!this[item["Task"]]) {
-        this[item["Task"]] = true;
+      if (!this[item.Task]) {
+        this[item.Task] = true;
         return true;
       }
       return false;
@@ -117,7 +118,7 @@ const WorkScheduleScreen = ({ route, navigation }) => {
 
     if (!storeTasks.length) {
       result = getTasks();
-      let newResult = [];
+      const newResult = [];
       result.forEach((task) => {
         const newObject = new Task(task);
         newResult.push(newObject);
@@ -208,14 +209,11 @@ const WorkScheduleScreen = ({ route, navigation }) => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator
-          animating={true}
-          size="large"
-          color={Colors.primary}
-        />
+        <ActivityIndicator animating size="large" color={Colors.primary} />
       </View>
     );
-  } else if (storeTasks.length === 0) {
+  }
+  if (storeTasks.length === 0) {
     return (
       <View style={styles.centered}>
         <Text>No tasks found. Start adding some!</Text>

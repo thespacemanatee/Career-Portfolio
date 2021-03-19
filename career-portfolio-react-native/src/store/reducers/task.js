@@ -1,3 +1,4 @@
+import _ from "lodash";
 import {
   ADD_ALL_TASKS,
   TOGGLE_LIFE_TASK,
@@ -8,7 +9,6 @@ import {
   ADD_COMBINED_TASKS,
   SET_USER_INPUT,
 } from "../actions/task";
-import _ from "lodash";
 
 const initialState = {
   userInput: null,
@@ -51,8 +51,8 @@ const tasksReducer = (state = initialState, action) => {
       };
 
     case RESET_CORE_TASKS:
-      console.log("ACTION: " + action.chosenOccupation);
-      console.log("STATE: " + state.chosenOccupation);
+      console.log(`ACTION: ${action.chosenOccupation}`);
+      console.log(`STATE: ${state.chosenOccupation}`);
       if (action.chosenOccupation === state.chosenOccupation) {
         return state;
       }

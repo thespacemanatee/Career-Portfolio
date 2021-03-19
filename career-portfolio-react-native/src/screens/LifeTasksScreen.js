@@ -12,19 +12,19 @@ import {
   useBottomSheetModal,
   BottomSheetBackdrop,
 } from "@gorhom/bottom-sheet";
-import modalProvider from "./modalProvider";
 import { Text } from "react-native-paper";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { HeaderBackButton } from "@react-navigation/stack";
+import modalProvider from "./modalProvider";
 
 import Colors from "../constants/Colors";
 import DefaultScreen from "../components/ui/DefaultScreen";
 import CustomHeaderButton from "../components/ui/CustomHeaderButton";
 import CustomFlatList from "../components/ui/CustomFlatList";
 import TaskTile from "../components/TaskTile";
-import AddTask from "../screens/bottom_sheets/AddTask";
-import AddByAction from "../screens/bottom_sheets/AddByAction";
-import AddByOccupation from "../screens/bottom_sheets/AddByOccupation";
+import AddTask from "./bottom_sheets/AddTask";
+import AddByAction from "./bottom_sheets/AddByAction";
+import AddByOccupation from "./bottom_sheets/AddByOccupation";
 import * as taskActions from "../store/actions/task";
 
 const LifeTasksScreen = ({ route, navigation }) => {
@@ -114,20 +114,21 @@ const LifeTasksScreen = ({ route, navigation }) => {
           }}
         />
       );
-    } else if (type === "Action") {
+    }
+    if (type === "Action") {
       return (
         <AddByAction type={type} onPress={{ back: handleDismissAction }} />
       );
-    } else if (type === "Occupation") {
+    }
+    if (type === "Occupation") {
       return (
         <AddByOccupation
           type={type}
           onPress={{ back: handleDismissOccupation }}
         />
       );
-    } else {
-      return <Text>Error</Text>;
     }
+    return <Text>Error</Text>;
   }, []);
 
   const renderTaskTiles = useCallback(
@@ -137,7 +138,7 @@ const LifeTasksScreen = ({ route, navigation }) => {
           deleteMode={deleteMode}
           checkBoxEnabled={false}
           onLongPress={() => {
-            console.log("Delete Mode: " + deleteMode);
+            console.log(`Delete Mode: ${deleteMode}`);
             Vibration.vibrate(50);
             setDeleteMode(!deleteMode);
             toggleDeleteHandler(itemData.item.taskId);

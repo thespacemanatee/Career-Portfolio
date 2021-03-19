@@ -6,12 +6,13 @@ import { Title, Button } from "react-native-paper";
 import { BottomSheetView, BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import _ from "lodash";
 
+import { add } from "react-native-reanimated";
 import Task from "../../models/task";
 import TaskTile from "../../components/TaskTile";
 import * as taskActions from "../../store/actions/task";
 
 import * as data from "../../data/career_data.json";
-import { add } from "react-native-reanimated";
+
 const dataArray = Object.values(data);
 
 const AddByOccupation = (props) => {
@@ -24,7 +25,7 @@ const AddByOccupation = (props) => {
   const dispatch = useDispatch();
 
   const toggleLifeTaskHandler = (task) => {
-    console.log("TASK CHECKED: " + task);
+    console.log(`TASK CHECKED: ${task}`);
     dispatch(taskActions.toggleLifeTask(task));
 
     const index = addedTasks.indexOf(task.taskId);
@@ -43,7 +44,7 @@ const AddByOccupation = (props) => {
       // console.log(itemData.item);
       return (
         <TaskTile
-          addLifeTaskMode={true}
+          addLifeTaskMode
           checkBoxEnabled={false}
           onClick={() => {
             toggleLifeTaskHandler(itemData.item);
@@ -64,7 +65,7 @@ const AddByOccupation = (props) => {
       const { Task } = element;
       const taskId = element["Task ID"];
       if (
-        !tempArray.find((v) => _.isEqual(v["Task"], Task)) &&
+        !tempArray.find((v) => _.isEqual(v.Task, Task)) &&
         Title === selectedValue &&
         !storeLifeTasks.find((u) => _.isEqual(u.taskId, taskId))
       ) {

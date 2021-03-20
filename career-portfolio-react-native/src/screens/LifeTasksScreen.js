@@ -100,33 +100,41 @@ const LifeTasksScreen = ({ navigation }) => {
   }, [deleteMode, setDeleteList]);
 
   // renders
-  const renderBottomSheetContent = useCallback((type) => {
-    if (type === "Add") {
-      return (
-        <AddTask
-          type={type}
-          onPress={{
-            action: handlePresentAction,
-            occupation: handlePresentOccupation,
-          }}
-        />
-      );
-    }
-    if (type === "Action") {
-      return (
-        <AddByAction type={type} onPress={{ back: handleDismissAction }} />
-      );
-    }
-    if (type === "Occupation") {
-      return (
-        <AddByOccupation
-          type={type}
-          onPress={{ back: handleDismissOccupation }}
-        />
-      );
-    }
-    return <Text>Error</Text>;
-  }, []);
+  const renderBottomSheetContent = useCallback(
+    (type) => {
+      if (type === "Add") {
+        return (
+          <AddTask
+            type={type}
+            onPress={{
+              action: handlePresentAction,
+              occupation: handlePresentOccupation,
+            }}
+          />
+        );
+      }
+      if (type === "Action") {
+        return (
+          <AddByAction type={type} onPress={{ back: handleDismissAction }} />
+        );
+      }
+      if (type === "Occupation") {
+        return (
+          <AddByOccupation
+            type={type}
+            onPress={{ back: handleDismissOccupation }}
+          />
+        );
+      }
+      return <Text>Error</Text>;
+    },
+    [
+      handleDismissAction,
+      handleDismissOccupation,
+      handlePresentAction,
+      handlePresentOccupation,
+    ]
+  );
 
   const renderTaskTiles = useCallback(
     (itemData) => {
@@ -149,7 +157,7 @@ const LifeTasksScreen = ({ navigation }) => {
         </TaskTile>
       );
     },
-    [storeTasks, deleteMode, deleteList]
+    [deleteMode, toggleDeleteHandler]
   );
 
   useEffect(() => {

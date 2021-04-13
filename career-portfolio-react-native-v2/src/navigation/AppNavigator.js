@@ -12,8 +12,12 @@ import RankingsScreen from "../screens/RankingsScreen";
 
 const AppNavigator = () => {
   const { Navigator, Screen } = createStackNavigator();
+  const linking = {
+    prefixes: ["http://localhost:19006"],
+    // config,
+  };
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <SafeAreaView style={styles.screen}>
         <Navigator headerMode="none">
           <Screen name="Welcome" component={WelcomeScreen} />

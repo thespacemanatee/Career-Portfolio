@@ -9,7 +9,6 @@ import {
   Icon,
   useTheme,
   TopNavigationAction,
-  Card,
 } from "@ui-kitten/components";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -21,6 +20,7 @@ import CustomTextInput from "../components/CustomTextInput";
 import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
 import OccupationCard from "../components/OccupationCard";
+import ShadowCard from "../components/ShadowCard";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props) => (
@@ -92,9 +92,13 @@ const OccupationsScreen = ({ navigation }) => {
     }
   };
 
+  const handleOnPress = (value) => {
+    setChosenOccupation(value);
+  };
+
   const renderListItems = useCallback((itemData) => {
     const { item } = itemData;
-    return <OccupationCard onPress={() => {}}>{item}</OccupationCard>;
+    return <OccupationCard onPress={handleOnPress}>{item}</OccupationCard>;
   }, []);
 
   return (
@@ -134,6 +138,15 @@ const OccupationsScreen = ({ navigation }) => {
                   );
                 }}
               />
+              <ShadowCard style={{ height: 75, padding: 10 }}>
+                <CustomText
+                  bold
+                  style={{ fontSize: 20 }}
+                  numberOfLines={2}
+                >{`Selected occupation:\n${
+                  chosenOccupation || ""
+                }`}</CustomText>
+              </ShadowCard>
               <FlatList
                 data={occupations}
                 renderItem={renderListItems}

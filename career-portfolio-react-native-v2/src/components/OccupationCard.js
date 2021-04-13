@@ -5,8 +5,11 @@ import CustomText from "./CustomText";
 
 const OccupationCard = (props) => {
   const { children, onPress } = props;
+  const handleOnPress = () => {
+    onPress(children);
+  };
   return (
-    <Card onPress={onPress}>
+    <Card onPress={handleOnPress}>
       <CustomText>{children}</CustomText>
     </Card>
   );

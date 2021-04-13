@@ -20,6 +20,7 @@ import { handleErrorResponse } from "../helpers/utils";
 import CustomTextInput from "../components/CustomTextInput";
 import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
+import OccupationCard from "../components/OccupationCard";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props) => (
@@ -71,7 +72,7 @@ const OccupationsScreen = ({ navigation }) => {
     console.log(occupation);
     try {
       setLoading(true);
-      const url = `https://services.onetcenter.org/ws/online/search?keyword=${occupation}&start=1&end=100`;
+      const url = `https://thingproxy.freeboard.io/fetch/https://services.onetcenter.org/ws/online/search?keyword=${occupation}&start=1&end=100`;
       const res = await axios.get(url, {
         headers: {
           Authorization: `Basic ${token}`,
@@ -93,11 +94,7 @@ const OccupationsScreen = ({ navigation }) => {
 
   const renderListItems = useCallback((itemData) => {
     const { item } = itemData;
-    return (
-      <Card>
-        <CustomText>{item}</CustomText>
-      </Card>
-    );
+    return <OccupationCard onPress={() => {}}>{item}</OccupationCard>;
   }, []);
 
   return (

@@ -12,8 +12,9 @@ import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { Provider } from "react-redux";
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
+import { PersistGate } from "redux-persist/integration/react";
 
-import store from "./src/app/store";
+import { store, persistor } from "./src/app/store";
 import { setVerbs, setOccupations } from "./src/app/features/local/localSlice";
 import AppNavigator from "./src/navigation/AppNavigator";
 import { getActionVerbsArray, getOccupationsArray } from "./src/helpers/utils";
@@ -51,12 +52,14 @@ export default function App() {
     <>
       <IconRegistry icons={EvaIconsPack} />
       <Provider store={store}>
-        <ApplicationProvider {...eva} theme={eva.light}>
-          {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
-          <SafeAreaProvider style={styles.screen}>
-            <AppNavigator />
-          </SafeAreaProvider>
-        </ApplicationProvider>
+        <PersistGate loading={null} persistor={persistor}>
+          <ApplicationProvider {...eva} theme={eva.light}>
+            {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
+            <SafeAreaProvider style={styles.screen}>
+              <AppNavigator />
+            </SafeAreaProvider>
+          </ApplicationProvider>
+        </PersistGate>
       </Provider>
     </>
   );

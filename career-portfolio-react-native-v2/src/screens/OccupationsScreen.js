@@ -18,7 +18,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { Buffer } from "buffer";
 
-import * as formActions from "../app/features/form/formSlice";
+import { addSelection } from "../app/features/form/formSlice";
 import { handleErrorResponse } from "../helpers/utils";
 import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
@@ -36,7 +36,6 @@ const password = "3594cgj";
 const token = Buffer.from(`${username}:${password}`).toString("base64");
 
 const OccupationsScreen = ({ navigation }) => {
-  const form = useSelector((state) => state.form);
   const [loading, setLoading] = useState(false);
   const [occupations, setOccupations] = useState();
   const [chosenOccupation, setChosenOccupation] = useState();
@@ -81,12 +80,17 @@ const OccupationsScreen = ({ navigation }) => {
   );
 
   const handleNavigation = () => {
-    const payload = {
-      inputTitle: userInput,
-      onetTitle: chosenOccupation,
-      titleId: Date.now(),
-    };
-    dispatch(formActions.addSelection(payload));
+    if (chosenOccupation) {
+      const payload = {
+        inputTitle: userInput,
+        onetTitle: chosenOccupation,
+        titleId: Date.now(),
+      };
+      dispatch(addSelection(payload));
+      navigation.navigate("CoreTasks");
+    } else {
+      alert("Error", "Please choose an occupation!");
+    }
   };
 
   const SearchSchema = Yup.object().shape({

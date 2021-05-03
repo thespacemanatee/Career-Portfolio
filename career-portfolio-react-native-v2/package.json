@@ -42,7 +42,7 @@
     "react-native-web-lottie": "^1.4.4",
     "react-native-web-refresh-control": "^1.0.3",
     "react-redux": "^7.2.4",
-    "redux": "^4.1.0",
+    "react-use": "^17.2.4",
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
     "typescript": "^4.2.4",

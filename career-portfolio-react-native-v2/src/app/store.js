@@ -1,5 +1,8 @@
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import { combineReducers } from "redux";
+import {
+  configureStore,
+  getDefaultMiddleware,
+  combineReducers,
+} from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   persistStore,

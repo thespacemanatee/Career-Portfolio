@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Platform } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { View, Platform, FlatList } from "react-native";
 import {
   Divider,
   Layout,
@@ -8,11 +8,16 @@ import {
   Button,
   Icon,
   TopNavigationAction,
+  Card,
 } from "@ui-kitten/components";
 import { useSelector } from "react-redux";
+import useEffectOnce from "react-use/lib/useEffectOnce";
+
 import alert from "../components/CustomAlert";
 import ShadowCard from "../components/ShadowCard";
 import CustomText from "../components/CustomText";
+import { getTasks } from "../helpers/utils";
+import TaskCard from "../components/TaskCard";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props) => (
@@ -21,6 +26,7 @@ const HelpIcon = (props) => (
 
 const CoreTasksScreen = ({ navigation }) => {
   const chosenOccupation = useSelector((state) => state.form.onet_title);
+  const [tasks, setTasks] = useState([]);
 
   const BackAction = () => (
     <TopNavigationAction
@@ -47,6 +53,20 @@ const CoreTasksScreen = ({ navigation }) => {
     />
   );
 
+  const renderTasks = (itemData) => {
+    const { Task, "Task ID": TaskID, "IWA Title": IWATitle } = itemData.item;
+    const taskObject = {
+      task: Task,
+      taskId: TaskID,
+      IWA_Title: IWATitle,
+    };
+    return <TaskCard taskObject={taskObject} />;
+  };
+
+  useEffectOnce(() => {
+    setTasks(getTasks(chosenOccupation));
+  });
+
   return (
     <View style={styles.screen}>
       <TopNavigation
@@ -61,6 +81,7 @@ const CoreTasksScreen = ({ navigation }) => {
           <CustomText bold>Selected Occupation</CustomText>
           <CustomText numberOfLines={1}>{chosenOccupation}</CustomText>
         </ShadowCard>
+        <FlatList renderItem={renderTasks} data={tasks} />
         <Button>{chosenOccupation}</Button>
       </Layout>
     </View>

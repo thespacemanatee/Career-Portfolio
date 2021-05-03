@@ -10,6 +10,7 @@ import {
   useTheme,
   TopNavigationAction,
   Spinner,
+  Input,
 } from "@ui-kitten/components";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -44,7 +45,7 @@ const OccupationsScreen = ({ navigation }) => {
     const { style } = props;
     return (
       <View style={[style, styles.indicator]}>
-        <Spinner status="control" size="small" />
+        <Spinner size="small" />
       </View>
     );
   };
@@ -73,6 +74,8 @@ const OccupationsScreen = ({ navigation }) => {
       }}
     />
   );
+
+  const handleNavigation = () => {};
 
   const SearchSchema = Yup.object().shape({
     occupation: Yup.string(),
@@ -145,14 +148,14 @@ const OccupationsScreen = ({ navigation }) => {
         >
           {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
             <>
-              <CustomTextInput
-                label="Enter your occupation"
+              <Input
+                label="Search Occupations"
                 returnKeyType="next"
+                size="large"
+                placeholder="Enter your occupation here"
                 value={values.occupation}
                 onChangeText={handleChange("occupation")}
                 onBlur={handleBlur("occupation")}
-                error={!!errors.occupation}
-                errorText={errors.occupation}
                 accessoryRight={(props) => {
                   return (
                     !!errors.occupation && (
@@ -165,6 +168,14 @@ const OccupationsScreen = ({ navigation }) => {
                   );
                 }}
               />
+              <Button
+                style={styles.button}
+                onPress={handleSubmit}
+                appearance="outline"
+                accessoryRight={loading ? LoadingIndicator : null}
+              >
+                SEARCH
+              </Button>
               <FlatList
                 data={occupations}
                 renderItem={renderListItems}
@@ -172,11 +183,8 @@ const OccupationsScreen = ({ navigation }) => {
                 ListEmptyComponent={renderEmptyComponent}
                 contentContainerStyle={styles.contentContainer}
               />
-              <Button
-                onPress={handleSubmit}
-                accessoryRight={loading ? LoadingIndicator : null}
-              >
-                Search
+              <Button style={styles.button} onPress={handleNavigation}>
+                NEXT
               </Button>
             </>
           )}
@@ -202,6 +210,9 @@ const styles = StyleService.create({
   },
   contentContainer: {
     flexGrow: 1,
+  },
+  button: {
+    marginVertical: 5,
   },
   emptyComponent: {
     justifyContent: "center",

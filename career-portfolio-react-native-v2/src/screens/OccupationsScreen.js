@@ -9,6 +9,7 @@ import {
   Icon,
   useTheme,
   TopNavigationAction,
+  Spinner,
 } from "@ui-kitten/components";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -21,6 +22,7 @@ import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
 import OccupationCard from "../components/OccupationCard";
 import ShadowCard from "../components/ShadowCard";
+import OccupationsLoading from "../components/loading/OccupationsLoading";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props) => (
@@ -29,7 +31,7 @@ const HelpIcon = (props) => (
 
 const username = "singapore_university";
 const password = "3594cgj";
-const token = Buffer.from(`${username}:${password}`, "utf8").toString("base64");
+const token = Buffer.from(`${username}:${password}`).toString("base64");
 
 const OccupationsScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
@@ -37,6 +39,15 @@ const OccupationsScreen = ({ navigation }) => {
   const [chosenOccupation, setChosenOccupation] = useState();
 
   const theme = useTheme();
+
+  const LoadingIndicator = (props) => {
+    const { style } = props;
+    return (
+      <View style={[style, styles.indicator]}>
+        <Spinner status="control" size="small" />
+      </View>
+    );
+  };
 
   const BackAction = () => (
     <TopNavigationAction
@@ -64,7 +75,7 @@ const OccupationsScreen = ({ navigation }) => {
   );
 
   const SearchSchema = Yup.object().shape({
-    occupation: Yup.string().required("Please enter your occupation!"),
+    occupation: Yup.string(),
   });
 
   const handleSubmitForm = async (values) => {
@@ -78,6 +89,7 @@ const OccupationsScreen = ({ navigation }) => {
           Authorization: `Basic ${token}`,
         },
       });
+      console.log(res.data);
 
       const titles = [];
       res.data.occupation.forEach((item) => {
@@ -101,6 +113,15 @@ const OccupationsScreen = ({ navigation }) => {
     return <OccupationCard onPress={handleOnPress}>{item}</OccupationCard>;
   }, []);
 
+  const renderEmptyComponent = () =>
+    loading ? (
+      <OccupationsLoading />
+    ) : (
+      <View style={styles.emptyComponent}>
+        <CustomText bold>NO OCCUPATIONS FOUND</CustomText>
+      </View>
+    );
+
   return (
     <View style={styles.screen}>
       <TopNavigation
@@ -111,6 +132,12 @@ const OccupationsScreen = ({ navigation }) => {
       />
       <Divider />
       <Layout style={styles.layout}>
+        <ShadowCard style={styles.selectedOccupation}>
+          <CustomText bold>Selected Occupation</CustomText>
+          <CustomText numberOfLines={1}>
+            {chosenOccupation || "Please choose an occupation"}
+          </CustomText>
+        </ShadowCard>
         <Formik
           initialValues={{ occupation: "" }}
           onSubmit={handleSubmitForm}
@@ -138,26 +165,19 @@ const OccupationsScreen = ({ navigation }) => {
                   );
                 }}
               />
-              <ShadowCard style={{ height: 75, padding: 10 }}>
-                <CustomText
-                  bold
-                  style={{ fontSize: 20 }}
-                  numberOfLines={2}
-                >{`Selected occupation:\n${
-                  chosenOccupation || ""
-                }`}</CustomText>
-              </ShadowCard>
               <FlatList
                 data={occupations}
                 renderItem={renderListItems}
                 keyExtractor={(item, index) => String(index)}
-                ListEmptyComponent={
-                  <View style={styles.emptyComponent}>
-                    <CustomText>No Occupations</CustomText>
-                  </View>
-                }
+                ListEmptyComponent={renderEmptyComponent}
+                contentContainerStyle={styles.contentContainer}
               />
-              <Button onPress={handleSubmit}>Search</Button>
+              <Button
+                onPress={handleSubmit}
+                accessoryRight={loading ? LoadingIndicator : null}
+              >
+                Search
+              </Button>
             </>
           )}
         </Formik>
@@ -176,9 +196,20 @@ const styles = StyleService.create({
     flex: 1,
     padding: 10,
   },
+  selectedOccupation: {
+    height: 75,
+    padding: 10,
+  },
+  contentContainer: {
+    flexGrow: 1,
+  },
   emptyComponent: {
     justifyContent: "center",
     alignItems: "center",
     flexGrow: 1,
+  },
+  indicator: {
+    position: "absolute",
+    right: 0,
   },
 });

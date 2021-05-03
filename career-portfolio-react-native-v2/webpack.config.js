@@ -5,7 +5,10 @@ module.exports = async (env, argv) => {
     {
       ...env,
       babel: {
-        dangerouslyAddModulePathsToTranspile: ["@ui-kitten/components"],
+        dangerouslyAddModulePathsToTranspile: [
+          "@ui-kitten/components",
+          "@gorhom/bottom-sheet",
+        ],
       },
       offline: true,
     },

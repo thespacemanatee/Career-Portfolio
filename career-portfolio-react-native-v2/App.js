@@ -28,8 +28,8 @@ export default function App() {
     });
   };
 
-  const loadAppAssets = () => {
-    loadFonts();
+  const loadAppAssets = async () => {
+    await loadFonts();
   };
 
   if (!ready) {

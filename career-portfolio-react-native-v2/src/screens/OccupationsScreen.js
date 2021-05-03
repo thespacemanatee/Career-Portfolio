@@ -19,7 +19,8 @@ import axios from "axios";
 import { Buffer } from "buffer";
 
 import { addSelection } from "../app/features/form/formSlice";
-import { handleErrorResponse } from "../helpers/utils";
+import { setAllTasks } from "../app/features/tasks/tasksSlice";
+import { getTasks, handleErrorResponse } from "../helpers/utils";
 import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
 import OccupationCard from "../components/OccupationCard";
@@ -36,6 +37,7 @@ const password = "3594cgj";
 const token = Buffer.from(`${username}:${password}`).toString("base64");
 
 const OccupationsScreen = ({ navigation }) => {
+  const form = useSelector((state) => state.form);
   const [loading, setLoading] = useState(false);
   const [occupations, setOccupations] = useState();
   const [chosenOccupation, setChosenOccupation] = useState();
@@ -81,12 +83,24 @@ const OccupationsScreen = ({ navigation }) => {
 
   const handleNavigation = () => {
     if (chosenOccupation) {
-      const payload = {
-        inputTitle: userInput,
-        onetTitle: chosenOccupation,
-        titleId: Date.now(),
-      };
-      dispatch(addSelection(payload));
+      if (chosenOccupation !== form.onet_title) {
+        const payload = {
+          inputTitle: userInput,
+          onetTitle: chosenOccupation,
+          titleId: Date.now(),
+        };
+        const data = getTasks(chosenOccupation).map((e) => {
+          return {
+            task: e.Task,
+            taskId: e["Task ID"],
+            IWA_Title: e["IWA Title"],
+            taskType: "supplementary",
+            deleted: false,
+          };
+        });
+        dispatch(addSelection(payload));
+        dispatch(setAllTasks(data));
+      }
       navigation.navigate("CoreTasks");
     } else {
       alert("Error", "Please choose an occupation!");

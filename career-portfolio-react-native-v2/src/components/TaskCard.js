@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import {
   LayoutAnimation,
   Platform,
@@ -7,7 +7,15 @@ import {
   Easing,
   View,
 } from "react-native";
-import { StyleService, Card, Icon } from "@ui-kitten/components";
+import { useDispatch } from "react-redux";
+import { StyleService, Card, Icon, CheckBox } from "@ui-kitten/components";
+import Swipeable from "react-native-gesture-handler/Swipeable";
+
+import {
+  addTask,
+  removeTask,
+  updateTaskType,
+} from "../app/features/tasks/tasksSlice";
 import CustomText from "./CustomText";
 
 if (
@@ -16,6 +24,16 @@ if (
 ) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
+
+const ICON_SIZE = 30;
+
+const TrashIcon = (props) => (
+  <Icon fill="#8F9BB3" {...props} name="trash" style={styles.icon} />
+);
+
+const UndoIcon = (props) => (
+  <Icon fill="#8F9BB3" {...props} name="undo" style={styles.icon} />
+);
 
 const ChevronIcon = (props) => (
   <Icon
@@ -26,11 +44,41 @@ const ChevronIcon = (props) => (
   />
 );
 
-const TaskCard = ({ taskObject }, ...props) => {
+const TaskCard = ({ taskObject }) => {
   const [expanded, setExpanded] = useState(false);
-  const { task, taskId, IWA_Title } = taskObject;
-
+  const [checked, setChecked] = useState(false);
+  const [deleted, setDeleted] = useState(false);
   const [spinValue] = useState(new Animated.Value(0));
+  const leftSwipeable = useRef(null);
+
+  const { task, taskId, taskType, deleted: removed } = taskObject;
+
+  const dispatch = useDispatch();
+
+  const handleCheckChange = (nextChecked) => {
+    setChecked(nextChecked);
+    let type;
+    if (nextChecked === true) {
+      type = "core";
+    } else {
+      type = "supplementary";
+    }
+    dispatch(updateTaskType({ id: taskId, changes: { taskType: type } }));
+  };
+
+  useEffect(() => {
+    if (taskType === "core") {
+      setChecked(true);
+    } else {
+      setChecked(false);
+    }
+
+    if (removed) {
+      setDeleted(true);
+    } else {
+      setDeleted(false);
+    }
+  }, [removed, taskType]);
 
   const rotate = spinValue.interpolate({
     inputRange: [0, 1],
@@ -46,51 +94,92 @@ const TaskCard = ({ taskObject }, ...props) => {
     }).start();
   };
 
-  return (
-    <Card
-      onPress={() => {
-        LayoutAnimation.configureNext(
-          LayoutAnimation.create(100, "linear", "opacity")
-        );
-        setExpanded(!expanded);
-        spin();
-      }}
-    >
-      <View style={styles.contentContainer}>
-        <View style={styles.taskContainer}>
-          <CustomText numberOfLines={expanded ? null : 2}>{task}</CustomText>
-        </View>
-        <Animated.View
-          style={[styles.iconContainer, { transform: [{ rotate }] }]}
-        >
-          <ChevronIcon />
-        </Animated.View>
+  const rightSwipe = useCallback(() => {
+    setDeleted(!deleted);
+    // dispatch(checklistActions.changeMaximumScore(!deleted, checked));
+    if (!deleted) {
+      dispatch(removeTask({ id: taskId, changes: { deleted: true } }));
+    } else {
+      dispatch(addTask({ id: taskId, changes: { deleted: false } }));
+    }
+    leftSwipeable.current.close();
+    // eslint-disable-next-line camelcase
+  }, [deleted, dispatch, taskId]);
+
+  const leftComponent = useCallback(() => {
+    return (
+      <View style={styles.deleteBox}>
+        {deleted ? <UndoIcon /> : <TrashIcon />}
       </View>
-    </Card>
+    );
+  }, [deleted]);
+
+  return (
+    <Swipeable
+      ref={leftSwipeable}
+      renderLeftActions={leftComponent}
+      onSwipeableOpen={rightSwipe}
+      friction={2}
+    >
+      <Card
+        onPress={() => {
+          LayoutAnimation.configureNext(
+            LayoutAnimation.create(100, "linear", "opacity")
+          );
+          setExpanded(!expanded);
+          spin();
+        }}
+      >
+        <View style={styles.contentContainer}>
+          <View style={styles.checkboxContainer}>
+            <CheckBox checked={checked} onChange={handleCheckChange} />
+          </View>
+          <View style={styles.taskContainer}>
+            <CustomText
+              style={{ textDecorationLine: deleted ? "line-through" : null }}
+              numberOfLines={expanded ? null : 2}
+            >
+              {task}
+            </CustomText>
+          </View>
+          <Animated.View
+            style={[styles.iconContainer, { transform: [{ rotate }] }]}
+          >
+            <ChevronIcon />
+          </Animated.View>
+        </View>
+      </Card>
+    </Swipeable>
   );
 };
 
 export default TaskCard;
 
 const styles = StyleService.create({
-  tile: {
-    backgroundColor: "lightgrey",
-    borderWidth: 0.5,
-    borderColor: "#d6d7da",
-  },
   contentContainer: {
     flex: 1,
     flexDirection: "row",
     alignItems: "flex-start",
   },
+  checkboxContainer: {
+    flex: 0.1,
+    height: "100%",
+    justifyContent: "center",
+  },
   taskContainer: {
-    flex: 0.9,
+    flex: 0.85,
   },
   iconContainer: {
     flex: 0.1,
   },
   icon: {
-    width: 32,
-    height: 32,
+    width: ICON_SIZE,
+    height: ICON_SIZE,
+  },
+  deleteBox: {
+    // flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: ICON_SIZE * 2,
   },
 });

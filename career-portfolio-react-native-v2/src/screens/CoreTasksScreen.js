@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import { View, Platform, FlatList } from "react-native";
 import {
   Divider,
@@ -8,15 +8,14 @@ import {
   Button,
   Icon,
   TopNavigationAction,
-  Card,
 } from "@ui-kitten/components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useEffectOnce from "react-use/lib/useEffectOnce";
 
+import { tasksSelector } from "../app/features/tasks/tasksSlice";
 import alert from "../components/CustomAlert";
 import ShadowCard from "../components/ShadowCard";
 import CustomText from "../components/CustomText";
-import { getTasks } from "../helpers/utils";
 import TaskCard from "../components/TaskCard";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
@@ -25,8 +24,10 @@ const HelpIcon = (props) => (
 );
 
 const CoreTasksScreen = ({ navigation }) => {
+  const tasks = useSelector(tasksSelector.selectAll);
   const chosenOccupation = useSelector((state) => state.form.onet_title);
-  const [tasks, setTasks] = useState([]);
+
+  const dispatch = useDispatch();
 
   const BackAction = () => (
     <TopNavigationAction
@@ -54,18 +55,8 @@ const CoreTasksScreen = ({ navigation }) => {
   );
 
   const renderTasks = (itemData) => {
-    const { Task, "Task ID": TaskID, "IWA Title": IWATitle } = itemData.item;
-    const taskObject = {
-      task: Task,
-      taskId: TaskID,
-      IWA_Title: IWATitle,
-    };
-    return <TaskCard taskObject={taskObject} />;
+    return <TaskCard taskObject={itemData.item} />;
   };
-
-  useEffectOnce(() => {
-    setTasks(getTasks(chosenOccupation));
-  });
 
   return (
     <View style={styles.screen}>
@@ -81,8 +72,18 @@ const CoreTasksScreen = ({ navigation }) => {
           <CustomText bold>Selected Occupation</CustomText>
           <CustomText numberOfLines={1}>{chosenOccupation}</CustomText>
         </ShadowCard>
-        <FlatList renderItem={renderTasks} data={tasks} />
-        <Button>NEXT</Button>
+        <FlatList
+          renderItem={renderTasks}
+          data={tasks}
+          keyExtractor={(item) => String(item.taskId)}
+        />
+        <Button
+          onPress={() => {
+            console.log(tasks);
+          }}
+        >
+          NEXT
+        </Button>
       </Layout>
     </View>
   );

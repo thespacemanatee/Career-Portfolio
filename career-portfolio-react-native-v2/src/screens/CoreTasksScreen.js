@@ -82,7 +82,7 @@ const CoreTasksScreen = ({ navigation }) => {
           <CustomText numberOfLines={1}>{chosenOccupation}</CustomText>
         </ShadowCard>
         <FlatList renderItem={renderTasks} data={tasks} />
-        <Button>{chosenOccupation}</Button>
+        <Button>NEXT</Button>
       </Layout>
     </View>
   );

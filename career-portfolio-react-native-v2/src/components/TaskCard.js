@@ -56,16 +56,13 @@ const TaskCard = ({ taskObject }, ...props) => {
         spin();
       }}
     >
-      <View
-        style={{
-          flex: 1,
-          flexDirection: "row",
-          justifyContent: "space-around",
-          alignItems: "flex-start",
-        }}
-      >
-        <CustomText numberOfLines={expanded ? null : 2}>{task}</CustomText>
-        <Animated.View style={{ transform: [{ rotate }] }}>
+      <View style={styles.contentContainer}>
+        <View style={styles.taskContainer}>
+          <CustomText numberOfLines={expanded ? null : 2}>{task}</CustomText>
+        </View>
+        <Animated.View
+          style={[styles.iconContainer, { transform: [{ rotate }] }]}
+        >
           <ChevronIcon />
         </Animated.View>
       </View>
@@ -80,6 +77,17 @@ const styles = StyleService.create({
     backgroundColor: "lightgrey",
     borderWidth: 0.5,
     borderColor: "#d6d7da",
+  },
+  contentContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "flex-start",
+  },
+  taskContainer: {
+    flex: 0.9,
+  },
+  iconContainer: {
+    flex: 0.1,
   },
   icon: {
     width: 32,

@@ -14,7 +14,9 @@ import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 
 import store from "./src/app/store";
+import { setVerbs, setOccupations } from "./src/app/features/local/localSlice";
 import AppNavigator from "./src/navigation/AppNavigator";
+import { getActionVerbsArray, getOccupationsArray } from "./src/helpers/utils";
 
 export default function App() {
   const [ready, setReady] = useState(false);
@@ -30,6 +32,10 @@ export default function App() {
 
   const loadAppAssets = async () => {
     await loadFonts();
+    const verbs = await getActionVerbsArray();
+    const occupations = await getOccupationsArray();
+    store.dispatch(setVerbs(verbs));
+    store.dispatch(setOccupations(occupations));
   };
 
   if (!ready) {

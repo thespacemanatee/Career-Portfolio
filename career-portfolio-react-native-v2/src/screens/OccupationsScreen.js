@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { View, Platform, FlatList } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Divider,
   Layout,
@@ -17,8 +18,8 @@ import * as Yup from "yup";
 import axios from "axios";
 import { Buffer } from "buffer";
 
+import * as formActions from "../app/features/form/formSlice";
 import { handleErrorResponse } from "../helpers/utils";
-import CustomTextInput from "../components/CustomTextInput";
 import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
 import OccupationCard from "../components/OccupationCard";
@@ -35,9 +36,13 @@ const password = "3594cgj";
 const token = Buffer.from(`${username}:${password}`).toString("base64");
 
 const OccupationsScreen = ({ navigation }) => {
+  const form = useSelector((state) => state.form);
   const [loading, setLoading] = useState(false);
   const [occupations, setOccupations] = useState();
   const [chosenOccupation, setChosenOccupation] = useState();
+  const [userInput, setUserInput] = useState();
+
+  const dispatch = useDispatch();
 
   const theme = useTheme();
 
@@ -75,7 +80,14 @@ const OccupationsScreen = ({ navigation }) => {
     />
   );
 
-  const handleNavigation = () => {};
+  const handleNavigation = () => {
+    const payload = {
+      inputTitle: userInput,
+      onetTitle: chosenOccupation,
+      titleId: Date.now(),
+    };
+    dispatch(formActions.addSelection(payload));
+  };
 
   const SearchSchema = Yup.object().shape({
     occupation: Yup.string(),
@@ -83,6 +95,7 @@ const OccupationsScreen = ({ navigation }) => {
 
   const handleSubmitForm = async (values) => {
     const { occupation } = values;
+    setUserInput(occupation);
     console.log(occupation);
     try {
       setLoading(true);

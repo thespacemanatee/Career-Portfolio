@@ -1,13 +1,15 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState = {
+  input_title: null,
+  onet_title: null,
+  title_id: null,
+};
+
 export const formSlice = createSlice({
   name: "form",
-  initialState: {
-    input_title: null,
-    onet_title: null,
-    title_id: null,
-  },
+  initialState,
   reducers: {
     addSelection: (state, action) => {
       const { inputTitle, onetTitle, titleId } = action.payload;
@@ -15,9 +17,10 @@ export const formSlice = createSlice({
       state.onet_title = onetTitle;
       state.title_id = titleId;
     },
+    resetState: () => initialState,
   },
 });
 
-export const { addSelection } = formSlice.actions;
+export const { addSelection, resetState } = formSlice.actions;
 
 export default formSlice.reducer;

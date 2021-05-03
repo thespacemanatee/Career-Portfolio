@@ -47,11 +47,10 @@ const ChevronIcon = (props) => (
 const TaskCard = ({ taskObject }) => {
   const [expanded, setExpanded] = useState(false);
   const [checked, setChecked] = useState(false);
-  const [deleted, setDeleted] = useState(false);
   const [spinValue] = useState(new Animated.Value(0));
   const leftSwipeable = useRef(null);
 
-  const { task, taskId, taskType, deleted: removed } = taskObject;
+  const { task, taskId, taskType, deleted } = taskObject;
 
   const dispatch = useDispatch();
 
@@ -72,13 +71,7 @@ const TaskCard = ({ taskObject }) => {
     } else {
       setChecked(false);
     }
-
-    if (removed) {
-      setDeleted(true);
-    } else {
-      setDeleted(false);
-    }
-  }, [removed, taskType]);
+  }, [taskType]);
 
   const rotate = spinValue.interpolate({
     inputRange: [0, 1],
@@ -95,15 +88,12 @@ const TaskCard = ({ taskObject }) => {
   };
 
   const rightSwipe = useCallback(() => {
-    setDeleted(!deleted);
-    // dispatch(checklistActions.changeMaximumScore(!deleted, checked));
     if (!deleted) {
       dispatch(removeTask({ id: taskId, changes: { deleted: true } }));
     } else {
       dispatch(addTask({ id: taskId, changes: { deleted: false } }));
     }
     leftSwipeable.current.close();
-    // eslint-disable-next-line camelcase
   }, [deleted, dispatch, taskId]);
 
   const leftComponent = useCallback(() => {
@@ -132,10 +122,15 @@ const TaskCard = ({ taskObject }) => {
       >
         <View style={styles.contentContainer}>
           <View style={styles.checkboxContainer}>
-            <CheckBox checked={checked} onChange={handleCheckChange} />
+            <CheckBox
+              disabled={deleted}
+              checked={checked}
+              onChange={handleCheckChange}
+            />
           </View>
           <View style={styles.taskContainer}>
             <CustomText
+              // eslint-disable-next-line react-native/no-inline-styles
               style={{ textDecorationLine: deleted ? "line-through" : null }}
               numberOfLines={expanded ? null : 2}
             >
@@ -177,7 +172,6 @@ const styles = StyleService.create({
     height: ICON_SIZE,
   },
   deleteBox: {
-    // flex: 1,
     justifyContent: "center",
     alignItems: "center",
     width: ICON_SIZE * 2,

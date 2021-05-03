@@ -17,7 +17,7 @@ export const getTasks = (chosenOccupation) => {
 };
 
 export const getActionVerbsArray = () => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const tempArray = [];
     dataArray.forEach((element) => {
       const { Task } = element;
@@ -35,11 +35,10 @@ export const getActionVerbsArray = () => {
 };
 
 export const getOccupationsArray = () => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const tempArray = [];
     dataArray.forEach((element) => {
       const { Title } = element;
-      // const actionVerb = (Task + "").split(/[ ,]+/, 1).toString();
       if (!tempArray.find((v) => _.isEqual(v, Title))) tempArray.push(Title);
     });
     tempArray.sort();
@@ -52,8 +51,8 @@ export const handleErrorResponse = (err, action) => {
   if (err.response) {
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx
-    const { data, status, headers } = err.response;
-    console.error(data);
+    const { data: errorData, status, headers } = err.response;
+    console.error(errorData);
     console.error(status);
     console.error(headers);
 
@@ -61,7 +60,7 @@ export const handleErrorResponse = (err, action) => {
       case 4: {
         alert(
           "Error",
-          data.description,
+          errorData.description,
           action
             ? [
                 { text: "Cancel", style: "cancel" },

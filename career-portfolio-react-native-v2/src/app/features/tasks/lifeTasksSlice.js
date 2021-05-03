@@ -14,7 +14,6 @@ export const lifeTasksSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
 export const { addLifeTask, removeLifeTask } = lifeTasksSlice.actions;
 
 export default lifeTasksSlice.reducer;

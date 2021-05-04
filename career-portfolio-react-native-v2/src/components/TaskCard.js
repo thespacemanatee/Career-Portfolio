@@ -169,7 +169,7 @@ const styles = StyleService.create({
     justifyContent: "center",
   },
   taskContainer: {
-    flex: 0.85,
+    flex: 0.8,
   },
   iconContainer: {
     flex: 0.1,

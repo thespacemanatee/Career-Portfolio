@@ -15,7 +15,7 @@ import { Formik } from "formik";
 import { getTasksByAction } from "../../helpers/utils";
 import SearchList from "../../components/SearchResultsModal";
 import CustomText from "../../components/CustomText";
-import LifeTaskCard from "../../components/LifeTaskCard";
+import TaskSearchResultCard from "../../components/TaskSearchResultCard";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
@@ -61,7 +61,7 @@ const AddByActionScreen = ({ navigation }) => {
   };
 
   const renderTasks = (itemData) => {
-    return <LifeTaskCard taskObject={itemData.item} />;
+    return <TaskSearchResultCard taskObject={itemData.item} />;
   };
 
   const renderEmptyComponent = () => (

@@ -15,7 +15,7 @@ import { Formik } from "formik";
 import { getTasksByOccupation } from "../../helpers/utils";
 import SearchList from "../../components/SearchResultsModal";
 import CustomText from "../../components/CustomText";
-import LifeTaskCard from "../../components/LifeTaskCard";
+import TaskSearchResultCard from "../../components/TaskSearchResultCard";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
@@ -45,21 +45,23 @@ const AddByOccupationScreen = ({ navigation }) => {
   };
 
   const handleSelectResult = (selection) => {
-    const data = getTasksByOccupation(selection).map((e) => {
-      return {
-        task: e.Task,
-        taskId: e["Task ID"],
-        IWA_Title: e["IWA Title"],
-        task_type: "supplementary",
-        deleted: false,
-      };
-    });
-    setTasks(data);
+    if (selection) {
+      const data = getTasksByOccupation(selection).map((e) => {
+        return {
+          task: e.Task,
+          taskId: e["Task ID"],
+          IWA_Title: e["IWA Title"],
+          task_type: "supplementary",
+          deleted: false,
+        };
+      });
+      setTasks(data);
+    }
     setResults([]);
   };
 
   const renderTasks = (itemData) => {
-    return <LifeTaskCard taskObject={itemData.item} />;
+    return <TaskSearchResultCard taskObject={itemData.item} />;
   };
 
   const renderEmptyComponent = () => (

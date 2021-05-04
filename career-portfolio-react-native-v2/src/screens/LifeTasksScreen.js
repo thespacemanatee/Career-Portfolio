@@ -50,6 +50,8 @@ const LifeTasksScreen = ({ navigation }) => {
     />
   );
 
+  const handleNavigation = () => {};
+
   const renderTasks = (itemData) => {
     return <TaskCard taskObject={itemData.item} life />;
   };
@@ -82,14 +84,14 @@ const LifeTasksScreen = ({ navigation }) => {
               navigation.navigate("AddByAction");
             }}
           >
-            Add by Action
+            Action
           </Button>
           <Button
             onPress={() => {
               navigation.navigate("AddByOccupation");
             }}
           >
-            Add by Occupation
+            Occupation
           </Button>
         </ButtonGroup>
         <FlatList
@@ -99,6 +101,7 @@ const LifeTasksScreen = ({ navigation }) => {
           contentContainerStyle={styles.contentContainer}
           ListEmptyComponent={renderEmptyComponent}
         />
+        <Button onPress={handleNavigation}>NEXT</Button>
       </Layout>
     </View>
   );

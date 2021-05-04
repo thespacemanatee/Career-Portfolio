@@ -8,7 +8,6 @@ import {
   StyleService,
   Button,
   Icon,
-  useTheme,
   TopNavigationAction,
   Spinner,
   Input,
@@ -20,7 +19,7 @@ import { Buffer } from "buffer";
 
 import { addSelection } from "../app/features/form/formSlice";
 import { setAllTasks } from "../app/features/tasks/tasksSlice";
-import { getTasks, handleErrorResponse } from "../helpers/utils";
+import { getTasksByOccupation, handleErrorResponse } from "../helpers/utils";
 import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
 import OccupationCard from "../components/OccupationCard";
@@ -44,8 +43,6 @@ const OccupationsScreen = ({ navigation }) => {
   const [userInput, setUserInput] = useState();
 
   const dispatch = useDispatch();
-
-  const theme = useTheme();
 
   const LoadingIndicator = (props) => {
     const { style } = props;
@@ -89,7 +86,7 @@ const OccupationsScreen = ({ navigation }) => {
           onetTitle: chosenOccupation,
           titleId: Date.now(),
         };
-        const data = getTasks(chosenOccupation).map((e) => {
+        const data = getTasksByOccupation(chosenOccupation).map((e) => {
           return {
             task: e.Task,
             taskId: e["Task ID"],
@@ -175,7 +172,7 @@ const OccupationsScreen = ({ navigation }) => {
           onSubmit={handleSubmitForm}
           validationSchema={SearchSchema}
         >
-          {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+          {({ handleChange, handleBlur, handleSubmit, values }) => (
             <>
               <Input
                 label="Search Occupations"
@@ -185,17 +182,6 @@ const OccupationsScreen = ({ navigation }) => {
                 value={values.occupation}
                 onChangeText={handleChange("occupation")}
                 onBlur={handleBlur("occupation")}
-                accessoryRight={(props) => {
-                  return (
-                    !!errors.occupation && (
-                      <Icon
-                        {...props}
-                        name="alert-circle-outline"
-                        fill={theme["color-danger-700"]}
-                      />
-                    )
-                  );
-                }}
               />
               <Button
                 style={styles.button}

@@ -126,7 +126,6 @@ const styles = StyleService.create({
     flexDirection: "row",
     alignItems: "flex-start",
   },
-
   taskContainer: {
     flex: 0.9,
   },

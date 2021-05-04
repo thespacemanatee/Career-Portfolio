@@ -5,10 +5,22 @@ import * as data from "../data/career_data.json";
 
 const dataArray = Object.values(data);
 
-export const getTasks = (chosenOccupation) => {
-  let tempArray = dataArray.filter(
-    (occupation) => occupation.Title === chosenOccupation
+export const getTasksByAction = (action) => {
+  let tempArray = dataArray.filter((e) => {
+    const words = `${e.Task}`.split(/[ ,]+/).map((verb) => verb.toLowerCase());
+    return words.includes(action.toLowerCase());
+  });
+
+  console.log(tempArray);
+
+  tempArray = tempArray.filter(
+    (task, index, self) => self.findIndex((e) => e.Task === task.Task) === index
   );
+  return tempArray;
+};
+
+export const getTasksByOccupation = (occupation) => {
+  let tempArray = dataArray.filter((e) => e.Title === occupation);
 
   tempArray = tempArray.filter(
     (task, index, self) => self.findIndex((e) => e.Task === task.Task) === index

@@ -54,7 +54,6 @@ const AddByOccupationScreen = ({ navigation }) => {
         deleted: false,
       };
     });
-    console.log(data);
     setTasks(data);
     setResults([]);
   };

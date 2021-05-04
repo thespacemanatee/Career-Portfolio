@@ -45,17 +45,18 @@ const AddByActionScreen = ({ navigation }) => {
   };
 
   const handleSelectResult = (selection) => {
-    const data = getTasksByAction(selection).map((e) => {
-      return {
-        task: e.Task,
-        taskId: e["Task ID"],
-        IWA_Title: e["IWA Title"],
-        task_type: "supplementary",
-        deleted: false,
-      };
-    });
-    console.log(data);
-    setTasks(data);
+    if (selection) {
+      const data = getTasksByAction(selection).map((e) => {
+        return {
+          task: e.Task,
+          taskId: e["Task ID"],
+          IWA_Title: e["IWA Title"],
+          task_type: "supplementary",
+          deleted: false,
+        };
+      });
+      setTasks(data);
+    }
     setResults([]);
   };
 

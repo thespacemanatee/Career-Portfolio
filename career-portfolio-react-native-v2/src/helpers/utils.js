@@ -11,8 +11,6 @@ export const getTasksByAction = (action) => {
     return words.includes(action.toLowerCase());
   });
 
-  console.log(tempArray);
-
   tempArray = tempArray.filter(
     (task, index, self) => self.findIndex((e) => e.Task === task.Task) === index
   );

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, { useState } from "react";
 import {
   LayoutAnimation,
@@ -10,6 +11,10 @@ import {
 import { useDispatch } from "react-redux";
 import { StyleService, Card, Icon, Button } from "@ui-kitten/components";
 
+import {
+  addLifeTask,
+  removeLifeTask,
+} from "../app/features/tasks/lifeTasksSlice";
 import CustomText from "./CustomText";
 
 if (
@@ -30,11 +35,12 @@ const ChevronIcon = (props) => (
   />
 );
 
-const TaskSearchResultCard = ({ taskObject }) => {
+const TaskSearchResultCard = ({ taskObject, exists }) => {
   const [expanded, setExpanded] = useState(false);
+  const [added, setAdded] = useState(exists);
   const [spinValue] = useState(new Animated.Value(0));
 
-  const { task, taskId } = taskObject;
+  const { task, taskId, IWA_Title } = taskObject;
 
   const dispatch = useDispatch();
 
@@ -52,12 +58,27 @@ const TaskSearchResultCard = ({ taskObject }) => {
     }).start();
   };
 
+  const handleAddTask = () => {
+    if (added) {
+      dispatch(removeLifeTask(taskId));
+      setAdded(false);
+    } else {
+      dispatch(addLifeTask({ taskId, task, IWA_Title, task_type: "life" }));
+      setAdded(true);
+    }
+  };
+
   const Footer = (props) => {
     const { style } = props;
     return (
       <View {...props} style={[style, styles.footerContainer]}>
-        <Button style={styles.footerControl} size="small">
-          ADD TASK
+        <Button
+          onPress={handleAddTask}
+          style={styles.footerControl}
+          size="small"
+          status={added ? "danger" : null}
+        >
+          {added ? "REMOVE TASK" : "ADD TASK"}
         </Button>
       </View>
     );

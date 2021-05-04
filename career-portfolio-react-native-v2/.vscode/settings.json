@@ -1,8 +1,10 @@
 {
     "cSpell.ignoreWords": [
         "formik",
+        "one",
         "onet",
         "reduxjs",
-        "title"
+        "title",
+        "upsert"
     ]
 }

@@ -9,7 +9,7 @@ export const lifeTasksSlice = createSlice({
   name: "tasks",
   initialState: lifeTasksAdapter.getInitialState(),
   reducers: {
-    addLifeTask: lifeTasksAdapter.addOne,
+    addLifeTask: lifeTasksAdapter.upsertOne,
     removeLifeTask: lifeTasksAdapter.removeOne,
   },
 });

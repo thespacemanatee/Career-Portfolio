@@ -27,10 +27,6 @@ const TrashIcon = (props) => (
   <Icon fill="white" {...props} name="trash" style={styles.icon} />
 );
 
-const UndoIcon = (props) => (
-  <Icon fill="white" {...props} name="undo" style={styles.icon} />
-);
-
 const ChevronIcon = (props) => (
   <Icon
     fill="#8F9BB3"
@@ -45,7 +41,7 @@ const TaskCard = ({ taskObject }) => {
   const [spinValue] = useState(new Animated.Value(0));
   const leftSwipeable = useRef(null);
 
-  const { task, taskId, deleted } = taskObject;
+  const { task, taskId } = taskObject;
 
   const dispatch = useDispatch();
 
@@ -64,19 +60,16 @@ const TaskCard = ({ taskObject }) => {
   };
 
   const rightSwipe = useCallback(() => {
-    if (!deleted) {
-      dispatch(removeLifeTask(taskId));
-    }
-    leftSwipeable.current.close();
-  }, [deleted, dispatch, taskId]);
+    dispatch(removeLifeTask(taskId));
+  }, [dispatch, taskId]);
 
   const leftComponent = useCallback(() => {
     return (
       <View style={styles.deleteBox}>
-        {deleted ? <UndoIcon /> : <TrashIcon />}
+        <TrashIcon />
       </View>
     );
-  }, [deleted]);
+  }, []);
 
   return (
     <View style={styles.container}>

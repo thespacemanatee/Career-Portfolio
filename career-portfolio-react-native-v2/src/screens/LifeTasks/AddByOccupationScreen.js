@@ -12,6 +12,7 @@ import {
 } from "@ui-kitten/components";
 import { Formik } from "formik";
 
+import { lifeTasksSelector } from "../../app/features/tasks/lifeTasksSlice";
 import { getTasksByOccupation } from "../../helpers/utils";
 import SearchList from "../../components/SearchResultsModal";
 import CustomText from "../../components/CustomText";
@@ -23,6 +24,7 @@ const filter = (item, query) =>
   item?.toLowerCase().includes(query?.toLowerCase());
 
 const AddByOccupationScreen = ({ navigation }) => {
+  const lifeTasks = useSelector(lifeTasksSelector.selectAll);
   const occupations = useSelector((state) => state.local.occupations);
   const [tasks, setTasks] = useState([]);
   const [results, setResults] = useState([]);
@@ -61,7 +63,9 @@ const AddByOccupationScreen = ({ navigation }) => {
   };
 
   const renderTasks = (itemData) => {
-    return <TaskSearchResultCard taskObject={itemData.item} />;
+    const exists =
+      lifeTasks.findIndex((e) => e.taskId === itemData.item.taskId) !== -1;
+    return <TaskSearchResultCard taskObject={itemData.item} exists={exists} />;
   };
 
   const renderEmptyComponent = () => (

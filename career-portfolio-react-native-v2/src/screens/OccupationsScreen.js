@@ -192,6 +192,7 @@ const OccupationsScreen = ({ navigation }) => {
                 SEARCH
               </Button>
               <FlatList
+                style={styles.flatList}
                 data={occupations}
                 renderItem={renderListItems}
                 keyExtractor={(item, index) => String(index)}
@@ -220,6 +221,9 @@ const styles = StyleService.create({
   selectedOccupation: {
     height: 75,
     padding: 10,
+    marginVertical: 5,
+  },
+  flatList: {
     marginVertical: 5,
   },
   contentContainer: {

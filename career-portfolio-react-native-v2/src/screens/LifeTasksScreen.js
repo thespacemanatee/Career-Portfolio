@@ -15,7 +15,7 @@ import {
 import { lifeTasksSelector } from "../app/features/tasks/lifeTasksSlice";
 import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
-import TaskCard from "../components/TaskCard";
+import LifeTaskCard from "../components/LifeTaskCard";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props) => (
@@ -53,7 +53,7 @@ const LifeTasksScreen = ({ navigation }) => {
   const handleNavigation = () => {};
 
   const renderTasks = (itemData) => {
-    return <TaskCard taskObject={itemData.item} life />;
+    return <LifeTaskCard taskObject={itemData.item} life />;
   };
 
   const renderEmptyComponent = () => (
@@ -95,6 +95,7 @@ const LifeTasksScreen = ({ navigation }) => {
           </Button>
         </ButtonGroup>
         <FlatList
+          style={styles.flatList}
           renderItem={renderTasks}
           data={tasks}
           keyExtractor={(item) => String(item.taskId)}
@@ -121,6 +122,9 @@ const styles = StyleService.create({
     fontSize: 26,
   },
   buttonGroupTitle: {
+    marginVertical: 5,
+  },
+  flatList: {
     marginVertical: 5,
   },
   contentContainer: {

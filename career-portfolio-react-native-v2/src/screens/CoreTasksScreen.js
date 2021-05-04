@@ -83,6 +83,7 @@ const CoreTasksScreen = ({ navigation }) => {
           <CustomText numberOfLines={1}>{chosenOccupation}</CustomText>
         </ShadowCard>
         <FlatList
+          style={styles.flatList}
           renderItem={renderTasks}
           data={tasks}
           keyExtractor={(item) => String(item.taskId)}
@@ -111,6 +112,9 @@ const styles = StyleService.create({
   selectedOccupation: {
     height: 75,
     padding: 10,
+    marginVertical: 5,
+  },
+  flatList: {
     marginVertical: 5,
   },
   contentContainer: {

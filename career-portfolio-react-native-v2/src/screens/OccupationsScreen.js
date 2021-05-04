@@ -94,7 +94,7 @@ const OccupationsScreen = ({ navigation }) => {
             task: e.Task,
             taskId: e["Task ID"],
             IWA_Title: e["IWA Title"],
-            taskType: "supplementary",
+            task_type: "supplementary",
             deleted: false,
           };
         });
@@ -140,8 +140,9 @@ const OccupationsScreen = ({ navigation }) => {
   };
 
   const renderListItems = useCallback((itemData) => {
-    const { item } = itemData;
-    return <OccupationCard onPress={handleOnPress}>{item}</OccupationCard>;
+    return (
+      <OccupationCard onPress={handleOnPress}>{itemData.item}</OccupationCard>
+    );
   }, []);
 
   const renderEmptyComponent = () =>
@@ -233,6 +234,7 @@ const styles = StyleService.create({
   selectedOccupation: {
     height: 75,
     padding: 10,
+    marginVertical: 5,
   },
   contentContainer: {
     flexGrow: 1,

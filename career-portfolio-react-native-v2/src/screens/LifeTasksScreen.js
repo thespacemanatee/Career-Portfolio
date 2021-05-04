@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Platform } from "react-native";
+import { View, Platform, FlatList } from "react-native";
+import { useSelector } from "react-redux";
 import {
   Divider,
   Layout,
@@ -8,8 +9,13 @@ import {
   Button,
   Icon,
   TopNavigationAction,
+  ButtonGroup,
 } from "@ui-kitten/components";
+
+import { lifeTasksSelector } from "../app/features/tasks/lifeTasksSlice";
 import alert from "../components/CustomAlert";
+import CustomText from "../components/CustomText";
+import TaskCard from "../components/TaskCard";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props) => (
@@ -17,6 +23,8 @@ const HelpIcon = (props) => (
 );
 
 const LifeTasksScreen = ({ navigation }) => {
+  const tasks = useSelector(lifeTasksSelector.selectAll);
+
   const BackAction = () => (
     <TopNavigationAction
       icon={BackIcon}
@@ -42,6 +50,16 @@ const LifeTasksScreen = ({ navigation }) => {
     />
   );
 
+  const renderTasks = (itemData) => {
+    return <TaskCard taskObject={itemData.item} life />;
+  };
+
+  const renderEmptyComponent = () => (
+    <View style={styles.emptyComponent}>
+      <CustomText bold>NO TASKS</CustomText>
+    </View>
+  );
+
   return (
     <View style={styles.screen}>
       <TopNavigation
@@ -52,20 +70,35 @@ const LifeTasksScreen = ({ navigation }) => {
       />
       <Divider />
       <Layout style={styles.layout}>
-        <Button
-          onPress={() => {
-            navigation.navigate("AddByAction");
-          }}
-        >
-          Add by Action
-        </Button>
-        <Button
-          onPress={() => {
-            navigation.navigate("AddByOccupation");
-          }}
-        >
-          Add by Occupation
-        </Button>
+        <CustomText style={styles.title} bold>
+          What other tasks have you done in past jobs, or outside work?
+        </CustomText>
+        <CustomText style={styles.buttonGroupTitle} bold>
+          Search task by:
+        </CustomText>
+        <ButtonGroup style={styles.buttonGroup}>
+          <Button
+            onPress={() => {
+              navigation.navigate("AddByAction");
+            }}
+          >
+            Add by Action
+          </Button>
+          <Button
+            onPress={() => {
+              navigation.navigate("AddByOccupation");
+            }}
+          >
+            Add by Occupation
+          </Button>
+        </ButtonGroup>
+        <FlatList
+          renderItem={renderTasks}
+          data={tasks}
+          keyExtractor={(item) => String(item.taskId)}
+          contentContainerStyle={styles.contentContainer}
+          ListEmptyComponent={renderEmptyComponent}
+        />
       </Layout>
     </View>
   );
@@ -80,5 +113,19 @@ const styles = StyleService.create({
   layout: {
     flex: 1,
     padding: 10,
+  },
+  title: {
+    fontSize: 26,
+  },
+  buttonGroupTitle: {
+    marginVertical: 5,
+  },
+  contentContainer: {
+    flexGrow: 1,
+  },
+  emptyComponent: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexGrow: 1,
   },
 });

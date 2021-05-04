@@ -2,7 +2,7 @@
 import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
 
 const lifeTasksAdapter = createEntityAdapter({
-  selectId: (task) => task["Task ID"],
+  selectId: (task) => task.taskId,
 });
 
 export const lifeTasksSlice = createSlice({
@@ -15,5 +15,9 @@ export const lifeTasksSlice = createSlice({
 });
 
 export const { addLifeTask, removeLifeTask } = lifeTasksSlice.actions;
+
+export const lifeTasksSelector = lifeTasksAdapter.getSelectors(
+  (state) => state.lifeTasks
+);
 
 export default lifeTasksSlice.reducer;

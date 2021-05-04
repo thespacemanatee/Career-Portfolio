@@ -59,6 +59,12 @@ const CoreTasksScreen = ({ navigation }) => {
     return <TaskCard taskObject={itemData.item} />;
   };
 
+  const renderEmptyComponent = () => (
+    <View style={styles.emptyComponent}>
+      <CustomText bold>NO TASKS FOUND</CustomText>
+    </View>
+  );
+
   return (
     <View style={styles.screen}>
       <TopNavigation
@@ -69,6 +75,9 @@ const CoreTasksScreen = ({ navigation }) => {
       />
       <Divider />
       <Layout style={styles.layout}>
+        <CustomText style={styles.title} bold>
+          What does your work schedule look like?
+        </CustomText>
         <ShadowCard style={styles.selectedOccupation}>
           <CustomText bold>Selected Occupation</CustomText>
           <CustomText numberOfLines={1}>{chosenOccupation}</CustomText>
@@ -77,6 +86,8 @@ const CoreTasksScreen = ({ navigation }) => {
           renderItem={renderTasks}
           data={tasks}
           keyExtractor={(item) => String(item.taskId)}
+          contentContainerStyle={styles.contentContainer}
+          ListEmptyComponent={renderEmptyComponent}
         />
         <Button onPress={handleNavigation}>NEXT</Button>
       </Layout>
@@ -94,8 +105,20 @@ const styles = StyleService.create({
     flex: 1,
     padding: 10,
   },
+  title: {
+    fontSize: 26,
+  },
   selectedOccupation: {
     height: 75,
     padding: 10,
+    marginVertical: 5,
+  },
+  contentContainer: {
+    flexGrow: 1,
+  },
+  emptyComponent: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexGrow: 1,
   },
 });

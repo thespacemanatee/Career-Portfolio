@@ -68,7 +68,7 @@ const CoreTasksScreen = ({ navigation }) => {
   return (
     <View style={styles.screen}>
       <TopNavigation
-        title="Choose your Core Tasks"
+        title="Choose Your Core Tasks"
         alignment="center"
         accessoryLeft={BackAction}
         accessoryRight={HelpAction}

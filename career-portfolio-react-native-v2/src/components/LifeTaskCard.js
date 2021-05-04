@@ -36,7 +36,7 @@ const ChevronIcon = (props) => (
   />
 );
 
-const TaskCard = ({ taskObject }) => {
+const LifeTasksCard = ({ taskObject }) => {
   const [expanded, setExpanded] = useState(false);
   const [spinValue] = useState(new Animated.Value(0));
   const leftSwipeable = useRef(null);
@@ -106,7 +106,7 @@ const TaskCard = ({ taskObject }) => {
   );
 };
 
-export default TaskCard;
+export default LifeTasksCard;
 
 const styles = StyleService.create({
   container: {

@@ -50,7 +50,9 @@ const LifeTasksScreen = ({ navigation }) => {
     />
   );
 
-  const handleNavigation = () => {};
+  const handleNavigation = () => {
+    navigation.navigate("Rankings");
+  };
 
   const renderTasks = (itemData) => {
     return <LifeTaskCard taskObject={itemData.item} life />;
@@ -65,7 +67,7 @@ const LifeTasksScreen = ({ navigation }) => {
   return (
     <View style={styles.screen}>
       <TopNavigation
-        title="Choose your Life Tasks"
+        title="Choose Your Life Tasks"
         alignment="center"
         accessoryLeft={BackAction}
         accessoryRight={HelpAction}

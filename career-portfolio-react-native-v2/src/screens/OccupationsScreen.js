@@ -154,13 +154,16 @@ const OccupationsScreen = ({ navigation }) => {
   return (
     <View style={styles.screen}>
       <TopNavigation
-        title="What is your occupation?"
+        title="Choose Your Occupation"
         alignment="center"
         accessoryLeft={BackAction}
         accessoryRight={HelpAction}
       />
       <Divider />
       <Layout style={styles.layout}>
+        <CustomText style={styles.title} bold>
+          What is your occupation?
+        </CustomText>
         <ShadowCard style={styles.selectedOccupation}>
           <CustomText bold>Selected Occupation</CustomText>
           <CustomText numberOfLines={1}>
@@ -217,6 +220,9 @@ const styles = StyleService.create({
   layout: {
     flex: 1,
     padding: 10,
+  },
+  title: {
+    fontSize: 26,
   },
   selectedOccupation: {
     height: 75,

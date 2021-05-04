@@ -28,11 +28,11 @@ if (
 const ICON_SIZE = 30;
 
 const TrashIcon = (props) => (
-  <Icon fill="#8F9BB3" {...props} name="trash" style={styles.icon} />
+  <Icon fill="white" {...props} name="trash" style={styles.icon} />
 );
 
 const UndoIcon = (props) => (
-  <Icon fill="#8F9BB3" {...props} name="undo" style={styles.icon} />
+  <Icon fill="white" {...props} name="undo" style={styles.icon} />
 );
 
 const ChevronIcon = (props) => (
@@ -105,52 +105,59 @@ const TaskCard = ({ taskObject }) => {
   }, [deleted]);
 
   return (
-    <Swipeable
-      ref={leftSwipeable}
-      renderLeftActions={leftComponent}
-      onSwipeableOpen={rightSwipe}
-      friction={2}
-    >
-      <Card
-        onPress={() => {
-          LayoutAnimation.configureNext(
-            LayoutAnimation.create(100, "linear", "opacity")
-          );
-          setExpanded(!expanded);
-          spin();
-        }}
+    <View style={styles.container}>
+      <Swipeable
+        ref={leftSwipeable}
+        renderLeftActions={leftComponent}
+        onSwipeableOpen={rightSwipe}
+        friction={2}
       >
-        <View style={styles.contentContainer}>
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              disabled={deleted}
-              checked={checked}
-              onChange={handleCheckChange}
-            />
-          </View>
-          <View style={styles.taskContainer}>
-            <CustomText
-              // eslint-disable-next-line react-native/no-inline-styles
-              style={{ textDecorationLine: deleted ? "line-through" : null }}
-              numberOfLines={expanded ? null : 2}
+        <Card
+          onPress={() => {
+            LayoutAnimation.configureNext(
+              LayoutAnimation.create(100, "linear", "opacity")
+            );
+            setExpanded(!expanded);
+            spin();
+          }}
+        >
+          <View style={styles.contentContainer}>
+            <View style={styles.checkboxContainer}>
+              <CheckBox
+                disabled={deleted}
+                checked={checked}
+                onChange={handleCheckChange}
+              />
+            </View>
+            <View style={styles.taskContainer}>
+              <CustomText
+                // eslint-disable-next-line react-native/no-inline-styles
+                style={{ textDecorationLine: deleted ? "line-through" : null }}
+                numberOfLines={expanded ? null : 2}
+              >
+                {task}
+              </CustomText>
+            </View>
+            <Animated.View
+              style={[styles.iconContainer, { transform: [{ rotate }] }]}
             >
-              {task}
-            </CustomText>
+              <ChevronIcon />
+            </Animated.View>
           </View>
-          <Animated.View
-            style={[styles.iconContainer, { transform: [{ rotate }] }]}
-          >
-            <ChevronIcon />
-          </Animated.View>
-        </View>
-      </Card>
-    </Swipeable>
+        </Card>
+      </Swipeable>
+    </View>
   );
 };
 
 export default TaskCard;
 
 const styles = StyleService.create({
+  container: {
+    flex: 1,
+    backgroundColor: "red",
+    borderRadius: 5,
+  },
   contentContainer: {
     flex: 1,
     flexDirection: "row",

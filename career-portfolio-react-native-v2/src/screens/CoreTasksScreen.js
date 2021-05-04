@@ -9,8 +9,7 @@ import {
   Icon,
   TopNavigationAction,
 } from "@ui-kitten/components";
-import { useDispatch, useSelector } from "react-redux";
-import useEffectOnce from "react-use/lib/useEffectOnce";
+import { useSelector } from "react-redux";
 
 import { tasksSelector } from "../app/features/tasks/tasksSlice";
 import alert from "../components/CustomAlert";
@@ -26,8 +25,6 @@ const HelpIcon = (props) => (
 const CoreTasksScreen = ({ navigation }) => {
   const tasks = useSelector(tasksSelector.selectAll);
   const chosenOccupation = useSelector((state) => state.form.onet_title);
-
-  const dispatch = useDispatch();
 
   const BackAction = () => (
     <TopNavigationAction
@@ -54,6 +51,10 @@ const CoreTasksScreen = ({ navigation }) => {
     />
   );
 
+  const handleNavigation = () => {
+    navigation.navigate("LifeTasksStack");
+  };
+
   const renderTasks = (itemData) => {
     return <TaskCard taskObject={itemData.item} />;
   };
@@ -77,13 +78,7 @@ const CoreTasksScreen = ({ navigation }) => {
           data={tasks}
           keyExtractor={(item) => String(item.taskId)}
         />
-        <Button
-          onPress={() => {
-            console.log(tasks);
-          }}
-        >
-          NEXT
-        </Button>
+        <Button onPress={handleNavigation}>NEXT</Button>
       </Layout>
     </View>
   );

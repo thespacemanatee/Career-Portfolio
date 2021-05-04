@@ -46,21 +46,18 @@ export const getOccupationsArray = () => {
   });
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export const handleErrorResponse = (err, action) => {
   if (err.response) {
-    // The request was made and the server responded with a status code
-    // that falls out of the range of 2xx
     const { data: errorData, status, headers } = err.response;
     console.error(errorData);
     console.error(status);
     console.error(headers);
 
-    switch (Math.floor(err.response.status / 100)) {
+    switch (Math.floor(status / 100)) {
       case 4: {
         alert(
           "Error",
-          errorData.description,
+          errorData.error,
           action
             ? [
                 { text: "Cancel", style: "cancel" },

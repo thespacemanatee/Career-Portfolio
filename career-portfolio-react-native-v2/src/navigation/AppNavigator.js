@@ -1,5 +1,8 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleService } from "@ui-kitten/components";
@@ -9,6 +12,8 @@ import OccupationsScreen from "../screens/OccupationsScreen";
 import CoreTasksScreen from "../screens/CoreTasksScreen";
 import LifeTasksScreen from "../screens/LifeTasksScreen";
 import RankingsScreen from "../screens/RankingsScreen";
+import AddByActionScreen from "../screens/LifeTasks/AddByActionScreen";
+import AddByOccupationScreen from "../screens/LifeTasks/AddByOccupationScreen";
 
 const AppNavigator = () => {
   const { Navigator, Screen } = createStackNavigator();
@@ -16,14 +21,39 @@ const AppNavigator = () => {
     prefixes: ["http://localhost:19006"],
     // config,
   };
+
+  const LifeTasksStackNavigator = () => {
+    return (
+      <Navigator
+        screenOptions={({ route, navigation }) => ({
+          headerShown: false,
+          gestureEnabled: true,
+          cardOverlayEnabled: true,
+          ...TransitionPresets.ModalPresentationIOS,
+        })}
+      >
+        <Screen name="LifeTasks" component={LifeTasksScreen} />
+        <Screen name="AddByOccupation" component={AddByOccupationScreen} />
+        <Screen name="AddByAction" component={AddByActionScreen} />
+      </Navigator>
+    );
+  };
+
   return (
     <NavigationContainer linking={linking}>
       <SafeAreaView style={styles.screen}>
-        <Navigator headerMode="none">
+        <Navigator
+          screenOptions={({ route, navigation }) => ({
+            headerShown: false,
+            gestureEnabled: true,
+            cardOverlayEnabled: true,
+            ...TransitionPresets.SlideFromRightIOS,
+          })}
+        >
           <Screen name="Welcome" component={WelcomeScreen} />
           <Screen name="Occupations" component={OccupationsScreen} />
           <Screen name="CoreTasks" component={CoreTasksScreen} />
-          <Screen name="LifeTasks" component={LifeTasksScreen} />
+          <Screen name="LifeTasksStack" component={LifeTasksStackNavigator} />
           <Screen name="Rankings" component={RankingsScreen} />
         </Navigator>
       </SafeAreaView>

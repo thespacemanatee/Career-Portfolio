@@ -114,7 +114,6 @@ const OccupationsScreen = ({ navigation }) => {
   const handleSubmitForm = async (values) => {
     const { occupation } = values;
     setUserInput(occupation);
-    console.log(occupation);
     try {
       setLoading(true);
       const url = `https://thingproxy.freeboard.io/fetch/https://services.onetcenter.org/ws/online/search?keyword=${occupation}&start=1&end=100`;
@@ -123,13 +122,11 @@ const OccupationsScreen = ({ navigation }) => {
           Authorization: `Basic ${token}`,
         },
       });
-      console.log(res.data);
 
       const titles = [];
       res.data.occupation.forEach((item) => {
         titles.push(item.title);
       });
-      console.log(titles);
       setOccupations(titles);
     } catch (err) {
       handleErrorResponse(err);
@@ -214,9 +211,7 @@ const OccupationsScreen = ({ navigation }) => {
                 ListEmptyComponent={renderEmptyComponent}
                 contentContainerStyle={styles.contentContainer}
               />
-              <Button style={styles.button} onPress={handleNavigation}>
-                NEXT
-              </Button>
+              <Button onPress={handleNavigation}>NEXT</Button>
             </>
           )}
         </Formik>
@@ -243,7 +238,7 @@ const styles = StyleService.create({
     flexGrow: 1,
   },
   button: {
-    marginVertical: 5,
+    marginVertical: 10,
   },
   emptyComponent: {
     justifyContent: "center",

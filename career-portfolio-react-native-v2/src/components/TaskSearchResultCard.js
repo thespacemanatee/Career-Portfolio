@@ -43,7 +43,7 @@ const TaskSearchResultCard = ({ taskObject, exists }) => {
 
   const rotate = spinValue.interpolate({
     inputRange: [0, 1],
-    outputRange: ["0deg", "180deg"],
+    outputRange: ["90deg", "180deg"],
   });
 
   const spin = () => {
@@ -118,7 +118,8 @@ const styles = StyleService.create({
     flex: 0.9,
   },
   iconContainer: {
-    flex: 0.1,
+    position: "absolute",
+    right: 0,
   },
   icon: {
     width: ICON_SIZE,

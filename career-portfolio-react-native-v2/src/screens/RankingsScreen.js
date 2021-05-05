@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, { useCallback, useEffect, useState } from "react";
 import { Platform, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,11 +12,13 @@ import {
   Icon,
 } from "@ui-kitten/components";
 import DraggableFlatList from "react-native-draggable-flatlist";
+import axios from "axios";
 
 import { setAllTasks, tasksSelector } from "../app/features/tasks/tasksSlice";
 import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
 import RankingCard from "../components/RankingCard";
+import { handleErrorResponse } from "../helpers/utils";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props) => (
@@ -24,6 +27,7 @@ const HelpIcon = (props) => (
 
 const RankingsScreen = ({ navigation }) => {
   const tasks = useSelector(tasksSelector.selectAll);
+  const form = useSelector((state) => state.form);
   const [combinedTasks, setCombinedTasks] = useState([]);
   const [deletedTasks, setDeletedTasks] = useState([]);
 
@@ -54,9 +58,55 @@ const RankingsScreen = ({ navigation }) => {
     />
   );
 
+  const postResult = async (data) => {
+    try {
+      const response = await axios({
+        method: "post",
+        url:
+          "https://rjiu5d34rj.execute-api.ap-southeast-1.amazonaws.com/test/post-json",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data,
+      });
+
+      const { onet_title, user_id, count, similar, missing } = response.data;
+
+      console.log(Object.keys(response.data));
+
+      const responseData = {
+        count: JSON.parse(count),
+        similar_columns: JSON.parse(similar),
+        missing_columns: JSON.parse(missing),
+      };
+
+      console.log(responseData);
+    } catch (err) {
+      handleErrorResponse(err);
+    }
+  };
+
+  const handleSubmit = () => {
+    const tasksArray = tasks.map((e) => {
+      return {
+        task: e.task,
+        taskId: e.taskId,
+        IWA_Title: e.IWA_Title,
+        task_type: e.task_type,
+      };
+    });
+    // console.log(tasksArray);
+    const payload = {
+      ...form,
+      task_list: tasksArray,
+    };
+    // console.log(payload);
+    postResult(payload);
+  };
+
   useEffect(() => {
     setDeletedTasks(tasks.filter((e) => e.deleted === true));
-    setCombinedTasks(tasks.filter((e) => e.deleted === false));
+    setCombinedTasks(tasks.filter((e) => e.deleted !== true));
   }, [tasks]);
 
   const handleDragEnd = ({ data }) => {
@@ -99,7 +149,7 @@ const RankingsScreen = ({ navigation }) => {
           ListEmptyComponent={renderEmptyComponent}
           onDragEnd={handleDragEnd}
         />
-        <Button>SUBMIT</Button>
+        <Button onPress={handleSubmit}>SUBMIT</Button>
       </Layout>
     </View>
   );

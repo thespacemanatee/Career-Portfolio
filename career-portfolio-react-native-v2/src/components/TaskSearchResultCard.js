@@ -11,10 +11,7 @@ import {
 import { useDispatch } from "react-redux";
 import { StyleService, Card, Icon, Button } from "@ui-kitten/components";
 
-import {
-  addLifeTask,
-  removeLifeTask,
-} from "../app/features/tasks/lifeTasksSlice";
+import { addLifeTask, removeLifeTask } from "../app/features/tasks/tasksSlice";
 import CustomText from "./CustomText";
 
 if (
@@ -63,7 +60,7 @@ const TaskSearchResultCard = ({ taskObject, exists }) => {
       dispatch(removeLifeTask(taskId));
       setAdded(false);
     } else {
-      dispatch(addLifeTask({ taskId, task, IWA_Title, task_type: "life" }));
+      dispatch(addLifeTask({ task, taskId, IWA_Title, task_type: "life" }));
       setAdded(true);
     }
   };

@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 import { StyleService, Card, Icon } from "@ui-kitten/components";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 
-import { removeLifeTask } from "../app/features/tasks/lifeTasksSlice";
+import { removeLifeTask } from "../app/features/tasks/tasksSlice";
 import CustomText from "./CustomText";
 
 if (

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Platform, FlatList } from "react-native";
 import {
   Divider,
@@ -25,6 +25,7 @@ const HelpIcon = (props) => (
 const CoreTasksScreen = ({ navigation }) => {
   const tasks = useSelector(tasksSelector.selectAll);
   const chosenOccupation = useSelector((state) => state.form.onet_title);
+  const [coreTasks, setCoreTasks] = useState([]);
 
   const BackAction = () => (
     <TopNavigationAction
@@ -50,6 +51,10 @@ const CoreTasksScreen = ({ navigation }) => {
       }}
     />
   );
+
+  useEffect(() => {
+    setCoreTasks(tasks.filter((e) => e.task_type !== "life"));
+  }, [tasks]);
 
   const handleNavigation = () => {
     navigation.navigate("LifeTasksStack");
@@ -85,7 +90,7 @@ const CoreTasksScreen = ({ navigation }) => {
         <FlatList
           style={styles.flatList}
           renderItem={renderTasks}
-          data={tasks}
+          data={coreTasks}
           keyExtractor={(item) => String(item.taskId)}
           contentContainerStyle={styles.contentContainer}
           ListEmptyComponent={renderEmptyComponent}

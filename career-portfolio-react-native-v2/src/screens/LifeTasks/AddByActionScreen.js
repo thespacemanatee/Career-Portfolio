@@ -12,7 +12,7 @@ import {
 } from "@ui-kitten/components";
 import { Formik } from "formik";
 
-import { lifeTasksSelector } from "../../app/features/tasks/lifeTasksSlice";
+import { tasksSelector } from "../../app/features/tasks/tasksSlice";
 import { getTasksByAction } from "../../helpers/utils";
 import SearchList from "../../components/SearchResultsModal";
 import CustomText from "../../components/CustomText";
@@ -24,7 +24,7 @@ const filter = (item, query) =>
   item?.toLowerCase().includes(query?.toLowerCase());
 
 const AddByActionScreen = ({ navigation }) => {
-  const lifeTasks = useSelector(lifeTasksSelector.selectAll);
+  const allTasks = useSelector(tasksSelector.selectAll);
   const verbs = useSelector((state) => state.local.verbs);
   const [tasks, setTasks] = useState([]);
   const [results, setResults] = useState([]);
@@ -53,7 +53,7 @@ const AddByActionScreen = ({ navigation }) => {
           task: e.Task,
           taskId: e["Task ID"],
           IWA_Title: e["IWA Title"],
-          task_type: "supplementary",
+          task_type: "life",
           deleted: false,
         };
       });
@@ -64,7 +64,7 @@ const AddByActionScreen = ({ navigation }) => {
 
   const renderTasks = (itemData) => {
     const exists =
-      lifeTasks.findIndex((e) => e.taskId === itemData.item.taskId) !== -1;
+      allTasks.findIndex((e) => e.taskId === itemData.item.taskId) !== -1;
     return <TaskSearchResultCard taskObject={itemData.item} exists={exists} />;
   };
 

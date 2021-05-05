@@ -18,7 +18,6 @@ import {
 import formReducer from "./features/form/formSlice";
 import localReducer from "./features/local/localSlice";
 import tasksReducer from "./features/tasks/tasksSlice";
-import lifeTasksReducer from "./features/tasks/lifeTasksSlice";
 
 const persistConfig = {
   key: "root",
@@ -29,7 +28,6 @@ const rootReducer = combineReducers({
   form: formReducer,
   local: localReducer,
   tasks: tasksReducer,
-  lifeTasks: lifeTasksReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

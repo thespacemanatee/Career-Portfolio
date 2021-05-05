@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Platform, View } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Divider,
   Layout,
@@ -12,11 +12,10 @@ import {
 } from "@ui-kitten/components";
 import DraggableFlatList from "react-native-draggable-flatlist";
 
+import { setAllTasks, tasksSelector } from "../app/features/tasks/tasksSlice";
 import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
 import RankingCard from "../components/RankingCard";
-import { lifeTasksSelector } from "../app/features/tasks/lifeTasksSlice";
-import { tasksSelector } from "../app/features/tasks/tasksSlice";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props) => (
@@ -25,13 +24,10 @@ const HelpIcon = (props) => (
 
 const RankingsScreen = ({ navigation }) => {
   const tasks = useSelector(tasksSelector.selectAll);
-  const lifeTasks = useSelector(lifeTasksSelector.selectAll);
   const [combinedTasks, setCombinedTasks] = useState([]);
+  const [deletedTasks, setDeletedTasks] = useState([]);
 
-  useEffect(() => {
-    const data = [...tasks, ...lifeTasks];
-    setCombinedTasks(data);
-  }, [lifeTasks, tasks]);
+  const dispatch = useDispatch();
 
   const BackAction = () => (
     <TopNavigationAction
@@ -57,6 +53,15 @@ const RankingsScreen = ({ navigation }) => {
       }}
     />
   );
+
+  useEffect(() => {
+    setDeletedTasks(tasks.filter((e) => e.deleted === true));
+    setCombinedTasks(tasks.filter((e) => e.deleted === false));
+  }, [tasks]);
+
+  const handleDragEnd = ({ data }) => {
+    dispatch(setAllTasks(data.concat(deletedTasks)));
+  };
 
   const renderTasks = useCallback(
     // eslint-disable-next-line no-unused-expressions
@@ -92,7 +97,7 @@ const RankingsScreen = ({ navigation }) => {
           keyExtractor={(item) => String(item.taskId)}
           contentContainerStyle={styles.contentContainer}
           ListEmptyComponent={renderEmptyComponent}
-          onDragEnd={({ data }) => setCombinedTasks(data)}
+          onDragEnd={handleDragEnd}
         />
         <Button>SUBMIT</Button>
       </Layout>

@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Platform, FlatList } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Divider,
   Layout,
@@ -12,7 +12,10 @@ import {
   ButtonGroup,
 } from "@ui-kitten/components";
 
-import { lifeTasksSelector } from "../app/features/tasks/lifeTasksSlice";
+import {
+  tasksSelector,
+  resetLifeTasks,
+} from "../app/features/tasks/tasksSlice";
 import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
 import LifeTaskCard from "../components/LifeTaskCard";
@@ -21,9 +24,13 @@ const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props) => (
   <Icon {...props} name="question-mark-circle-outline" />
 );
+const RefreshIcon = (props) => <Icon {...props} name="refresh-outline" />;
 
 const LifeTasksScreen = ({ navigation }) => {
-  const tasks = useSelector(lifeTasksSelector.selectAll);
+  const tasks = useSelector(tasksSelector.selectAll);
+  const [lifeTasks, setLifeTasks] = useState([]);
+
+  const dispatch = useDispatch();
 
   const BackAction = () => (
     <TopNavigationAction
@@ -50,8 +57,28 @@ const LifeTasksScreen = ({ navigation }) => {
     />
   );
 
+  useEffect(() => {
+    setLifeTasks(tasks.filter((e) => e.task_type === "life"));
+  }, [tasks]);
+
   const handleNavigation = () => {
     navigation.navigate("Rankings");
+  };
+
+  const handleResetLifeTasks = () => {
+    alert("Are you sure?", "This will reset your life tasks!", [
+      {
+        text: "Confirm",
+        style: "destructive",
+        onPress: () => {
+          dispatch(resetLifeTasks(lifeTasks.map((e) => e.taskId)));
+        },
+      },
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+    ]);
   };
 
   const renderTasks = (itemData) => {
@@ -80,26 +107,34 @@ const LifeTasksScreen = ({ navigation }) => {
         <CustomText style={styles.buttonGroupTitle} bold>
           Search task by:
         </CustomText>
-        <ButtonGroup style={styles.buttonGroup}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <ButtonGroup style={styles.buttonGroup}>
+            <Button
+              onPress={() => {
+                navigation.navigate("AddByAction");
+              }}
+            >
+              Action
+            </Button>
+            <Button
+              onPress={() => {
+                navigation.navigate("AddByOccupation");
+              }}
+            >
+              Occupation
+            </Button>
+          </ButtonGroup>
           <Button
-            onPress={() => {
-              navigation.navigate("AddByAction");
-            }}
-          >
-            Action
-          </Button>
-          <Button
-            onPress={() => {
-              navigation.navigate("AddByOccupation");
-            }}
-          >
-            Occupation
-          </Button>
-        </ButtonGroup>
+            onPress={handleResetLifeTasks}
+            accessoryRight={RefreshIcon}
+            appearance="ghost"
+            status="basic"
+          />
+        </View>
         <FlatList
           style={styles.flatList}
           renderItem={renderTasks}
-          data={tasks}
+          data={lifeTasks}
           keyExtractor={(item) => String(item.taskId)}
           contentContainerStyle={styles.contentContainer}
           ListEmptyComponent={renderEmptyComponent}

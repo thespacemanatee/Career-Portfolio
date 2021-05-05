@@ -13,6 +13,9 @@ export const tasksSlice = createSlice({
     addTask: tasksAdapter.updateOne,
     removeTask: tasksAdapter.updateOne,
     updateTaskType: tasksAdapter.updateOne,
+    addLifeTask: tasksAdapter.upsertOne,
+    removeLifeTask: tasksAdapter.removeOne,
+    resetLifeTasks: tasksAdapter.removeMany,
   },
 });
 
@@ -21,6 +24,9 @@ export const {
   addTask,
   removeTask,
   updateTaskType,
+  addLifeTask,
+  removeLifeTask,
+  resetLifeTasks,
 } = tasksSlice.actions;
 
 export const tasksSelector = tasksAdapter.getSelectors((state) => state.tasks);

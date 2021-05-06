@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { handleErrorResponse } from "../../../helpers/utils";
@@ -48,21 +49,13 @@ const initialState: ResultsState = {
 const resultsSlice = createSlice({
   name: "results",
   initialState,
-  reducers: {
-    // omit reducer cases
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(
-      fetchResults.rejected,
-      (state, action: PayloadAction<any>) => {
-        throw new Error(action.payload.message);
-      }
-    );
     builder.addCase(
       fetchResults.fulfilled,
       (state, action: PayloadAction<ResultsState>) => {
         let { count, similar, missing } = action.payload;
-        count = count.map((e) => {
+        count = count.slice(1).map((e) => {
           return {
             inputTitle: e[0],
             title: e[1],

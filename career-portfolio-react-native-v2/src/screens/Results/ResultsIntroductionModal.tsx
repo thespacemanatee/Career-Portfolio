@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useRef } from "react";
 import { View, Animated } from "react-native";
-import { Layout, StyleService, Icon, Button } from "@ui-kitten/components";
+import { Layout, StyleService, Button } from "@ui-kitten/components";
 import PagerView from "react-native-pager-view";
 
 import CustomText from "../../components/CustomText";
@@ -9,8 +9,6 @@ import type { PagerViewOnPageScrollEventData } from "../../types";
 import Ticker from "../../components/pager/Ticker";
 import TaskBarChart from "../../components/TaskBarChartDemo";
 import Item from "../../components/pager/Item";
-
-const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
@@ -23,9 +21,9 @@ const notRelevant = new Array(5);
 const similar = new Array(10);
 const missing = new Array(7);
 
-const ResultsIntroductionScreen = ({ onClose }: { onClose?: () => void }) => {
-  const scrollOffsetAnimatedValue = React.useRef(new Animated.Value(0)).current;
-  const positionAnimatedValue = React.useRef(new Animated.Value(0)).current;
+const ResultsIntroductionModal = ({ onClose }: { onClose?: () => void }) => {
+  const scrollOffsetAnimatedValue = useRef(new Animated.Value(0)).current;
+  const positionAnimatedValue = useRef(new Animated.Value(0)).current;
 
   return (
     <Layout style={styles.layout}>
@@ -120,11 +118,11 @@ const ResultsIntroductionScreen = ({ onClose }: { onClose?: () => void }) => {
   );
 };
 
-ResultsIntroductionScreen.defaultProps = {
+ResultsIntroductionModal.defaultProps = {
   onClose: () => {},
 };
 
-export default ResultsIntroductionScreen;
+export default ResultsIntroductionModal;
 
 const styles = StyleService.create({
   layout: {
@@ -141,10 +139,6 @@ const styles = StyleService.create({
     fontSize: 36,
     textAlign: "center",
     marginBottom: 20,
-  },
-  contentContainer: {
-    flex: 1,
-    margin: 20,
   },
   contentText: {
     fontSize: 18,

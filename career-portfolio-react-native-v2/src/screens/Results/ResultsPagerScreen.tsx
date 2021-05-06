@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   StyleSheet,
   View,
   Animated,
   Platform,
   useWindowDimensions,
+  FlatList,
 } from "react-native";
 import {
   Divider,
@@ -23,11 +24,14 @@ import Pagination from "../../components/pager/Pagination";
 import Ticker from "../../components/pager/Ticker";
 import type {
   PagerViewOnPageScrollEventData,
+  ResultsCountData,
   ResultsViewPagerConfig,
 } from "../../types";
-
 import CustomText from "../../components/CustomText";
-import ResultsIntroductionScreen from "./ResultsIntroductionScreen";
+import ResultsIntroductionScreen from "./ResultsIntroductionModal";
+import TaskBarChart from "../../components/TaskBarChart";
+import ShadowCard from "../../components/ShadowCard";
+import ResultCard from "../../components/ResultCard";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props: any) => (
@@ -56,8 +60,8 @@ const config: ResultsViewPagerConfig[] = [
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
 const ResultsPagerScreen = ({ navigation }) => {
-  const scrollOffsetAnimatedValue = React.useRef(new Animated.Value(0)).current;
-  const positionAnimatedValue = React.useRef(new Animated.Value(0)).current;
+  const scrollOffsetAnimatedValue = useRef(new Animated.Value(0)).current;
+  const positionAnimatedValue = useRef(new Animated.Value(0)).current;
   const results = useAppSelector((state) => state.results);
   const [visible, setVisible] = useState(true);
 
@@ -87,6 +91,17 @@ const ResultsPagerScreen = ({ navigation }) => {
 
   const handleCloseHelp = () => {
     setVisible(false);
+  };
+
+  const renderResults = ({ item }: { item: ResultsCountData }) => {
+    const similar = results.similar.filter((e) => e.title === item.title);
+    const missing = results.missing.filter((e) => e.title === item.title);
+    const data = {
+      notRelevant: 10,
+      similar,
+      missing,
+    };
+    return <ResultCard item={item} data={data} />;
   };
 
   return (
@@ -142,7 +157,12 @@ const ResultsPagerScreen = ({ navigation }) => {
           {config.map((item, index) => (
             <View collapsable={false} key={String(index)}>
               <Item scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}>
-                <CustomText>HELLO</CustomText>
+                <FlatList
+                  renderItem={renderResults}
+                  data={results.count}
+                  contentContainerStyle={styles.contentContainer}
+                  keyExtractor={(e, i) => String(i)}
+                />
               </Item>
             </View>
           ))}
@@ -175,6 +195,10 @@ const styles = StyleSheet.create({
   pageIndicator: {
     alignItems: "flex-end",
     marginVertical: 5,
+  },
+  contentContainer: {
+    flexGrow: 1,
+    padding: 10,
   },
   backdrop: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",

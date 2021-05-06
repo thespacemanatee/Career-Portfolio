@@ -64,3 +64,9 @@ export enum TASK_TYPE {
   SUPPLEMENTARY = "supplementary",
   LIFE = "life",
 }
+
+export interface TaskBarChartProps {
+  notRelevant: number;
+  similar: ResultsSimilarData[];
+  missing: ResultsMissingData[];
+}

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, { useCallback, useEffect, useState } from "react";
 import { Platform, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +10,9 @@ import {
   Button,
   TopNavigationAction,
   Icon,
+  Modal,
+  Spinner,
+  Card,
 } from "@ui-kitten/components";
 import DraggableFlatList from "react-native-draggable-flatlist";
 
@@ -16,6 +20,8 @@ import { setAllTasks, tasksSelector } from "../app/features/tasks/tasksSlice";
 import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
 import RankingCard from "../components/RankingCard";
+import { handleErrorResponse } from "../helpers/utils";
+import { fetchResults } from "../app/features/results/resultsSlice";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props) => (
@@ -24,8 +30,10 @@ const HelpIcon = (props) => (
 
 const RankingsScreen = ({ navigation }) => {
   const tasks = useSelector(tasksSelector.selectAll);
+  const form = useSelector((state) => state.form);
   const [combinedTasks, setCombinedTasks] = useState([]);
   const [deletedTasks, setDeletedTasks] = useState([]);
+  const [visible, setVisible] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -54,9 +62,38 @@ const RankingsScreen = ({ navigation }) => {
     />
   );
 
+  const postResult = async (data) => {
+    try {
+      setVisible(true);
+      await dispatch(fetchResults(data));
+    } catch (err) {
+      handleErrorResponse(err);
+    } finally {
+      setVisible(false);
+    }
+  };
+
+  const handleSubmit = () => {
+    const tasksArray = tasks.map((e) => {
+      return {
+        task: e.task,
+        taskId: e.taskId,
+        IWA_Title: e.IWA_Title,
+        task_type: e.task_type,
+      };
+    });
+    // console.log(tasksArray);
+    const payload = {
+      ...form,
+      task_list: tasksArray,
+    };
+    // console.log(payload);
+    postResult(payload);
+  };
+
   useEffect(() => {
     setDeletedTasks(tasks.filter((e) => e.deleted === true));
-    setCombinedTasks(tasks.filter((e) => e.deleted === false));
+    setCombinedTasks(tasks.filter((e) => e.deleted !== true));
   }, [tasks]);
 
   const handleDragEnd = ({ data }) => {
@@ -87,6 +124,11 @@ const RankingsScreen = ({ navigation }) => {
       />
       <Divider />
       <Layout style={styles.layout}>
+        <Modal visible={visible} backdropStyle={styles.backdrop}>
+          <Card disabled>
+            <Spinner size="large" />
+          </Card>
+        </Modal>
         <CustomText style={styles.title} bold>
           Rank your tasks in order of preference.
         </CustomText>
@@ -99,7 +141,7 @@ const RankingsScreen = ({ navigation }) => {
           ListEmptyComponent={renderEmptyComponent}
           onDragEnd={handleDragEnd}
         />
-        <Button>SUBMIT</Button>
+        <Button onPress={handleSubmit}>SUBMIT</Button>
       </Layout>
     </View>
   );
@@ -128,5 +170,8 @@ const styles = StyleService.create({
     justifyContent: "center",
     alignItems: "center",
     flexGrow: 1,
+  },
+  backdrop: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 });

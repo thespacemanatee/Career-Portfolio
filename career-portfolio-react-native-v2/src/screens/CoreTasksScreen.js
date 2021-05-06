@@ -83,7 +83,7 @@ const CoreTasksScreen = ({ navigation }) => {
         <CustomText style={styles.title} bold>
           What does your work schedule look like?
         </CustomText>
-        <ShadowCard style={styles.selectedOccupation}>
+        <ShadowCard style={styles.selectedOccupation} disabled>
           <CustomText bold>Selected Occupation</CustomText>
           <CustomText numberOfLines={1}>{chosenOccupation}</CustomText>
         </ShadowCard>
@@ -115,8 +115,7 @@ const styles = StyleService.create({
     fontSize: 26,
   },
   selectedOccupation: {
-    height: 75,
-    padding: 10,
+    padding: 20,
     marginVertical: 5,
   },
   flatList: {

@@ -51,5 +51,6 @@ module.exports = {
     "react/jsx-props-no-spreading": 0,
     "import/extensions": "off",
     "no-underscore-dangle": "off",
+    "no-param-reassign": 0,
   },
 };

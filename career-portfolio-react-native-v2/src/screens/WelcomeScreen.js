@@ -1,5 +1,6 @@
 import React from "react";
 import { View } from "react-native";
+import { useSelector } from "react-redux";
 import {
   Divider,
   Layout,
@@ -10,8 +11,12 @@ import {
 import CustomText from "../components/CustomText";
 
 const WelcomeScreen = ({ navigation }) => {
+  const count = useSelector((state) => state.results.count);
   const handleNext = () => {
     navigation.navigate("Occupations");
+  };
+  const handleViewResults = () => {
+    navigation.navigate("ResultsIntroduction");
   };
   return (
     <View style={styles.screen}>
@@ -19,11 +24,18 @@ const WelcomeScreen = ({ navigation }) => {
       <Divider />
       <Layout style={styles.layout}>
         <View />
-        <CustomText style={{ fontSize: 40, textAlign: "center" }}>
-          Discovering Your Options
-        </CustomText>
-        <View style={{ width: "100%" }}>
-          <Button onPress={handleNext}>START</Button>
+        <CustomText style={styles.title}>Discovering Your Options</CustomText>
+        <View>
+          <Button style={styles.button} onPress={handleNext}>
+            START
+          </Button>
+          <Button
+            disabled={count === null}
+            appearance="outline"
+            onPress={handleViewResults}
+          >
+            VIEW RESULTS
+          </Button>
         </View>
       </Layout>
     </View>
@@ -39,7 +51,13 @@ const styles = StyleService.create({
   layout: {
     flex: 1,
     justifyContent: "space-between",
-    alignItems: "center",
     padding: 10,
+  },
+  title: {
+    fontSize: 40,
+    textAlign: "center",
+  },
+  button: {
+    marginBottom: 10,
   },
 });

@@ -15,6 +15,7 @@ import {
   Card,
 } from "@ui-kitten/components";
 import DraggableFlatList from "react-native-draggable-flatlist";
+import { CommonActions } from "@react-navigation/native";
 
 import { setAllTasks, tasksSelector } from "../app/features/tasks/tasksSlice";
 import alert from "../components/CustomAlert";
@@ -66,6 +67,12 @@ const RankingsScreen = ({ navigation }) => {
     try {
       setVisible(true);
       await dispatch(fetchResults(data));
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [{ name: "Welcome" }, { name: "ResultsIntroduction" }],
+        })
+      );
     } catch (err) {
       handleErrorResponse(err);
     } finally {
@@ -82,7 +89,6 @@ const RankingsScreen = ({ navigation }) => {
         task_type: e.task_type,
       };
     });
-    // console.log(tasksArray);
     const payload = {
       ...form,
       task_list: tasksArray,

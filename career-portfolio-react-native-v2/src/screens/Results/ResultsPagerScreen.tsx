@@ -27,10 +27,7 @@ import type {
   ResultsCountData,
   ResultsViewPagerConfig,
 } from "../../types";
-import CustomText from "../../components/CustomText";
 import ResultsIntroductionScreen from "./ResultsIntroductionModal";
-import TaskBarChart from "../../components/TaskBarChart";
-import ShadowCard from "../../components/ShadowCard";
 import ResultCard from "../../components/ResultCard";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
@@ -93,7 +90,13 @@ const ResultsPagerScreen = ({ navigation }) => {
     setVisible(false);
   };
 
-  const renderResults = ({ item }: { item: ResultsCountData }) => {
+  const renderResults = ({
+    item,
+    index,
+  }: {
+    item: ResultsCountData;
+    index: number;
+  }) => {
     const similar = results.similar.filter((e) => e.title === item.title);
     const missing = results.missing.filter((e) => e.title === item.title);
     const data = {
@@ -101,7 +104,7 @@ const ResultsPagerScreen = ({ navigation }) => {
       similar,
       missing,
     };
-    return <ResultCard item={item} data={data} />;
+    return <ResultCard index={index + 1} item={item} data={data} />;
   };
 
   return (

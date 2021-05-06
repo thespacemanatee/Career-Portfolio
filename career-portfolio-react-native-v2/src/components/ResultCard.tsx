@@ -7,15 +7,18 @@ import ShadowCard from "./ShadowCard";
 import TaskBarChart from "./TaskBarChart";
 
 interface ResultCardProps {
+  index: number;
   item: ResultsCountData;
   data: TaskBarChartProps;
 }
 
 const ResultCard = (props: ResultCardProps) => {
-  const { item, data } = props;
+  const { index, item, data } = props;
   return (
     <ShadowCard style={styles.resultCard}>
-      <CustomText>{item.title}</CustomText>
+      <CustomText
+        style={styles.titleText}
+      >{`${index}. ${item.title}`}</CustomText>
       <TaskBarChart
         notRelevant={10}
         similar={data.similar}
@@ -30,5 +33,9 @@ export default ResultCard;
 const styles = StyleService.create({
   resultCard: {
     padding: 20,
+  },
+  titleText: {
+    fontSize: 16,
+    marginBottom: 5,
   },
 });

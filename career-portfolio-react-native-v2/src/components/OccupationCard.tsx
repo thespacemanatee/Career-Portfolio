@@ -1,10 +1,9 @@
 import React from "react";
-import { Card, StyleService } from "@ui-kitten/components";
+import { Card } from "@ui-kitten/components";
 
 import CustomText from "./CustomText";
 
-const OccupationCard = (props) => {
-  const { children, onPress } = props;
+const OccupationCard = ({ children, onPress }) => {
   const handleOnPress = () => {
     onPress(children);
   };
@@ -15,7 +14,7 @@ const OccupationCard = (props) => {
   );
 };
 
-const areEqual = (prevProps, nextProps) => {
+const areEqual = (prevProps: any, nextProps: any) => {
   /* if the props are equal, it won't update */
   const isSelectedEqual = nextProps.children === prevProps.children;
 
@@ -23,5 +22,3 @@ const areEqual = (prevProps, nextProps) => {
 };
 
 export default React.memo(OccupationCard, areEqual);
-
-const styles = StyleService.create({});

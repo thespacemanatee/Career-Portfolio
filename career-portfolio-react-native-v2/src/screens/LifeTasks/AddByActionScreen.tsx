@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { View, FlatList, Platform } from "react-native";
+import { Platform, FlatList, View } from "react-native";
 import {
   Button,
   Icon,
@@ -13,20 +12,21 @@ import {
 import { Formik } from "formik";
 
 import { tasksSelector } from "../../app/features/tasks/tasksSlice";
-import { getTasksByOccupation } from "../../helpers/utils";
+import { getTasksByAction } from "../../helpers/utils";
 import SearchList from "../../components/SearchResultsModal";
 import CustomText from "../../components/CustomText";
 import TaskSearchResultCard from "../../components/TaskSearchResultCard";
-import { TASK_TYPE } from "../../types";
+import { TaskObject, TASK_TYPE } from "../../types";
+import { useAppSelector } from "../../app/hooks";
 
-const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
+const BackIcon = (props: any) => <Icon {...props} name="arrow-back" />;
 
-const filter = (item, query) =>
+const filter = (item: string, query: string) =>
   item?.toLowerCase().includes(query?.toLowerCase());
 
-const AddByOccupationScreen = ({ navigation }) => {
-  const allTasks = useSelector(tasksSelector.selectAll);
-  const occupations = useSelector((state) => state.local.occupations);
+const AddByActionScreen = ({ navigation }) => {
+  const allTasks = useAppSelector(tasksSelector.selectAll);
+  const verbs = useAppSelector((state) => state.local.verbs);
   const [tasks, setTasks] = useState([]);
   const [results, setResults] = useState([]);
 
@@ -43,13 +43,13 @@ const AddByOccupationScreen = ({ navigation }) => {
     />
   );
 
-  const handleSearch = (query) => {
-    setResults(occupations.filter((item) => filter(item, query.occupation)));
+  const handleSearch = ({ action }: { action: string }) => {
+    setResults(verbs.filter((item) => filter(item, action)));
   };
 
   const handleSelectResult = (selection) => {
     if (selection) {
-      const data = getTasksByOccupation(selection).map((e) => {
+      const data = getTasksByAction(selection).map((e) => {
         return {
           task: e.Task,
           taskId: e["Task ID"],
@@ -63,10 +63,9 @@ const AddByOccupationScreen = ({ navigation }) => {
     setResults([]);
   };
 
-  const renderTasks = (itemData) => {
-    const exists =
-      allTasks.findIndex((e) => e.taskId === itemData.item.taskId) !== -1;
-    return <TaskSearchResultCard taskObject={itemData.item} exists={exists} />;
+  const renderTasks = ({ item }: { item: TaskObject }) => {
+    const exists = allTasks.findIndex((e) => e.taskId === item.taskId) !== -1;
+    return <TaskSearchResultCard taskObject={item} exists={exists} />;
   };
 
   const renderEmptyComponent = () => (
@@ -78,22 +77,22 @@ const AddByOccupationScreen = ({ navigation }) => {
   return (
     <>
       <TopNavigation
-        title="Add task by occupation"
+        title="Add task by action"
         alignment="center"
         accessoryLeft={BackAction}
       />
       <Layout style={styles.layout}>
-        <Formik initialValues={{ occupation: "" }} onSubmit={handleSearch}>
+        <Formik initialValues={{ action: "" }} onSubmit={handleSearch}>
           {({ handleChange, handleBlur, handleSubmit, values }) => (
             <>
               <Input
-                label="Search Occupations"
+                label="Search Actions"
                 returnKeyType="next"
                 size="large"
-                placeholder="Enter query occupation here"
-                value={values.occupation}
-                onChangeText={handleChange("occupation")}
-                onBlur={handleBlur("occupation")}
+                placeholder="Enter query action here"
+                value={values.action}
+                onChangeText={handleChange("action")}
+                onBlur={handleBlur("action")}
               />
               <Button
                 style={styles.button}
@@ -118,7 +117,7 @@ const AddByOccupationScreen = ({ navigation }) => {
   );
 };
 
-export default AddByOccupationScreen;
+export default AddByActionScreen;
 
 const styles = StyleService.create({
   layout: {

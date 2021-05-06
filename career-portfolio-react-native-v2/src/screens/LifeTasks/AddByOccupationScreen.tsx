@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { Platform, FlatList, View } from "react-native";
+import { View, FlatList, Platform } from "react-native";
 import {
   Button,
   Icon,
@@ -13,20 +12,21 @@ import {
 import { Formik } from "formik";
 
 import { tasksSelector } from "../../app/features/tasks/tasksSlice";
-import { getTasksByAction } from "../../helpers/utils";
+import { getTasksByOccupation } from "../../helpers/utils";
 import SearchList from "../../components/SearchResultsModal";
 import CustomText from "../../components/CustomText";
 import TaskSearchResultCard from "../../components/TaskSearchResultCard";
 import { TASK_TYPE } from "../../types";
+import { useAppSelector } from "../../app/hooks";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 const filter = (item, query) =>
   item?.toLowerCase().includes(query?.toLowerCase());
 
-const AddByActionScreen = ({ navigation }) => {
-  const allTasks = useSelector(tasksSelector.selectAll);
-  const verbs = useSelector((state) => state.local.verbs);
+const AddByOccupationScreen = ({ navigation }) => {
+  const allTasks = useAppSelector(tasksSelector.selectAll);
+  const occupations = useAppSelector((state) => state.local.occupations);
   const [tasks, setTasks] = useState([]);
   const [results, setResults] = useState([]);
 
@@ -44,12 +44,12 @@ const AddByActionScreen = ({ navigation }) => {
   );
 
   const handleSearch = (query) => {
-    setResults(verbs.filter((item) => filter(item, query.action)));
+    setResults(occupations.filter((item) => filter(item, query.occupation)));
   };
 
   const handleSelectResult = (selection) => {
     if (selection) {
-      const data = getTasksByAction(selection).map((e) => {
+      const data = getTasksByOccupation(selection).map((e) => {
         return {
           task: e.Task,
           taskId: e["Task ID"],
@@ -78,22 +78,22 @@ const AddByActionScreen = ({ navigation }) => {
   return (
     <>
       <TopNavigation
-        title="Add task by action"
+        title="Add task by occupation"
         alignment="center"
         accessoryLeft={BackAction}
       />
       <Layout style={styles.layout}>
-        <Formik initialValues={{ action: "" }} onSubmit={handleSearch}>
+        <Formik initialValues={{ occupation: "" }} onSubmit={handleSearch}>
           {({ handleChange, handleBlur, handleSubmit, values }) => (
             <>
               <Input
-                label="Search Actions"
+                label="Search Occupations"
                 returnKeyType="next"
                 size="large"
-                placeholder="Enter query action here"
-                value={values.action}
-                onChangeText={handleChange("action")}
-                onBlur={handleBlur("action")}
+                placeholder="Enter query occupation here"
+                value={values.occupation}
+                onChangeText={handleChange("occupation")}
+                onBlur={handleBlur("occupation")}
               />
               <Button
                 style={styles.button}
@@ -118,7 +118,7 @@ const AddByActionScreen = ({ navigation }) => {
   );
 };
 
-export default AddByActionScreen;
+export default AddByOccupationScreen;
 
 const styles = StyleService.create({
   layout: {

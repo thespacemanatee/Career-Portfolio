@@ -7,7 +7,6 @@ import {
   Easing,
   View,
 } from "react-native";
-import { useDispatch } from "react-redux";
 import { StyleService, Card, Icon } from "@ui-kitten/components";
 
 import CustomText from "./CustomText";
@@ -34,9 +33,7 @@ const RankingCard = ({ taskObject, onLongPress }) => {
   const [expanded, setExpanded] = useState(false);
   const [spinValue] = useState(new Animated.Value(0));
 
-  const { task, taskId } = taskObject;
-
-  const dispatch = useDispatch();
+  const { task } = taskObject;
 
   const rotate = spinValue.interpolate({
     inputRange: [0, 1],

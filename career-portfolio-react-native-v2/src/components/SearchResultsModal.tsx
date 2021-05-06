@@ -15,14 +15,14 @@ const SearchResultsModal = ({ data, onSelect }) => {
   const windowDimensions = useWindowDimensions();
   const { width, height } = windowDimensions;
 
-  const ResultsItem = React.memo(({ item }) => (
+  const ResultsItem = React.memo(({ item }: { item: string }) => (
     <TouchableOpacity style={styles.item} onPress={() => onSelect(item)}>
       <CustomText>{item}</CustomText>
     </TouchableOpacity>
   ));
 
-  const renderListItems = (itemData) => {
-    return <ResultsItem item={itemData.item} />;
+  const renderListItems = ({ item }) => {
+    return <ResultsItem item={item} />;
   };
 
   const renderEmptyComponent = () => (
@@ -31,7 +31,7 @@ const SearchResultsModal = ({ data, onSelect }) => {
     </View>
   );
 
-  const getItemLayout = (data, index) => ({
+  const getItemLayout = (itemData: any[], index: number) => ({
     length: ITEM_HEIGHT,
     offset: ITEM_HEIGHT * index,
     index,
@@ -73,5 +73,13 @@ const styles = StyleService.create({
   },
   item: {
     height: ITEM_HEIGHT,
+  },
+  contentContainer: {
+    flexGrow: 1,
+  },
+  emptyComponent: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexGrow: 1,
   },
 });

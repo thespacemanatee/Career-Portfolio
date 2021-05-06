@@ -1,7 +1,11 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// omit imports and state
+import {
+  ResultsCountData,
+  ResultsMissingData,
+  ResultsSimilarData,
+} from "../../../types";
 
 export const fetchResults = createAsyncThunk(
   "results/fetchResults",
@@ -27,7 +31,13 @@ export const fetchResults = createAsyncThunk(
   }
 );
 
-const initialState = {
+interface ResultsState {
+  count: ResultsCountData[];
+  similar: ResultsSimilarData[];
+  missing: ResultsMissingData[];
+}
+
+const initialState: ResultsState = {
   count: null,
   similar: null,
   missing: null,
@@ -40,11 +50,9 @@ const resultsSlice = createSlice({
     // omit reducer cases
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(fetchResults.pending, (state, action) => {
-        state.status = "loading";
-      })
-      .addCase(fetchResults.fulfilled, (state, action) => {
+    builder.addCase(
+      fetchResults.fulfilled,
+      (state, action: PayloadAction<ResultsState>) => {
         let { count, similar, missing } = action.payload;
         count = count.map((e) => {
           return {
@@ -86,8 +94,8 @@ const resultsSlice = createSlice({
         state.count = count;
         state.similar = similar;
         state.missing = missing;
-        state.status = "idle";
-      });
+      }
+    );
   },
 });
 

@@ -16,12 +16,13 @@ import Pagination from "../../components/pager/Pagination";
 import type { PagerViewOnPageScrollEventData } from "../../types";
 import Ticker from "../../components/pager/Ticker";
 import TaskBarChart from "../../components/TaskBarChart";
+import Item from "../../components/pager/Item";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
-const data = [
+const config = [
   { type: "Your Options", color: "black" },
   { type: "Occupations", color: "black" },
 ];
@@ -51,13 +52,6 @@ const ResultsIntroductionScreen = ({ navigation }) => {
     navigation.navigate("ResultsPager");
   };
 
-  const inputRangeOpacity = [0, 0.5, 0.99];
-
-  const opacity = scrollOffsetAnimatedValue.interpolate({
-    inputRange: inputRangeOpacity,
-    outputRange: [1, 0, 1],
-  });
-
   return (
     <View style={styles.screen}>
       <TopNavigation
@@ -70,7 +64,7 @@ const ResultsIntroductionScreen = ({ navigation }) => {
         <Ticker
           scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}
           positionAnimatedValue={positionAnimatedValue}
-          data={data}
+          config={config}
         />
         <AnimatedPagerView
           style={styles.pagerView}
@@ -90,14 +84,7 @@ const ResultsIntroductionScreen = ({ navigation }) => {
           )}
         >
           <View style={styles.pagerContent} key="1">
-            <Animated.View
-              style={[
-                styles.contentContainer,
-                {
-                  opacity,
-                },
-              ]}
-            >
+            <Item scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}>
               <CustomText style={styles.contentText}>
                 Here, we show you jobs related to your tasks by:
               </CustomText>
@@ -129,17 +116,10 @@ const ResultsIntroductionScreen = ({ navigation }) => {
                 </CustomText>{" "}
                 (combination of the above)
               </CustomText>
-            </Animated.View>
+            </Item>
           </View>
           <View style={styles.pagerContent} key="2">
-            <Animated.View
-              style={[
-                styles.contentContainer,
-                {
-                  opacity,
-                },
-              ]}
-            >
+            <Item scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}>
               <View style={styles.readyContent}>
                 <CustomText style={styles.contentText}>
                   Each occupation is made up of tasks.
@@ -151,14 +131,14 @@ const ResultsIntroductionScreen = ({ navigation }) => {
                 />
                 <Button onPress={handleNavigation}>I&apos;M READY!</Button>
               </View>
-            </Animated.View>
+            </Item>
           </View>
         </AnimatedPagerView>
         <View style={styles.pageIndicator}>
           <Pagination
             scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}
             positionAnimatedValue={positionAnimatedValue}
-            data={data}
+            config={config}
           />
         </View>
       </Layout>
@@ -201,5 +181,6 @@ const styles = StyleService.create({
   },
   pageIndicator: {
     alignItems: "center",
+    marginVertical: 5,
   },
 });

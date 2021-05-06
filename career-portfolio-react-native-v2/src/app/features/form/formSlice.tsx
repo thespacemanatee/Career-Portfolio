@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState = {
   input_title: null,
@@ -11,7 +11,7 @@ export const formSlice = createSlice({
   name: "form",
   initialState,
   reducers: {
-    addSelection: (state, action) => {
+    addSelection: (state, action: PayloadAction<any>) => {
       const { inputTitle, onetTitle, titleId } = action.payload;
       state.input_title = inputTitle;
       state.onet_title = onetTitle;

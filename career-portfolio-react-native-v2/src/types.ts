@@ -1,6 +1,13 @@
+/* eslint-disable camelcase */
 export interface PagerViewOnPageScrollEventData {
   position: number;
   offset: number;
+}
+
+export interface ResultsViewPagerConfig {
+  type: string;
+  color: string;
+  data?: any;
 }
 
 export interface ResultsCountData {
@@ -35,4 +42,12 @@ export interface ResultsMissingData {
   similarTasks: number;
   missingTasks: number;
   missingIWA: string;
+}
+
+export interface TaskObject {
+  task: string;
+  taskId: number;
+  IWA_Title: string;
+  task_type: string;
+  deleted?: boolean;
 }

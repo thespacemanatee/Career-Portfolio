@@ -1,17 +1,24 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+interface LocalState {
+  verbs: string[];
+  occupations: string[];
+}
+
+const initialState: LocalState = {
+  verbs: null,
+  occupations: null,
+};
 
 export const localSlice = createSlice({
   name: "tasks",
-  initialState: {
-    verbs: null,
-    occupations: null,
-  },
+  initialState,
   reducers: {
-    setVerbs: (state, action) => {
+    setVerbs: (state, action: PayloadAction<any>) => {
       state.verbs = action.payload;
     },
-    setOccupations: (state, action) => {
+    setOccupations: (state, action: PayloadAction<any>) => {
       state.occupations = action.payload;
     },
   },

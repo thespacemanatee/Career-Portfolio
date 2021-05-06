@@ -1,24 +1,25 @@
 import React from "react";
 import { StyleSheet, View, Animated } from "react-native";
-import { ResultsCountData } from "../../types";
+import { ResultsViewPagerConfig } from "../../types";
 
 const DOT_SIZE = 40;
 
 const Pagination = ({
   scrollOffsetAnimatedValue,
   positionAnimatedValue,
-  data,
+  config,
 }: {
   scrollOffsetAnimatedValue: Animated.Value;
   positionAnimatedValue: Animated.Value;
+  config: ResultsViewPagerConfig[];
 }) => {
-  const inputRange = [0, data.length];
+  const inputRange = [0, config.length];
   const translateX = Animated.add(
     scrollOffsetAnimatedValue,
     positionAnimatedValue
   ).interpolate({
     inputRange,
-    outputRange: [0, data.length * DOT_SIZE],
+    outputRange: [0, config.length * DOT_SIZE],
   });
 
   return (
@@ -31,7 +32,7 @@ const Pagination = ({
           },
         ]}
       />
-      {data.map((item) => {
+      {config.map((item) => {
         return (
           <View key={item.key} style={styles.paginationDotContainer}>
             <View

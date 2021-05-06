@@ -1,4 +1,3 @@
-/* eslint-disable global-require */
 import React from "react";
 import { StyleSheet, View, Animated, Platform } from "react-native";
 import {
@@ -13,39 +12,30 @@ import PagerView from "react-native-pager-view";
 import Item from "../../components/pager/Item";
 import Pagination from "../../components/pager/Pagination";
 import Ticker from "../../components/pager/Ticker";
-import type { PagerViewOnPageScrollEventData } from "../../types";
+import type {
+  PagerViewOnPageScrollEventData,
+  ResultsViewPagerConfig,
+} from "../../types";
+import CustomText from "../../components/CustomText";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 
-const data = [
+const config: ResultsViewPagerConfig[] = [
   {
-    type: "Humlan P",
-    heading: "Vibrant colors",
-    description: "Four on-trend colorways to seamlessly suit your style.",
-    key: "first",
+    type: "Familiarity",
     color: "#9dcdfa",
   },
   {
-    type: "Pampas",
-    heading: "Redefined sound",
-    description: "A bold statement tuned to perfection.",
-    key: "second",
+    type: "Preference",
     color: "#db9efa",
   },
   {
-    type: "Humlan P",
-    heading: "Great quality",
-    description:
-      "An Urbanears classic! Listen-all-day fit. Striking the perfect balance of effortless technology",
-    key: "third",
+    type: "Personality",
     color: "#999",
   },
   {
-    type: "Humlan B",
-    heading: "From Sweden",
-    description:
-      "The “Plattan” in Plattan headphones is Swedish for “the slab.”",
-    key: "fourth",
+    type: "Best Fit",
+
     color: "#a1e3a1",
   },
 ];
@@ -81,7 +71,7 @@ const ResultsPagerScreen = ({ navigation }) => {
         <Ticker
           scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}
           positionAnimatedValue={positionAnimatedValue}
-          data={data}
+          config={config}
         />
         <AnimatedPagerView
           initialPage={0}
@@ -103,12 +93,11 @@ const ResultsPagerScreen = ({ navigation }) => {
             }
           )}
         >
-          {data.map((item, index) => (
+          {config.map((item, index) => (
             <View collapsable={false} key={String(index)}>
-              <Item
-                {...item}
-                scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}
-              />
+              <Item scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}>
+                <CustomText>HELLO</CustomText>
+              </Item>
             </View>
           ))}
         </AnimatedPagerView>
@@ -116,7 +105,7 @@ const ResultsPagerScreen = ({ navigation }) => {
           <Pagination
             scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}
             positionAnimatedValue={positionAnimatedValue}
-            data={data}
+            config={config}
           />
         </View>
       </Layout>
@@ -139,5 +128,6 @@ const styles = StyleSheet.create({
   },
   pageIndicator: {
     alignItems: "flex-end",
+    marginVertical: 5,
   },
 });

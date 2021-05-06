@@ -1,9 +1,9 @@
 import React from "react";
-import { Text } from "@ui-kitten/components";
+import { Animated } from "react-native";
 
 const CustomText = ({ children, ...props }) => {
   return (
-    <Text
+    <Animated.Text
       {...props}
       // eslint-disable-next-line react-native/no-inline-styles
       style={{
@@ -12,7 +12,7 @@ const CustomText = ({ children, ...props }) => {
       }}
     >
       {children}
-    </Text>
+    </Animated.Text>
   );
 };
 

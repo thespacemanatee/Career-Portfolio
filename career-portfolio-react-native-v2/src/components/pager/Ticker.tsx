@@ -1,29 +1,32 @@
 import React from "react";
 import { StyleSheet, View, Animated } from "react-native";
+
 import CustomText from "../CustomText";
+import { ResultsViewPagerConfig } from "../../types";
 
 const TICKER_HEIGHT = 36;
 
 const Ticker = ({
   scrollOffsetAnimatedValue,
   positionAnimatedValue,
-  data,
+  config,
 }: {
   scrollOffsetAnimatedValue: Animated.Value;
   positionAnimatedValue: Animated.Value;
+  config: ResultsViewPagerConfig[];
 }) => {
-  const inputRange = [0, data.length];
+  const inputRange = [0, config.length];
   const translateY = Animated.add(
     scrollOffsetAnimatedValue,
     positionAnimatedValue
   ).interpolate({
     inputRange,
-    outputRange: [0, data.length * -TICKER_HEIGHT],
+    outputRange: [0, config.length * -TICKER_HEIGHT],
   });
   return (
     <View style={styles.tickerContainer}>
       <Animated.View style={{ transform: [{ translateY }] }}>
-        {data.map((item, index) => {
+        {config.map((item, index) => {
           return (
             <CustomText
               bold

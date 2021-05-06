@@ -16,7 +16,11 @@ const Item = ({
   });
 
   return (
-    <Animated.View style={[styles.itemStyle, { opacity }]}>
+    <Animated.View
+      style={[styles.itemStyle, { opacity }]}
+      needsOffscreenAlphaCompositing
+      renderToHardwareTextureAndroid
+    >
       {children}
     </Animated.View>
   );

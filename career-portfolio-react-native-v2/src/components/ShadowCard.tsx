@@ -1,8 +1,20 @@
 import React from "react";
-import { View, TouchableOpacity, Platform } from "react-native";
+import { View, TouchableOpacity, Platform, ViewStyle } from "react-native";
 import { StyleService, useStyleSheet } from "@ui-kitten/components";
 
-const ShadowCard = ({ style, children, onPress, disabled }) => {
+interface ShadowCardProps {
+  style?: ViewStyle;
+  children: React.ReactNode;
+  onPress?: () => void;
+  disabled?: boolean;
+}
+
+const ShadowCard = ({
+  style,
+  children,
+  onPress,
+  disabled,
+}: ShadowCardProps) => {
   const styles = useStyleSheet(themedStyles);
   return (
     <TouchableOpacity
@@ -14,6 +26,12 @@ const ShadowCard = ({ style, children, onPress, disabled }) => {
       <View style={[style, styles.shadow]}>{children}</View>
     </TouchableOpacity>
   );
+};
+
+ShadowCard.defaultProps = {
+  style: null,
+  onPress: null,
+  disabled: false,
 };
 
 export default ShadowCard;

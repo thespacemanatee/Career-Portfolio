@@ -52,5 +52,9 @@ module.exports = {
     "import/extensions": "off",
     "no-underscore-dangle": "off",
     "no-param-reassign": 0,
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "error",
   },
 };

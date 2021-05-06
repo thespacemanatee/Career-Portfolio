@@ -51,3 +51,16 @@ export interface TaskObject {
   task_type: string;
   deleted?: boolean;
 }
+
+export interface ResultsPayload {
+  input_title: string;
+  onet_title: string;
+  title_id: string;
+  task_list: TaskObject[];
+}
+
+export enum TASK_TYPE {
+  CORE = "core",
+  SUPPLEMENTARY = "supplementary",
+  LIFE = "life",
+}

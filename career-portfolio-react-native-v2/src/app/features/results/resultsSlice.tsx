@@ -4,12 +4,13 @@ import axios from "axios";
 import {
   ResultsCountData,
   ResultsMissingData,
+  ResultsPayload,
   ResultsSimilarData,
 } from "../../../types";
 
 export const fetchResults = createAsyncThunk(
   "results/fetchResults",
-  async (data) => {
+  async (data: ResultsPayload) => {
     const response = await axios({
       method: "post",
       url:

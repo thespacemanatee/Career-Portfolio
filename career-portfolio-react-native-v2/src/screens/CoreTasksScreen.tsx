@@ -9,13 +9,13 @@ import {
   Icon,
   TopNavigationAction,
 } from "@ui-kitten/components";
-import { useSelector } from "react-redux";
 
 import { tasksSelector } from "../app/features/tasks/tasksSlice";
 import alert from "../components/CustomAlert";
 import ShadowCard from "../components/ShadowCard";
 import CustomText from "../components/CustomText";
 import TaskCard from "../components/TaskCard";
+import { useAppSelector } from "../app/hooks";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props) => (
@@ -23,8 +23,8 @@ const HelpIcon = (props) => (
 );
 
 const CoreTasksScreen = ({ navigation }) => {
-  const tasks = useSelector(tasksSelector.selectAll);
-  const chosenOccupation = useSelector((state) => state.form.onet_title);
+  const tasks = useAppSelector(tasksSelector.selectAll);
+  const chosenOccupation = useAppSelector((state) => state.form.onet_title);
   const [coreTasks, setCoreTasks] = useState([]);
 
   const BackAction = () => (

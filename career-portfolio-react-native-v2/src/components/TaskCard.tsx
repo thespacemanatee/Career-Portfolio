@@ -17,6 +17,7 @@ import {
   updateTaskType,
 } from "../app/features/tasks/tasksSlice";
 import CustomText from "./CustomText";
+import { TASK_TYPE } from "../types";
 
 if (
   Platform.OS === "android" &&
@@ -27,15 +28,15 @@ if (
 
 const ICON_SIZE = 30;
 
-const TrashIcon = (props) => (
+const TrashIcon = (props: any) => (
   <Icon fill="white" {...props} name="trash" style={styles.icon} />
 );
 
-const UndoIcon = (props) => (
+const UndoIcon = (props: any) => (
   <Icon fill="white" {...props} name="undo" style={styles.icon} />
 );
 
-const ChevronIcon = (props) => (
+const ChevronIcon = (props: any) => (
   <Icon
     fill="#8F9BB3"
     style={styles.icon}
@@ -56,17 +57,17 @@ const TaskCard = ({ taskObject }) => {
 
   const handleCheckChange = (nextChecked) => {
     setChecked(nextChecked);
-    let type;
+    let type: TASK_TYPE;
     if (nextChecked === true) {
-      type = "core";
+      type = TASK_TYPE.CORE;
     } else {
-      type = "supplementary";
+      type = TASK_TYPE.SUPPLEMENTARY;
     }
     dispatch(updateTaskType({ id: taskId, changes: { task_type: type } }));
   };
 
   useEffect(() => {
-    if (taskType === "core") {
+    if (taskType === TASK_TYPE.CORE) {
       setChecked(true);
     } else {
       setChecked(false);

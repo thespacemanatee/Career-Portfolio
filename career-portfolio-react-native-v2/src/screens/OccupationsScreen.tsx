@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from "react";
 import { View, Platform, FlatList } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
 import {
   Divider,
   Layout,
@@ -25,6 +24,11 @@ import CustomText from "../components/CustomText";
 import OccupationCard from "../components/OccupationCard";
 import ShadowCard from "../components/ShadowCard";
 import OccupationsLoading from "../components/loading/OccupationsLoading";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+
+interface Values {
+  occupation: string;
+}
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props) => (
@@ -36,13 +40,13 @@ const password = "3594cgj";
 const token = Buffer.from(`${username}:${password}`).toString("base64");
 
 const OccupationsScreen = ({ navigation }) => {
-  const form = useSelector((state) => state.form);
+  const form = useAppSelector((state) => state.form);
   const [loading, setLoading] = useState(false);
-  const [occupations, setOccupations] = useState();
+  const [occupations, setOccupations] = useState<string[]>();
   const [chosenOccupation, setChosenOccupation] = useState();
-  const [userInput, setUserInput] = useState();
+  const [userInput, setUserInput] = useState<string>();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const LoadingIndicator = (props) => {
     const { style } = props;
@@ -108,7 +112,7 @@ const OccupationsScreen = ({ navigation }) => {
     occupation: Yup.string(),
   });
 
-  const handleSubmitForm = async (values) => {
+  const handleSubmitForm = async (values: Values) => {
     const { occupation } = values;
     setUserInput(occupation);
     try {
@@ -120,7 +124,7 @@ const OccupationsScreen = ({ navigation }) => {
         },
       });
 
-      const titles = [];
+      const titles: string[] = [];
       res.data.occupation.forEach((item) => {
         titles.push(item.title);
       });

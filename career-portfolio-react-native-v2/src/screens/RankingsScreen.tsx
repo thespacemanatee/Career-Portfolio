@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 import React, { useCallback, useEffect, useState } from "react";
 import { Platform, View } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
 import {
   Divider,
   Layout,
@@ -23,6 +22,8 @@ import CustomText from "../components/CustomText";
 import RankingCard from "../components/RankingCard";
 import { handleErrorResponse } from "../helpers/utils";
 import { fetchResults } from "../app/features/results/resultsSlice";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { ResultsPayload } from "../types";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props) => (
@@ -30,13 +31,13 @@ const HelpIcon = (props) => (
 );
 
 const RankingsScreen = ({ navigation }) => {
-  const tasks = useSelector(tasksSelector.selectAll);
-  const form = useSelector((state) => state.form);
+  const tasks = useAppSelector(tasksSelector.selectAll);
+  const form = useAppSelector((state) => state.form);
   const [combinedTasks, setCombinedTasks] = useState([]);
   const [deletedTasks, setDeletedTasks] = useState([]);
   const [visible, setVisible] = useState(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const BackAction = () => (
     <TopNavigationAction
@@ -63,7 +64,7 @@ const RankingsScreen = ({ navigation }) => {
     />
   );
 
-  const postResult = async (data) => {
+  const postResult = async (data: ResultsPayload) => {
     try {
       setVisible(true);
       await dispatch(fetchResults(data));
@@ -89,7 +90,7 @@ const RankingsScreen = ({ navigation }) => {
         task_type: e.task_type,
       };
     });
-    const payload = {
+    const payload: ResultsPayload = {
       ...form,
       task_list: tasksArray,
     };
@@ -106,13 +107,9 @@ const RankingsScreen = ({ navigation }) => {
     dispatch(setAllTasks(data.concat(deletedTasks)));
   };
 
-  const renderTasks = useCallback(
-    // eslint-disable-next-line no-unused-expressions
-    ({ item, index, drag, isActive }) => {
-      return <RankingCard taskObject={item} onLongPress={drag} />;
-    },
-    []
-  );
+  const renderTasks = useCallback(({ item, index, drag, isActive }) => {
+    return <RankingCard taskObject={item} onLongPress={drag} />;
+  }, []);
 
   const renderEmptyComponent = () => (
     <View style={styles.emptyComponent}>

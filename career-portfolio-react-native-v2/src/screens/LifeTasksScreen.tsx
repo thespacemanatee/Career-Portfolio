@@ -82,7 +82,7 @@ const LifeTasksScreen = ({ navigation }) => {
   };
 
   const renderTasks = (itemData) => {
-    return <LifeTaskCard taskObject={itemData.item} life />;
+    return <LifeTaskCard taskObject={itemData.item} />;
   };
 
   const renderEmptyComponent = () => (
@@ -108,7 +108,7 @@ const LifeTasksScreen = ({ navigation }) => {
           Search task by:
         </CustomText>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <ButtonGroup style={styles.buttonGroup}>
+          <ButtonGroup>
             <Button
               onPress={() => {
                 navigation.navigate("AddByAction");

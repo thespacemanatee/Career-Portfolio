@@ -5,7 +5,7 @@ import * as data from "../data/career_data.json";
 
 const dataArray = Object.values(data);
 
-export const getTasksByAction = (action) => {
+export const getTasksByAction = (action: string) => {
   let tempArray = dataArray.filter((e) => {
     const words = `${e.Task}`.split(/[ ,]+/).map((verb) => verb.toLowerCase());
     return words.includes(action.toLowerCase());

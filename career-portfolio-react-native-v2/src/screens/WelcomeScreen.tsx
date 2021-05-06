@@ -1,6 +1,5 @@
 import React from "react";
 import { View } from "react-native";
-import { useSelector } from "react-redux";
 import {
   Divider,
   Layout,
@@ -8,10 +7,12 @@ import {
   StyleService,
   Button,
 } from "@ui-kitten/components";
+
 import CustomText from "../components/CustomText";
+import { useAppSelector } from "../app/hooks";
 
 const WelcomeScreen = ({ navigation }) => {
-  const count = useSelector((state) => state.results.count);
+  const count = useAppSelector((state) => state.results.count);
   const handleNext = () => {
     navigation.navigate("Occupations");
   };

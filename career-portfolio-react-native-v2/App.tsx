@@ -1,6 +1,6 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { Platform } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import * as eva from "@eva-design/eva";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import {
@@ -54,7 +54,7 @@ export default function App() {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <ApplicationProvider {...eva} theme={eva.light}>
-            {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
+            {Platform.OS === "ios" && <StatusBar style="dark" />}
             <SafeAreaProvider style={styles.screen}>
               <AppNavigator />
             </SafeAreaProvider>

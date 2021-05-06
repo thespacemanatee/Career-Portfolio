@@ -13,6 +13,7 @@ import { StyleService, Card, Icon, Button } from "@ui-kitten/components";
 
 import { addLifeTask, removeLifeTask } from "../app/features/tasks/tasksSlice";
 import CustomText from "./CustomText";
+import { TASK_TYPE } from "../types";
 
 if (
   Platform.OS === "android" &&
@@ -23,7 +24,7 @@ if (
 
 const ICON_SIZE = 30;
 
-const ChevronIcon = (props) => (
+const ChevronIcon = (props: any) => (
   <Icon
     fill="#8F9BB3"
     style={styles.icon}
@@ -60,12 +61,14 @@ const TaskSearchResultCard = ({ taskObject, exists }) => {
       dispatch(removeLifeTask(taskId));
       setAdded(false);
     } else {
-      dispatch(addLifeTask({ task, taskId, IWA_Title, task_type: "life" }));
+      dispatch(
+        addLifeTask({ task, taskId, IWA_Title, task_type: TASK_TYPE.LIFE })
+      );
       setAdded(true);
     }
   };
 
-  const Footer = (props) => {
+  const Footer = (props: any) => {
     const { style } = props;
     return (
       <View {...props} style={[style, styles.footerContainer]}>

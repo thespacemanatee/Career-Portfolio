@@ -4,7 +4,7 @@ import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
 import type { RootState } from "../../store";
 import { TaskObject } from "../../../types";
 
-const tasksAdapter = createEntityAdapter({
+const tasksAdapter = createEntityAdapter<TaskObject>({
   selectId: (task: TaskObject) => task.taskId,
 });
 

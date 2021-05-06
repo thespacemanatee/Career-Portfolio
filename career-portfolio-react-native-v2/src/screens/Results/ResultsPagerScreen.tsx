@@ -7,8 +7,9 @@ import {
   Icon,
   TopNavigationAction,
 } from "@ui-kitten/components";
-
 import PagerView from "react-native-pager-view";
+
+import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import Item from "../../components/pager/Item";
 import Pagination from "../../components/pager/Pagination";
 import Ticker from "../../components/pager/Ticker";
@@ -16,6 +17,7 @@ import type {
   PagerViewOnPageScrollEventData,
   ResultsViewPagerConfig,
 } from "../../types";
+
 import CustomText from "../../components/CustomText";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
@@ -35,7 +37,6 @@ const config: ResultsViewPagerConfig[] = [
   },
   {
     type: "Best Fit",
-
     color: "#a1e3a1",
   },
 ];
@@ -45,6 +46,7 @@ const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 const ResultsPagerScreen = ({ navigation }) => {
   const scrollOffsetAnimatedValue = React.useRef(new Animated.Value(0)).current;
   const positionAnimatedValue = React.useRef(new Animated.Value(0)).current;
+  const results = useAppSelector((state) => state.results);
 
   const BackAction = () => (
     <TopNavigationAction

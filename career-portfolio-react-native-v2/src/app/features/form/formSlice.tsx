@@ -1,7 +1,14 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialState = {
+interface FormState {
+  input_title: string;
+  onet_title: string;
+  title_id: string;
+}
+
+const initialState: FormState = {
   input_title: null,
   onet_title: null,
   title_id: null,

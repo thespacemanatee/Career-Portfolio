@@ -32,9 +32,9 @@ const Pagination = ({
           },
         ]}
       />
-      {config.map((item) => {
+      {config.map((item, index) => {
         return (
-          <View key={item.key} style={styles.paginationDotContainer}>
+          <View key={String(index)} style={styles.paginationDotContainer}>
             <View
               style={[styles.paginationDot, { backgroundColor: item.color }]}
             />

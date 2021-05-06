@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import React, { useCallback, useEffect, useState } from "react";
 import { Platform, View } from "react-native";
 import {
@@ -25,8 +24,8 @@ import { fetchResults } from "../app/features/results/resultsSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { ResultsPayload } from "../types";
 
-const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
-const HelpIcon = (props) => (
+const BackIcon = (props: any) => <Icon {...props} name="arrow-back" />;
+const HelpIcon = (props: any) => (
   <Icon {...props} name="question-mark-circle-outline" />
 );
 
@@ -65,8 +64,8 @@ const RankingsScreen = ({ navigation }) => {
   );
 
   const postResult = async (data: ResultsPayload) => {
+    setVisible(true);
     try {
-      setVisible(true);
       await dispatch(fetchResults(data));
       navigation.dispatch(
         CommonActions.reset({

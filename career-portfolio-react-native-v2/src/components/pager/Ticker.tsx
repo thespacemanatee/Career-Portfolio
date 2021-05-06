@@ -10,10 +10,12 @@ const Ticker = ({
   scrollOffsetAnimatedValue,
   positionAnimatedValue,
   config,
+  fontSize,
 }: {
   scrollOffsetAnimatedValue: Animated.Value;
   positionAnimatedValue: Animated.Value;
   config: ResultsViewPagerConfig[];
+  fontSize?: number;
 }) => {
   const inputRange = [0, config.length];
   const translateY = Animated.add(
@@ -31,7 +33,7 @@ const Ticker = ({
             <CustomText
               bold
               key={String(index)}
-              style={{ ...styles.tickerText, color: item.color }}
+              style={{ ...styles.tickerText, color: item.color, fontSize }}
             >
               {item.type}
             </CustomText>
@@ -40,6 +42,10 @@ const Ticker = ({
       </Animated.View>
     </View>
   );
+};
+
+Ticker.defaultProps = {
+  fontSize: TICKER_HEIGHT,
 };
 
 export default Ticker;

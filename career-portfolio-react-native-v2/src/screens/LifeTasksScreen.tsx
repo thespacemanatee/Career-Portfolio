@@ -107,8 +107,8 @@ const LifeTasksScreen = ({ navigation }) => {
         <CustomText style={styles.buttonGroupTitle} bold>
           Search task by:
         </CustomText>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <ButtonGroup>
+        <View style={styles.controlContainer}>
+          <ButtonGroup appearance="outline">
             <Button
               onPress={() => {
                 navigation.navigate("AddByAction");
@@ -160,6 +160,10 @@ const styles = StyleService.create({
   },
   buttonGroupTitle: {
     marginVertical: 5,
+  },
+  controlContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   flatList: {
     marginVertical: 5,

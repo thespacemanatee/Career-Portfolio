@@ -56,15 +56,15 @@ export const getOccupationsArray = () => {
   });
 };
 
-export const handleErrorResponse = (err, action) => {
-  if (err.response) {
-    const { data: errorData, status, headers } = err.response;
-    console.error(errorData);
-    console.error(status);
-    console.error(headers);
+export const handleErrorResponse = (err: any, action?: () => void) => {
+  if (err.name) {
+    const { name, message, stack } = err;
+    console.error(name);
+    console.error(message);
+    console.error(stack);
     alert(
       "Error",
-      errorData.error,
+      message,
       action
         ? [
             { text: "Cancel", style: "cancel" },

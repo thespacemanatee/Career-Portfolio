@@ -17,7 +17,7 @@ const WelcomeScreen = ({ navigation }) => {
     navigation.navigate("Occupations");
   };
   const handleViewResults = () => {
-    navigation.navigate("ResultsIntroduction");
+    navigation.navigate("ResultsPager");
   };
   return (
     <View style={styles.screen}>
@@ -25,7 +25,9 @@ const WelcomeScreen = ({ navigation }) => {
       <Divider />
       <Layout style={styles.layout}>
         <View />
-        <CustomText style={styles.title}>Discovering Your Options</CustomText>
+        <CustomText bold style={styles.title}>
+          Discovering Your Options
+        </CustomText>
         <View>
           <Button style={styles.button} onPress={handleNext}>
             START

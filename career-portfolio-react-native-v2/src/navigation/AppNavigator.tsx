@@ -14,7 +14,6 @@ import LifeTasksScreen from "../screens/LifeTasksScreen";
 import RankingsScreen from "../screens/RankingsScreen";
 import AddByActionScreen from "../screens/LifeTasks/AddByActionScreen";
 import AddByOccupationScreen from "../screens/LifeTasks/AddByOccupationScreen";
-import ResultsIntroductionScreen from "../screens/Results/ResultsIntroductionScreen";
 import ResultsPagerScreen from "../screens/Results/ResultsPagerScreen";
 
 const AppNavigator = () => {
@@ -57,10 +56,6 @@ const AppNavigator = () => {
           <Screen name="CoreTasks" component={CoreTasksScreen} />
           <Screen name="LifeTasksStack" component={LifeTasksStackNavigator} />
           <Screen name="Rankings" component={RankingsScreen} />
-          <Screen
-            name="ResultsIntroduction"
-            component={ResultsIntroductionScreen}
-          />
           <Screen name="ResultsPager" component={ResultsPagerScreen} />
         </Navigator>
       </SafeAreaView>

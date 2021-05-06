@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import { handleErrorResponse } from "../../../helpers/utils";
 
 import {
   ResultsCountData,
@@ -22,7 +23,7 @@ export const fetchResults = createAsyncThunk(
     });
     const { onet_title, user_id, count, similar, missing } = response.data;
 
-    const responseData = {
+    const responseData: ResultsState = {
       count: JSON.parse(count),
       similar: JSON.parse(similar),
       missing: JSON.parse(missing),
@@ -51,6 +52,12 @@ const resultsSlice = createSlice({
     // omit reducer cases
   },
   extraReducers: (builder) => {
+    builder.addCase(
+      fetchResults.rejected,
+      (state, action: PayloadAction<any>) => {
+        throw new Error(action.payload.message);
+      }
+    );
     builder.addCase(
       fetchResults.fulfilled,
       (state, action: PayloadAction<ResultsState>) => {

@@ -1,15 +1,23 @@
-import React from "react";
-import { StyleSheet, View, Animated, Platform } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  View,
+  Animated,
+  Platform,
+  useWindowDimensions,
+} from "react-native";
 import {
   Divider,
   Layout,
   TopNavigation,
   Icon,
   TopNavigationAction,
+  Modal,
+  Card,
 } from "@ui-kitten/components";
 import PagerView from "react-native-pager-view";
 
-import { useAppSelector, useAppDispatch } from "../../app/hooks";
+import { useAppSelector } from "../../app/hooks";
 import Item from "../../components/pager/Item";
 import Pagination from "../../components/pager/Pagination";
 import Ticker from "../../components/pager/Ticker";
@@ -19,8 +27,12 @@ import type {
 } from "../../types";
 
 import CustomText from "../../components/CustomText";
+import ResultsIntroductionScreen from "./ResultsIntroductionScreen";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
+const HelpIcon = (props: any) => (
+  <Icon {...props} name="question-mark-circle-outline" />
+);
 
 const config: ResultsViewPagerConfig[] = [
   {
@@ -47,6 +59,9 @@ const ResultsPagerScreen = ({ navigation }) => {
   const scrollOffsetAnimatedValue = React.useRef(new Animated.Value(0)).current;
   const positionAnimatedValue = React.useRef(new Animated.Value(0)).current;
   const results = useAppSelector((state) => state.results);
+  const [visible, setVisible] = useState(true);
+
+  const { width, height } = useWindowDimensions();
 
   const BackAction = () => (
     <TopNavigationAction
@@ -61,15 +76,44 @@ const ResultsPagerScreen = ({ navigation }) => {
     />
   );
 
+  const HelpAction = () => (
+    <TopNavigationAction
+      icon={HelpIcon}
+      onPress={() => {
+        setVisible(true);
+      }}
+    />
+  );
+
+  const handleCloseHelp = () => {
+    setVisible(false);
+  };
+
   return (
     <View style={styles.screen}>
       <TopNavigation
         title="Results"
         alignment="center"
         accessoryLeft={BackAction}
+        accessoryRight={HelpAction}
       />
       <Divider />
       <Layout style={styles.layout}>
+        <Modal
+          visible={visible}
+          backdropStyle={styles.backdrop}
+          onBackdropPress={handleCloseHelp}
+        >
+          <Card
+            disabled
+            style={{
+              height: (height / 4) * 3,
+              width: (width / 4) * 3,
+            }}
+          >
+            <ResultsIntroductionScreen onClose={handleCloseHelp} />
+          </Card>
+        </Modal>
         <Ticker
           scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}
           positionAnimatedValue={positionAnimatedValue}
@@ -131,5 +175,8 @@ const styles = StyleSheet.create({
   pageIndicator: {
     alignItems: "flex-end",
     marginVertical: 5,
+  },
+  backdrop: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 });

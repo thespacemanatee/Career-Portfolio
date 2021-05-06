@@ -1,21 +1,13 @@
 import React from "react";
-import { View, Platform, Animated } from "react-native";
-import {
-  Divider,
-  Layout,
-  TopNavigation,
-  StyleService,
-  Button,
-  Icon,
-  TopNavigationAction,
-} from "@ui-kitten/components";
+import { View, Animated } from "react-native";
+import { Layout, StyleService, Icon, Button } from "@ui-kitten/components";
 import PagerView from "react-native-pager-view";
 
 import CustomText from "../../components/CustomText";
 import Pagination from "../../components/pager/Pagination";
 import type { PagerViewOnPageScrollEventData } from "../../types";
 import Ticker from "../../components/pager/Ticker";
-import TaskBarChart from "../../components/TaskBarChart";
+import TaskBarChart from "../../components/TaskBarChartDemo";
 import Item from "../../components/pager/Item";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
@@ -31,130 +23,113 @@ const notRelevant = new Array(5);
 const similar = new Array(10);
 const missing = new Array(7);
 
-const ResultsIntroductionScreen = ({ navigation }) => {
+const ResultsIntroductionScreen = ({ onClose }: { onClose?: () => void }) => {
   const scrollOffsetAnimatedValue = React.useRef(new Animated.Value(0)).current;
   const positionAnimatedValue = React.useRef(new Animated.Value(0)).current;
 
-  const BackAction = () => (
-    <TopNavigationAction
-      icon={BackIcon}
-      onPress={() => {
-        if (Platform.OS === "web") {
-          window.history.back();
-        } else {
-          navigation.goBack();
-        }
-      }}
-    />
-  );
-
-  const handleNavigation = () => {
-    navigation.navigate("ResultsPager");
-  };
-
   return (
-    <View style={styles.screen}>
-      <TopNavigation
-        title="Results"
-        alignment="center"
-        accessoryLeft={BackAction}
+    <Layout style={styles.layout}>
+      <Ticker
+        scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}
+        positionAnimatedValue={positionAnimatedValue}
+        config={config}
+        fontSize={26}
       />
-      <Divider />
-      <Layout style={styles.layout}>
-        <Ticker
-          scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}
-          positionAnimatedValue={positionAnimatedValue}
-          config={config}
-        />
-        <AnimatedPagerView
-          style={styles.pagerView}
-          initialPage={0}
-          onPageScroll={Animated.event<PagerViewOnPageScrollEventData>(
-            [
-              {
-                nativeEvent: {
-                  offset: scrollOffsetAnimatedValue,
-                  position: positionAnimatedValue,
-                },
-              },
-            ],
+      <AnimatedPagerView
+        style={styles.pagerView}
+        initialPage={0}
+        onPageScroll={Animated.event<PagerViewOnPageScrollEventData>(
+          [
             {
-              useNativeDriver: true,
-            }
-          )}
-        >
-          <View style={styles.pagerContent} key="1">
-            <Item scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}>
-              <CustomText style={styles.contentText}>
-                Here, we show you jobs related to your tasks by:
+              nativeEvent: {
+                offset: scrollOffsetAnimatedValue,
+                position: positionAnimatedValue,
+              },
+            },
+          ],
+          {
+            useNativeDriver: true,
+          }
+        )}
+      >
+        <View style={styles.pagerContent} key="1">
+          <Item scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}>
+            <CustomText style={styles.contentText}>
+              Here, we show you jobs related to your tasks by:
+            </CustomText>
+            <CustomText style={styles.contentText}>
+              1.{" "}
+              <CustomText bold style={styles.contentText}>
+                Familiarity{" "}
               </CustomText>
-              <CustomText style={styles.contentText}>
-                1.{" "}
-                <CustomText bold style={styles.contentText}>
-                  Familiarity{" "}
-                </CustomText>
-                (jobs with similar tasks)
-              </CustomText>
-              <CustomText style={styles.contentText}>
-                2.{" "}
-                <CustomText bold style={styles.contentText}>
-                  Preference{" "}
-                </CustomText>{" "}
-                (based on your ranking of tasks)
-              </CustomText>
-              <CustomText style={styles.contentText}>
-                3.{" "}
-                <CustomText bold style={styles.contentText}>
-                  Personality{" "}
-                </CustomText>{" "}
-                (jobs of people whose personality are similar to yours)
-              </CustomText>
-              <CustomText style={styles.contentText}>
-                4.{" "}
-                <CustomText bold style={styles.contentText}>
-                  Best Fit{" "}
-                </CustomText>{" "}
-                (combination of the above)
-              </CustomText>
-            </Item>
-          </View>
-          <View style={styles.pagerContent} key="2">
-            <Item scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}>
-              <View style={styles.readyContent}>
+              (jobs with similar tasks)
+            </CustomText>
+            <CustomText style={styles.contentText}>
+              2.{" "}
+              <CustomText bold style={styles.contentText}>
+                Preference{" "}
+              </CustomText>{" "}
+              (based on your ranking of tasks)
+            </CustomText>
+            <CustomText style={styles.contentText}>
+              3.{" "}
+              <CustomText bold style={styles.contentText}>
+                Personality{" "}
+              </CustomText>{" "}
+              (jobs of people whose personality are similar to yours)
+            </CustomText>
+            <CustomText style={styles.contentText}>
+              4.{" "}
+              <CustomText bold style={styles.contentText}>
+                Best Fit{" "}
+              </CustomText>{" "}
+              (combination of the above)
+            </CustomText>
+          </Item>
+        </View>
+        <View style={styles.pagerContent} key="2">
+          <Item scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}>
+            <View style={styles.readyContent}>
+              <View />
+              <View>
                 <CustomText style={styles.contentText}>
                   Each occupation is made up of tasks.
+                </CustomText>
+                <CustomText bold style={styles.contentText}>
+                  Tap for more information!
                 </CustomText>
                 <TaskBarChart
                   notRelevant={notRelevant}
                   similar={similar}
                   missing={missing}
                 />
-                <Button onPress={handleNavigation}>I&apos;M READY!</Button>
               </View>
-            </Item>
-          </View>
-        </AnimatedPagerView>
-        <View style={styles.pageIndicator}>
-          <Pagination
-            scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}
-            positionAnimatedValue={positionAnimatedValue}
-            config={config}
-          />
+              <Button onPress={onClose}>I&apos;M READY!</Button>
+            </View>
+          </Item>
         </View>
-      </Layout>
-    </View>
+      </AnimatedPagerView>
+      <View style={styles.pageIndicator}>
+        <Pagination
+          scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}
+          positionAnimatedValue={positionAnimatedValue}
+          config={config}
+        />
+      </View>
+    </Layout>
   );
+};
+
+ResultsIntroductionScreen.defaultProps = {
+  onClose: () => {},
 };
 
 export default ResultsIntroductionScreen;
 
 const styles = StyleService.create({
-  screen: {
-    flex: 1,
-  },
   layout: {
-    flex: 1,
-    padding: 10,
+    width: "100%",
+    height: "100%",
   },
   pagerView: {
     flex: 1,

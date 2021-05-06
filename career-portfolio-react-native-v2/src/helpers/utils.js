@@ -62,30 +62,16 @@ export const handleErrorResponse = (err, action) => {
     console.error(errorData);
     console.error(status);
     console.error(headers);
-
-    switch (Math.floor(status / 100)) {
-      case 4: {
-        alert(
-          "Error",
-          errorData.error,
-          action
-            ? [
-                { text: "Cancel", style: "cancel" },
-                { text: "Confirm", onPress: action },
-              ]
-            : [{ text: "Okay" }]
-        );
-        break;
-      }
-      case 5: {
-        alert("Server Error", "Please contact your administrator.");
-        break;
-      }
-      default: {
-        alert("Request timeout", "Check your internet connection.");
-        break;
-      }
-    }
+    alert(
+      "Error",
+      errorData.error,
+      action
+        ? [
+            { text: "Cancel", style: "cancel" },
+            { text: "Confirm", onPress: action },
+          ]
+        : [{ text: "Okay" }]
+    );
   } else if (err.request) {
     // The request was made but no response was received
     // `error.request` is an instance of XMLHttpRequest in the browser and an instance of

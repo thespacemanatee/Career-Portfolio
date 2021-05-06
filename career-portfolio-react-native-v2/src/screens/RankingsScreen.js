@@ -10,15 +10,18 @@ import {
   Button,
   TopNavigationAction,
   Icon,
+  Modal,
+  Spinner,
+  Card,
 } from "@ui-kitten/components";
 import DraggableFlatList from "react-native-draggable-flatlist";
-import axios from "axios";
 
 import { setAllTasks, tasksSelector } from "../app/features/tasks/tasksSlice";
 import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
 import RankingCard from "../components/RankingCard";
 import { handleErrorResponse } from "../helpers/utils";
+import { fetchResults } from "../app/features/results/resultsSlice";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props) => (
@@ -30,6 +33,7 @@ const RankingsScreen = ({ navigation }) => {
   const form = useSelector((state) => state.form);
   const [combinedTasks, setCombinedTasks] = useState([]);
   const [deletedTasks, setDeletedTasks] = useState([]);
+  const [visible, setVisible] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -60,29 +64,12 @@ const RankingsScreen = ({ navigation }) => {
 
   const postResult = async (data) => {
     try {
-      const response = await axios({
-        method: "post",
-        url:
-          "https://rjiu5d34rj.execute-api.ap-southeast-1.amazonaws.com/test/post-json",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data,
-      });
-
-      const { onet_title, user_id, count, similar, missing } = response.data;
-
-      console.log(Object.keys(response.data));
-
-      const responseData = {
-        count: JSON.parse(count),
-        similar_columns: JSON.parse(similar),
-        missing_columns: JSON.parse(missing),
-      };
-
-      console.log(responseData);
+      setVisible(true);
+      await dispatch(fetchResults(data));
     } catch (err) {
       handleErrorResponse(err);
+    } finally {
+      setVisible(false);
     }
   };
 
@@ -137,6 +124,11 @@ const RankingsScreen = ({ navigation }) => {
       />
       <Divider />
       <Layout style={styles.layout}>
+        <Modal visible={visible} backdropStyle={styles.backdrop}>
+          <Card disabled>
+            <Spinner size="large" />
+          </Card>
+        </Modal>
         <CustomText style={styles.title} bold>
           Rank your tasks in order of preference.
         </CustomText>
@@ -178,5 +170,8 @@ const styles = StyleService.create({
     justifyContent: "center",
     alignItems: "center",
     flexGrow: 1,
+  },
+  backdrop: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
 });

@@ -12,6 +12,7 @@ import {
   Spinner,
   Card,
 } from "@ui-kitten/components";
+import { unwrapResult } from "@reduxjs/toolkit";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { CommonActions } from "@react-navigation/native";
 
@@ -65,19 +66,25 @@ const RankingsScreen = ({ navigation }) => {
 
   const postResult = async (data: ResultsPayload) => {
     setVisible(true);
-    try {
-      await dispatch(fetchResults(data));
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 1,
-          routes: [{ name: "Welcome" }, { name: "ResultsStack" }],
-        })
-      );
-    } catch (err) {
-      handleErrorResponse(err);
-    } finally {
-      setVisible(false);
-    }
+
+    await dispatch(fetchResults(data))
+      .then(unwrapResult)
+      .then((res) => {
+        console.log(res);
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{ name: "Welcome" }, { name: "ResultsStack" }],
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+        handleErrorResponse(err);
+      })
+      .finally(() => {
+        setVisible(false);
+      });
   };
 
   const handleSubmit = () => {

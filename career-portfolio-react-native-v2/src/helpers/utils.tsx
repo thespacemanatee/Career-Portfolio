@@ -63,7 +63,7 @@ export const handleErrorResponse = (err: any, action?: () => void) => {
     console.error(message);
     console.error(stack);
     alert(
-      "Error",
+      name,
       message,
       action
         ? [

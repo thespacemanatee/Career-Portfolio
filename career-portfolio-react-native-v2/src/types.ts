@@ -10,12 +10,15 @@ export interface ResultsViewPagerConfig {
   data?: any;
 }
 
-export interface ResultsCountData {
+interface ResultsBaseData {
   inputTitle: string;
   title: string;
   similarityScore: number;
   similarTasks: number;
   missingTasks: number;
+}
+
+export interface ResultsCountData extends ResultsBaseData {
   jobClassNo: number;
   jobClass: string;
   riasecScore: number;
@@ -26,22 +29,12 @@ export interface ResultsCountData {
   preferenceScore: number;
 }
 
-export interface ResultsSimilarData {
-  inputTitle: string;
-  title: string;
-  similarityScore: number;
-  similarTasks: number;
-  missingTasks: number;
-  similarIWA: string;
+export interface ResultsSimilarData extends ResultsBaseData {
+  similarIWA?: string;
 }
 
-export interface ResultsMissingData {
-  inputTitle: string;
-  title: string;
-  similarityScore: number;
-  similarTasks: number;
-  missingTasks: number;
-  missingIWA: string;
+export interface ResultsMissingData extends ResultsBaseData {
+  missingIWA?: string;
 }
 
 export interface TaskObject {
@@ -66,7 +59,7 @@ export enum TASK_TYPE {
 }
 
 export enum RESULTS_TYPE {
-  NOT_RELEVANT = "Not Relevant",
+  NOT_RELEVANT = "Irrelevant",
   SIMILAR = "Similar",
   MISSING = "Missing",
 }

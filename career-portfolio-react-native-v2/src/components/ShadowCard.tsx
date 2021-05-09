@@ -38,10 +38,14 @@ export default ShadowCard;
 
 const themedStyles = StyleService.create({
   shadowContainer: {
-    elevation: 10,
-    shadowOffset: { width: 5, height: 5 },
-    shadowColor: "grey",
-    shadowOpacity: 0.5,
+    elevation: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
     borderRadius: 20,
     marginBottom: 10,
   },

@@ -192,7 +192,7 @@ const OccupationsScreen = ({ navigation }) => {
               />
               <Button
                 style={styles.button}
-                onPress={handleSubmit}
+                onPress={() => handleSubmit()}
                 appearance="outline"
                 accessoryRight={loading ? LoadingIndicator : null}
               >

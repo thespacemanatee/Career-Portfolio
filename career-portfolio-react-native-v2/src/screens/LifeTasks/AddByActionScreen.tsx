@@ -96,7 +96,7 @@ const AddByActionScreen = ({ navigation }) => {
               />
               <Button
                 style={styles.button}
-                onPress={handleSubmit}
+                onPress={() => handleSubmit()}
                 appearance="outline"
               >
                 SEARCH

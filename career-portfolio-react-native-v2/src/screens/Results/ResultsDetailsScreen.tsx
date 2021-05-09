@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FlatList, Platform, View } from "react-native";
 import {
+  Card,
   Icon,
   Layout,
   StyleService,
@@ -9,7 +10,12 @@ import {
 } from "@ui-kitten/components";
 import CustomText from "../../components/CustomText";
 import { useAppSelector } from "../../app/hooks";
-import { RESULTS_TYPE } from "../../types";
+import {
+  ResultsMissingData,
+  ResultsSimilarData,
+  RESULTS_TYPE,
+} from "../../types";
+import ShadowCard from "../../components/ShadowCard";
 
 const BackIcon = (props: any) => <Icon {...props} name="arrow-back" />;
 
@@ -31,10 +37,29 @@ const ResultsDetailsScreen = ({ route, navigation }) => {
   );
 
   useEffect(() => {
+    const temp: ResultsSimilarData[] | ResultsMissingData[] = [];
     if (type === RESULTS_TYPE.SIMILAR) {
-      setTasks(results.similar.filter((e) => e.title === occupation));
+      results.similar
+        .filter((e) => e.title === occupation)
+        .forEach((e) => {
+          if (
+            !temp.some((v: ResultsSimilarData) => v.similarIWA === e.similarIWA)
+          ) {
+            temp.push(e);
+          }
+        });
+      setTasks(temp);
     } else if (type === RESULTS_TYPE.MISSING) {
-      setTasks(results.missing.filter((e) => e.title === occupation));
+      results.missing
+        .filter((e) => e.title === occupation)
+        .forEach((e) => {
+          if (
+            !temp.some((v: ResultsMissingData) => v.missingIWA === e.missingIWA)
+          ) {
+            temp.push(e);
+          }
+        });
+      setTasks(temp);
     }
   }, [occupation, results.missing, results.similar, type]);
 
@@ -45,7 +70,11 @@ const ResultsDetailsScreen = ({ route, navigation }) => {
     } else if (type === RESULTS_TYPE.MISSING) {
       task = item.missingIWA;
     }
-    return <CustomText>{task}</CustomText>;
+    return (
+      <Card disabled>
+        <CustomText>{task}</CustomText>
+      </Card>
+    );
   };
 
   return (
@@ -56,9 +85,14 @@ const ResultsDetailsScreen = ({ route, navigation }) => {
         accessoryLeft={BackAction}
       />
       <Layout style={styles.layout}>
-        <CustomText bold>Occupation:</CustomText>
-        <CustomText>{occupation}</CustomText>
-        <CustomText bold>{`${type} Tasks:`}</CustomText>
+        <ShadowCard style={styles.selectedOccupation} disabled>
+          <CustomText bold>Occupation:</CustomText>
+          <CustomText>{occupation}</CustomText>
+        </ShadowCard>
+        <CustomText
+          style={styles.tasksText}
+          bold
+        >{`${type} Tasks:`}</CustomText>
         <FlatList
           data={tasks}
           renderItem={renderTasks}
@@ -79,5 +113,12 @@ const styles = StyleService.create({
   layout: {
     flex: 1,
     padding: 10,
+  },
+  selectedOccupation: {
+    padding: 20,
+    marginVertical: 5,
+  },
+  tasksText: {
+    fontSize: 26,
   },
 });

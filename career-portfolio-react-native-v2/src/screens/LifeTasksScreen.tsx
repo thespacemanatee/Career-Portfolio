@@ -24,7 +24,6 @@ const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props) => (
   <Icon {...props} name="question-mark-circle-outline" />
 );
-const RefreshIcon = (props) => <Icon {...props} name="refresh-outline" />;
 
 const LifeTasksScreen = ({ navigation }) => {
   const tasks = useSelector(tasksSelector.selectAll);
@@ -124,12 +123,15 @@ const LifeTasksScreen = ({ navigation }) => {
               Occupation
             </Button>
           </ButtonGroup>
-          <Button
-            onPress={handleResetLifeTasks}
-            accessoryRight={RefreshIcon}
-            appearance="ghost"
-            status="basic"
-          />
+          {lifeTasks.length > 0 ? (
+            <Button
+              onPress={handleResetLifeTasks}
+              appearance="ghost"
+              status="basic"
+            >
+              CLEAR ALL
+            </Button>
+          ) : null}
         </View>
         <FlatList
           style={styles.flatList}

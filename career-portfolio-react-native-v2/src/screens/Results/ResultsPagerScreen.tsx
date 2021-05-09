@@ -61,6 +61,7 @@ const ResultsPagerScreen = ({ navigation }) => {
   const positionAnimatedValue = useRef(new Animated.Value(0)).current;
   const results = useAppSelector((state) => state.results);
   const [visible, setVisible] = useState(true);
+  const [pagePosition, setPagePosition] = useState<number>(0);
 
   const { width, height } = useWindowDimensions();
 
@@ -91,7 +92,11 @@ const ResultsPagerScreen = ({ navigation }) => {
   };
 
   const handleSelectCategory = (type: string, occupation: string) => {
-    navigation.navigate("ResultsDetails", { type, occupation });
+    navigation.navigate("ResultsDetails", {
+      title: Object.values(config)[pagePosition].type,
+      type,
+      occupation,
+    });
   };
 
   const renderResults = ({
@@ -163,6 +168,7 @@ const ResultsPagerScreen = ({ navigation }) => {
             {
               listener: ({ nativeEvent: { offset, position } }) => {
                 // console.log(`Position: ${position} Offset: ${offset}`);
+                setPagePosition(position);
               },
               useNativeDriver: true,
             }

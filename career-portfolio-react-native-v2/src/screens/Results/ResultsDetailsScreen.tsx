@@ -16,7 +16,7 @@ const BackIcon = (props: any) => <Icon {...props} name="arrow-back" />;
 const ResultsDetailsScreen = ({ route, navigation }) => {
   const results = useAppSelector((state) => state.results);
   const [tasks, setTasks] = useState([]);
-  const { type, occupation } = route.params;
+  const { title, type, occupation } = route.params;
   const BackAction = () => (
     <TopNavigationAction
       icon={BackIcon}
@@ -51,7 +51,7 @@ const ResultsDetailsScreen = ({ route, navigation }) => {
   return (
     <View style={styles.screen}>
       <TopNavigation
-        title={`${type} Tasks`}
+        title={title}
         alignment="center"
         accessoryLeft={BackAction}
       />

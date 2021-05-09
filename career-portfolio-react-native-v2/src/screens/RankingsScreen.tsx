@@ -70,7 +70,7 @@ const RankingsScreen = ({ navigation }) => {
       navigation.dispatch(
         CommonActions.reset({
           index: 1,
-          routes: [{ name: "Welcome" }, { name: "ResultsPager" }],
+          routes: [{ name: "Welcome" }, { name: "ResultsStack" }],
         })
       );
     } catch (err) {

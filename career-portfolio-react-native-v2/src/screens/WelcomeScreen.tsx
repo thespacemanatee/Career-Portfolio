@@ -17,7 +17,7 @@ const WelcomeScreen = ({ navigation }) => {
     navigation.navigate("Occupations");
   };
   const handleViewResults = () => {
-    navigation.navigate("ResultsPager");
+    navigation.navigate("ResultsStack");
   };
   return (
     <View style={styles.screen}>

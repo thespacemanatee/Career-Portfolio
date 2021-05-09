@@ -75,7 +75,7 @@ const AddByActionScreen = ({ navigation }) => {
   );
 
   return (
-    <>
+    <View style={styles.screen}>
       <TopNavigation
         title="Add task by action"
         alignment="center"
@@ -113,13 +113,16 @@ const AddByActionScreen = ({ navigation }) => {
           ListEmptyComponent={renderEmptyComponent}
         />
       </Layout>
-    </>
+    </View>
   );
 };
 
 export default AddByActionScreen;
 
 const styles = StyleService.create({
+  screen: {
+    flex: 1,
+  },
   layout: {
     flex: 1,
     padding: 10,

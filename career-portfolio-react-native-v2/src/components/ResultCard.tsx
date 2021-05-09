@@ -1,19 +1,22 @@
 import React from "react";
 import { StyleService } from "@ui-kitten/components";
 
-import { ResultsCountData, TaskBarChartProps } from "../types";
+import { ResultsCountData, TaskBarChartData } from "../types";
 import CustomText from "./CustomText";
 import ShadowCard from "./ShadowCard";
 import TaskBarChart from "./TaskBarChart";
 
-interface ResultCardProps {
+const ResultCard = ({
+  index,
+  item,
+  data,
+  onSelectCategory,
+}: {
   index: number;
   item: ResultsCountData;
-  data: TaskBarChartProps;
-}
-
-const ResultCard = (props: ResultCardProps) => {
-  const { index, item, data } = props;
+  data: TaskBarChartData;
+  onSelectCategory: (type: string, occupation: string) => void;
+}) => {
   return (
     <ShadowCard style={styles.resultCard}>
       <CustomText
@@ -23,6 +26,8 @@ const ResultCard = (props: ResultCardProps) => {
         notRelevant={10}
         similar={data.similar}
         missing={data.missing}
+        occupation={item.title}
+        onSelectCategory={onSelectCategory}
       />
     </ShadowCard>
   );

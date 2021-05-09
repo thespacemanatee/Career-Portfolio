@@ -15,6 +15,7 @@ import RankingsScreen from "../screens/RankingsScreen";
 import AddByActionScreen from "../screens/LifeTasks/AddByActionScreen";
 import AddByOccupationScreen from "../screens/LifeTasks/AddByOccupationScreen";
 import ResultsPagerScreen from "../screens/Results/ResultsPagerScreen";
+import ResultsDetailsScreen from "../screens/Results/ResultsDetailsScreen";
 
 const AppNavigator = () => {
   const { Navigator, Screen } = createStackNavigator();
@@ -40,6 +41,22 @@ const AppNavigator = () => {
     );
   };
 
+  const ResultsStackNavigator = () => {
+    return (
+      <Navigator
+        screenOptions={({ route, navigation }) => ({
+          headerShown: false,
+          gestureEnabled: true,
+          cardOverlayEnabled: true,
+          ...TransitionPresets.ModalPresentationIOS,
+        })}
+      >
+        <Screen name="ResultsPager" component={ResultsPagerScreen} />
+        <Screen name="ResultsDetails" component={ResultsDetailsScreen} />
+      </Navigator>
+    );
+  };
+
   return (
     <NavigationContainer linking={linking}>
       <SafeAreaView style={styles.screen}>
@@ -56,7 +73,7 @@ const AppNavigator = () => {
           <Screen name="CoreTasks" component={CoreTasksScreen} />
           <Screen name="LifeTasksStack" component={LifeTasksStackNavigator} />
           <Screen name="Rankings" component={RankingsScreen} />
-          <Screen name="ResultsPager" component={ResultsPagerScreen} />
+          <Screen name="ResultsStack" component={ResultsStackNavigator} />
         </Navigator>
       </SafeAreaView>
     </NavigationContainer>

@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { View, TouchableOpacity } from "react-native";
 import { StyleService, Tooltip } from "@ui-kitten/components";
+import Colors from "../helpers/color";
 
 const TaskBarChartDemo = ({ notRelevant, similar, missing }) => {
   const [notRelevantVisible, setNotRelevantVisible] = useState(false);
@@ -87,12 +88,12 @@ const styles = StyleService.create({
     flexDirection: "row",
   },
   notRelevant: {
-    backgroundColor: "yellow",
+    backgroundColor: Colors.NOT_RELEVANT,
   },
   similar: {
-    backgroundColor: "green",
+    backgroundColor: Colors.SIMILAR,
   },
   missing: {
-    backgroundColor: "red",
+    backgroundColor: Colors.MISSING,
   },
 });

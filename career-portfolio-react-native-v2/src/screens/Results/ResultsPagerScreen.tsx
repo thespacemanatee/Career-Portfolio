@@ -90,6 +90,10 @@ const ResultsPagerScreen = ({ navigation }) => {
     setVisible(false);
   };
 
+  const handleSelectCategory = (type: string, occupation: string) => {
+    navigation.navigate("ResultsDetails", { type, occupation });
+  };
+
   const renderResults = ({
     item,
     index,
@@ -104,7 +108,14 @@ const ResultsPagerScreen = ({ navigation }) => {
       similar,
       missing,
     };
-    return <ResultCard index={index + 1} item={item} data={data} />;
+    return (
+      <ResultCard
+        index={index + 1}
+        item={item}
+        data={data}
+        onSelectCategory={handleSelectCategory}
+      />
+    );
   };
 
   return (
@@ -201,7 +212,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flexGrow: 1,
-    padding: 10,
+    padding: 15,
   },
   backdrop: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",

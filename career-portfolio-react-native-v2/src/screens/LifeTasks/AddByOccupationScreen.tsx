@@ -76,7 +76,7 @@ const AddByOccupationScreen = ({ navigation }) => {
   );
 
   return (
-    <>
+    <View style={styles.screen}>
       <TopNavigation
         title="Add task by occupation"
         alignment="center"
@@ -114,13 +114,16 @@ const AddByOccupationScreen = ({ navigation }) => {
           ListEmptyComponent={renderEmptyComponent}
         />
       </Layout>
-    </>
+    </View>
   );
 };
 
 export default AddByOccupationScreen;
 
 const styles = StyleService.create({
+  screen: {
+    flex: 1,
+  },
   layout: {
     flex: 1,
     padding: 10,

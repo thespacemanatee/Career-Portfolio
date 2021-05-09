@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { handleErrorResponse } from "../../../helpers/utils";
 
 import {
   ResultsCountData,

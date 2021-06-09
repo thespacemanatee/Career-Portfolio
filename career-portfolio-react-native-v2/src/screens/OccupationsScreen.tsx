@@ -169,8 +169,10 @@ const OccupationsScreen = ({ navigation }) => {
           What is your occupation?
         </CustomText>
         <ShadowCard style={styles.selectedOccupation} disabled>
-          <CustomText bold>Selected Occupation</CustomText>
-          <CustomText numberOfLines={1}>
+          <CustomText style={styles.selectedOccupationText} bold>
+            Selected Occupation
+          </CustomText>
+          <CustomText style={styles.selectedOccupationText} numberOfLines={1}>
             {chosenOccupation || "Please choose an occupation"}
           </CustomText>
         </ShadowCard>
@@ -227,10 +229,13 @@ const styles = StyleService.create({
   },
   title: {
     fontSize: 26,
+    marginBottom: 10,
   },
   selectedOccupation: {
     padding: 20,
-    marginVertical: 5,
+  },
+  selectedOccupationText: {
+    fontSize: 16,
   },
   flatList: {
     marginVertical: 5,

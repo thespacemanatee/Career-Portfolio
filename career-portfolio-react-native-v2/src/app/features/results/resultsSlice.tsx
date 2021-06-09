@@ -14,8 +14,7 @@ export const fetchResults = createAsyncThunk(
   async (data: ResultsPayload) => {
     const response = await axios({
       method: "post",
-      url:
-        "https://rjiu5d34rj.execute-api.ap-southeast-1.amazonaws.com/test/post-json",
+      url: "https://rjiu5d34rj.execute-api.ap-southeast-1.amazonaws.com/test/post-json",
       headers: {
         "Content-Type": "application/json",
       },

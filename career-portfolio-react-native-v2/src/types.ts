@@ -13,12 +13,12 @@ export interface ResultsViewPagerConfig {
 interface ResultsBaseData {
   inputTitle: string;
   title: string;
-  similarityScore: number;
-  similarTasks: number;
-  missingTasks: number;
 }
 
 export interface ResultsCountData extends ResultsBaseData {
+  similarityScore: number;
+  similarTasks: number;
+  missingTasks: number;
   jobClassNo: number;
   jobClass: string;
   riasecScore: number;
@@ -27,6 +27,10 @@ export interface ResultsCountData extends ResultsBaseData {
   sourceJobZone: number;
   targetJobZone: number;
   preferenceScore: number;
+  simScarcity: number;
+  trainedInv: number;
+  cosineSim: number;
+  cosineSimPure: number;
 }
 
 export interface ResultsSimilarData extends ResultsBaseData {

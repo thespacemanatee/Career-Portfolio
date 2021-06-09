@@ -69,26 +69,24 @@ const resultsSlice = createSlice({
             sourceJobZone: e[10],
             targetJobZone: e[11],
             preferenceScore: e[12],
+            simScarcity: e[13],
+            trainedInv: e[14],
+            cosineSim: e[15],
+            cosineSimPure: e[16],
           };
         });
         similar = similar.map((e) => {
           return {
             inputTitle: e[0],
             title: e[1],
-            similarityScore: e[2],
-            similarTasks: e[3],
-            missingTasks: e[4],
-            similarIWA: e[5],
+            similarIWA: e[2],
           };
         });
         missing = missing.map((e) => {
           return {
             inputTitle: e[0],
             title: e[1],
-            similarityScore: e[2],
-            similarTasks: e[3],
-            missingTasks: e[4],
-            missingIWA: e[5],
+            missingIWA: e[2],
           };
         });
         state.count = count;

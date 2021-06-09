@@ -28,6 +28,8 @@ import {
   ResultsViewPagerConfig,
   ResultsCategory,
   TaskObject,
+  ResultsSimilarData,
+  ResultsMissingData,
 } from "../../types";
 import ResultsIntroductionScreen from "./ResultsIntroductionModal";
 import ResultCard from "../../components/ResultCard";
@@ -110,8 +112,30 @@ const ResultsPagerScreen = ({ navigation }) => {
     item: ResultsCountData;
     index: number;
   }) => {
-    const similar = results.similar.filter((e) => e.title === item.title);
-    const missing = results.missing.filter((e) => e.title === item.title);
+    const similar: ResultsSimilarData[] = [];
+    results.similar
+      .filter((e) => e.title === item.title)
+      .forEach((e) => {
+        if (
+          !similar.some(
+            (v: ResultsSimilarData) => v.similarIWA === e.similarIWA
+          )
+        ) {
+          similar.push(e);
+        }
+      });
+    const missing: ResultsMissingData[] = [];
+    results.missing
+      .filter((e) => e.title === item.title)
+      .forEach((e) => {
+        if (
+          !missing.some(
+            (v: ResultsMissingData) => v.missingIWA === e.missingIWA
+          )
+        ) {
+          missing.push(e);
+        }
+      });
     const notRelevant: TaskObject[] = [];
     tasks
       .filter((e) => {

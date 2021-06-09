@@ -37,7 +37,6 @@ const TaskBarChart = ({
           handleSelectCategory(ResultsType.NOT_RELEVANT);
         }}
       />
-
       <TouchableOpacity
         style={[styles.similar, { width: `${(similar / totalTasks) * 100}%` }]}
         onPress={() => {

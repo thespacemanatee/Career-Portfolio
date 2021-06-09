@@ -35,7 +35,7 @@ import ResultsIntroductionScreen from "./ResultsIntroductionModal";
 import ResultCard from "../../components/ResultCard";
 import { tasksSelector } from "../../app/features/tasks/tasksSlice";
 
-const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
+const BackIcon = (props: any) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props: any) => (
   <Icon {...props} name="question-mark-circle-outline" />
 );
@@ -112,40 +112,16 @@ const ResultsPagerScreen = ({ navigation }) => {
     item: ResultsCountData;
     index: number;
   }) => {
-    const similar: ResultsSimilarData[] = [];
-    results.similar
-      .filter((e) => e.title === item.title)
-      .forEach((e) => {
-        if (
-          !similar.some(
-            (v: ResultsSimilarData) => v.similarIWA === e.similarIWA
-          )
-        ) {
-          similar.push(e);
-        }
-      });
-    const missing: ResultsMissingData[] = [];
-    results.missing
-      .filter((e) => e.title === item.title)
-      .forEach((e) => {
-        if (
-          !missing.some(
-            (v: ResultsMissingData) => v.missingIWA === e.missingIWA
-          )
-        ) {
-          missing.push(e);
-        }
-      });
-    const notRelevant: TaskObject[] = [];
-    tasks
-      .filter((e) => {
-        return results.similar.filter((d) => e.IWA_Title !== d.similarIWA);
-      })
-      .forEach((e) => {
-        if (!notRelevant.some((v: TaskObject) => v.IWA_Title === e.IWA_Title)) {
-          notRelevant.push(e);
-        }
-      });
+    const similar: ResultsSimilarData[] = results.similar.filter(
+      (e) => e.title === item.title
+    );
+    const missing: ResultsMissingData[] = results.missing.filter(
+      (e) => e.title === item.title
+    );
+    const notRelevant: TaskObject[] = tasks.filter((e) => {
+      return results.similar.filter((d) => e.IWA_Title !== d.similarIWA);
+    });
+
     return (
       <ResultCard
         index={index + 1}

@@ -13,7 +13,7 @@ import { StyleService, Card, Icon, Button } from "@ui-kitten/components";
 
 import { addLifeTask, removeLifeTask } from "../app/features/tasks/tasksSlice";
 import CustomText from "./CustomText";
-import { TASK_TYPE } from "../types";
+import { TaskType } from "../types";
 
 if (
   Platform.OS === "android" &&
@@ -62,7 +62,7 @@ const TaskSearchResultCard = ({ taskObject, exists }) => {
       setAdded(false);
     } else {
       dispatch(
-        addLifeTask({ task, taskId, IWA_Title, task_type: TASK_TYPE.LIFE })
+        addLifeTask({ task, taskId, IWA_Title, task_type: TaskType.LIFE })
       );
       setAdded(true);
     }

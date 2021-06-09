@@ -17,7 +17,7 @@ import {
   updateTaskType,
 } from "../app/features/tasks/tasksSlice";
 import CustomText from "./CustomText";
-import { TASK_TYPE } from "../types";
+import { TaskType } from "../types";
 
 if (
   Platform.OS === "android" &&
@@ -57,17 +57,17 @@ const TaskCard = ({ taskObject }) => {
 
   const handleCheckChange = (nextChecked) => {
     setChecked(nextChecked);
-    let type: TASK_TYPE;
+    let type: TaskType;
     if (nextChecked === true) {
-      type = TASK_TYPE.CORE;
+      type = TaskType.CORE;
     } else {
-      type = TASK_TYPE.SUPPLEMENTARY;
+      type = TaskType.SUPPLEMENTARY;
     }
     dispatch(updateTaskType({ id: taskId, changes: { task_type: type } }));
   };
 
   useEffect(() => {
-    if (taskType === TASK_TYPE.CORE) {
+    if (taskType === TaskType.CORE) {
       setChecked(true);
     } else {
       setChecked(false);

@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { View, TouchableOpacity } from "react-native";
 import { StyleService } from "@ui-kitten/components";
-import { RESULTS_TYPE } from "../types";
+import { ResultsType } from "../types";
 import Colors from "../helpers/color";
 
 const TaskBarChart = ({
@@ -34,20 +34,20 @@ const TaskBarChart = ({
           { width: `${(notRelevant / totalTasks) * 100}%` },
         ]}
         onPress={() => {
-          handleSelectCategory(RESULTS_TYPE.NOT_RELEVANT);
+          handleSelectCategory(ResultsType.NOT_RELEVANT);
         }}
       />
 
       <TouchableOpacity
         style={[styles.similar, { width: `${(similar / totalTasks) * 100}%` }]}
         onPress={() => {
-          handleSelectCategory(RESULTS_TYPE.SIMILAR);
+          handleSelectCategory(ResultsType.SIMILAR);
         }}
       />
       <TouchableOpacity
         style={[styles.missing, { width: `${(missing / totalTasks) * 100}%` }]}
         onPress={() => {
-          handleSelectCategory(RESULTS_TYPE.MISSING);
+          handleSelectCategory(ResultsType.MISSING);
         }}
       />
     </View>

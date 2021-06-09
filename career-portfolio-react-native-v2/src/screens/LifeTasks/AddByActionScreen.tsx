@@ -16,7 +16,7 @@ import { getTasksByAction } from "../../helpers/utils";
 import SearchList from "../../components/SearchResultsModal";
 import CustomText from "../../components/CustomText";
 import TaskSearchResultCard from "../../components/TaskSearchResultCard";
-import { TaskObject, TASK_TYPE } from "../../types";
+import { TaskObject, TaskType } from "../../types";
 import { useAppSelector } from "../../app/hooks";
 
 const BackIcon = (props: any) => <Icon {...props} name="arrow-back" />;
@@ -54,7 +54,7 @@ const AddByActionScreen = ({ navigation }) => {
           task: e.Task,
           taskId: e["Task ID"],
           IWA_Title: e["IWA Title"],
-          task_type: TASK_TYPE.LIFE,
+          task_type: TaskType.LIFE,
           deleted: false,
         };
       });

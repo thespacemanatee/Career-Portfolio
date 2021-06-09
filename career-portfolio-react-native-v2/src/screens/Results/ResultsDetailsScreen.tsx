@@ -13,7 +13,7 @@ import { useAppSelector } from "../../app/hooks";
 import {
   ResultsMissingData,
   ResultsSimilarData,
-  RESULTS_TYPE,
+  ResultsType,
   TaskObject,
 } from "../../types";
 import SelectedOccupationCard from "../../components/SelectedOccupationCard";
@@ -41,7 +41,7 @@ const ResultsDetailsScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     const temp: ResultsSimilarData[] | ResultsMissingData[] = [];
-    if (type === RESULTS_TYPE.SIMILAR) {
+    if (type === ResultsType.SIMILAR) {
       results.similar
         .filter((e) => e.title === occupation)
         .forEach((e) => {
@@ -52,7 +52,7 @@ const ResultsDetailsScreen = ({ route, navigation }) => {
           }
         });
       setTasks(temp);
-    } else if (type === RESULTS_TYPE.MISSING) {
+    } else if (type === ResultsType.MISSING) {
       results.missing
         .filter((e) => e.title === occupation)
         .forEach((e) => {
@@ -63,7 +63,7 @@ const ResultsDetailsScreen = ({ route, navigation }) => {
           }
         });
       setTasks(temp);
-    } else if (type === RESULTS_TYPE.NOT_RELEVANT) {
+    } else if (type === ResultsType.NOT_RELEVANT) {
       const temp1: TaskObject[] = [];
       storeTasks
         .filter((e) => {
@@ -80,11 +80,11 @@ const ResultsDetailsScreen = ({ route, navigation }) => {
 
   const renderTasks = ({ item, index }) => {
     let task: string;
-    if (type === RESULTS_TYPE.SIMILAR) {
+    if (type === ResultsType.SIMILAR) {
       task = item.similarIWA;
-    } else if (type === RESULTS_TYPE.MISSING) {
+    } else if (type === ResultsType.MISSING) {
       task = item.missingIWA;
-    } else if (type === RESULTS_TYPE.NOT_RELEVANT) {
+    } else if (type === ResultsType.NOT_RELEVANT) {
       task = item.IWA_Title;
     }
     return (

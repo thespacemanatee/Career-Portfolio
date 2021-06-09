@@ -22,10 +22,11 @@ import { useAppSelector } from "../../app/hooks";
 import Item from "../../components/pager/Item";
 import Pagination from "../../components/pager/Pagination";
 import Ticker from "../../components/pager/Ticker";
-import type {
+import {
   PagerViewOnPageScrollEventData,
   ResultsCountData,
   ResultsViewPagerConfig,
+  ResultsCategory,
   TaskObject,
 } from "../../types";
 import ResultsIntroductionScreen from "./ResultsIntroductionModal";
@@ -39,19 +40,19 @@ const HelpIcon = (props: any) => (
 
 const config: ResultsViewPagerConfig[] = [
   {
-    type: "Familiarity",
+    type: ResultsCategory.FAMILIARITY,
     color: "#9dcdfa",
   },
   {
-    type: "Preference",
+    type: ResultsCategory.PREFERENCE,
     color: "#db9efa",
   },
   {
-    type: "Personality",
+    type: ResultsCategory.PERSONALITY,
     color: "#999",
   },
   {
-    type: "Best Fit",
+    type: ResultsCategory.BEST_FIT,
     color: "#a1e3a1",
   },
 ];
@@ -60,11 +61,11 @@ const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
 const ResultsPagerScreen = ({ navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
+  const results = useAppSelector((state) => state.results);
   const scrollOffsetAnimatedValue = useRef(new Animated.Value(0)).current;
   const positionAnimatedValue = useRef(new Animated.Value(0)).current;
-  const results = useAppSelector((state) => state.results);
   const [visible, setVisible] = useState(true);
-  const [pagePosition, setPagePosition] = useState<number>(0);
+  const [pagePosition, setPagePosition] = useState(0);
 
   const { width, height } = useWindowDimensions();
 
@@ -133,6 +134,31 @@ const ResultsPagerScreen = ({ navigation }) => {
     );
   };
 
+  const renderPage = (item: ResultsViewPagerConfig, index: number) => {
+    const temp = [...results.count];
+    if (item.type === ResultsCategory.FAMILIARITY) {
+      temp.sort((a, b) => b.similarTasks - a.similarTasks);
+    } else if (item.type === ResultsCategory.PREFERENCE) {
+      temp.sort((a, b) => b.preferenceScore - a.preferenceScore);
+    } else if (item.type === ResultsCategory.PERSONALITY) {
+      temp.sort((a, b) => b.riasecScore - a.riasecScore);
+    } else if (item.type === ResultsCategory.BEST_FIT) {
+      temp.sort((a, b) => b.similarityScore - a.similarityScore);
+    }
+    return (
+      <View collapsable={false} key={String(index)}>
+        <Item scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}>
+          <FlatList
+            renderItem={renderResults}
+            data={temp.slice(0, 10)}
+            contentContainerStyle={styles.contentContainer}
+            keyExtractor={(e, i) => String(i)}
+          />
+        </Item>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.screen}>
       <TopNavigation
@@ -184,18 +210,7 @@ const ResultsPagerScreen = ({ navigation }) => {
             }
           )}
         >
-          {config.map((item, index) => (
-            <View collapsable={false} key={String(index)}>
-              <Item scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}>
-                <FlatList
-                  renderItem={renderResults}
-                  data={results.count}
-                  contentContainerStyle={styles.contentContainer}
-                  keyExtractor={(e, i) => String(i)}
-                />
-              </Item>
-            </View>
-          ))}
+          {config.map((item, index) => renderPage(item, index))}
         </AnimatedPagerView>
         <View style={styles.pageIndicator}>
           <Pagination

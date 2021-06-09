@@ -5,9 +5,8 @@ export interface PagerViewOnPageScrollEventData {
 }
 
 export interface ResultsViewPagerConfig {
-  type: string;
+  type: ResultsCategory;
   color: string;
-  data?: any;
 }
 
 interface ResultsBaseData {
@@ -56,14 +55,21 @@ export interface ResultsPayload {
   task_list: TaskObject[];
 }
 
-export enum TASK_TYPE {
+export enum TaskType {
   CORE = "core",
   SUPPLEMENTARY = "supplementary",
   LIFE = "life",
 }
 
-export enum RESULTS_TYPE {
+export enum ResultsType {
   NOT_RELEVANT = "Irrelevant",
   SIMILAR = "Similar",
   MISSING = "Missing",
+}
+
+export enum ResultsCategory {
+  FAMILIARITY = "FAMILIARITY",
+  PREFERENCE = "PREFERENCE",
+  PERSONALITY = "PERSONALITY",
+  BEST_FIT = "BEST FIT",
 }

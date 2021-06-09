@@ -12,8 +12,7 @@ import CustomText from "./CustomText";
 const ITEM_HEIGHT = 40;
 
 const SearchResultsModal = ({ data, onSelect }) => {
-  const windowDimensions = useWindowDimensions();
-  const { width, height } = windowDimensions;
+  const { width, height } = useWindowDimensions();
 
   const ResultsItem = React.memo(({ item }: { item: string }) => (
     <TouchableOpacity style={styles.item} onPress={() => onSelect(item)}>

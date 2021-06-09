@@ -201,8 +201,8 @@ const ResultsPagerScreen = ({ navigation }) => {
           <Card
             disabled
             style={{
-              height: (height / 4) * 3,
-              width: (width / 4) * 3,
+              height: (height / 4) * 2.5,
+              width: (width / 4) * 3.5,
             }}
           >
             <ResultsIntroductionScreen onClose={handleCloseHelp} />

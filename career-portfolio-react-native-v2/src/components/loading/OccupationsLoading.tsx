@@ -11,8 +11,7 @@ if (Platform.OS !== "web") {
 }
 
 const OccupationsLoading = (props) => {
-  const windowDimensions = useWindowDimensions();
-  const { width, height } = windowDimensions;
+  const { width, height } = useWindowDimensions();
 
   const SVG_HEIGHT = 75;
   const len = new Array(Math.ceil(height / SVG_HEIGHT)).fill(0);

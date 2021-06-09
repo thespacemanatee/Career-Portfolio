@@ -10,12 +10,13 @@ const Footer = ({
   rightButtonLabel = false,
   rightButtonPress = false,
 }) => {
-  const windowWidth = useWindowDimensions().width;
-  const HEIGHT = windowWidth * 0.21;
-  const FOOTER_PADDING = windowWidth * 0.1;
+  const { width } = useWindowDimensions();
+  const HEIGHT = width * 0.21;
+  const FOOTER_PADDING = width * 0.1;
 
   return (
     <View
+      // eslint-disable-next-line react-native/no-inline-styles
       style={{
         flexDirection: "row",
         justifyContent: leftButtonLabel ? "space-between" : "flex-end",

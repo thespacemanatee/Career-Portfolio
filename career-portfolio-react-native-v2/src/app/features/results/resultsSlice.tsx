@@ -20,12 +20,13 @@ export const fetchResults = createAsyncThunk(
       },
       data,
     });
+
     const { onet_title, user_id, count, similar, missing } = response.data;
 
     const responseData: ResultsState = {
-      count: JSON.parse(count),
-      similar: JSON.parse(similar),
-      missing: JSON.parse(missing),
+      count: JSON.parse(count.replace(/\bNaN\b/g, "null")),
+      similar: JSON.parse(similar.replace(/\bNaN\b/g, "null")),
+      missing: JSON.parse(missing.replace(/\bNaN\b/g, "null")),
     };
 
     return responseData;

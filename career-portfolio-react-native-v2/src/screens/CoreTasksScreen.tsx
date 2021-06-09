@@ -12,10 +12,10 @@ import {
 
 import { tasksSelector } from "../app/features/tasks/tasksSlice";
 import alert from "../components/CustomAlert";
-import ShadowCard from "../components/ShadowCard";
 import CustomText from "../components/CustomText";
 import TaskCard from "../components/TaskCard";
 import { useAppSelector } from "../app/hooks";
+import SelectedOccupationCard from "../components/SelectedOccupationCard";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props) => (
@@ -83,10 +83,7 @@ const CoreTasksScreen = ({ navigation }) => {
         <CustomText style={styles.title} bold>
           What does your work schedule look like?
         </CustomText>
-        <ShadowCard style={styles.selectedOccupation} disabled>
-          <CustomText bold>Selected Occupation</CustomText>
-          <CustomText numberOfLines={1}>{chosenOccupation}</CustomText>
-        </ShadowCard>
+        <SelectedOccupationCard occupation={chosenOccupation} />
         <FlatList
           style={styles.flatList}
           renderItem={renderTasks}

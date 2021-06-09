@@ -15,7 +15,7 @@ import {
   ResultsSimilarData,
   RESULTS_TYPE,
 } from "../../types";
-import ShadowCard from "../../components/ShadowCard";
+import SelectedOccupationCard from "../../components/SelectedOccupationCard";
 
 const BackIcon = (props: any) => <Icon {...props} name="arrow-back" />;
 
@@ -85,10 +85,7 @@ const ResultsDetailsScreen = ({ route, navigation }) => {
         accessoryLeft={BackAction}
       />
       <Layout style={styles.layout}>
-        <ShadowCard style={styles.selectedOccupation} disabled>
-          <CustomText bold>Occupation:</CustomText>
-          <CustomText>{occupation}</CustomText>
-        </ShadowCard>
+        <SelectedOccupationCard occupation={occupation} />
         <CustomText
           style={styles.tasksText}
           bold

@@ -22,9 +22,9 @@ import { getTasksByOccupation, handleErrorResponse } from "../helpers/utils";
 import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
 import OccupationCard from "../components/OccupationCard";
-import ShadowCard from "../components/ShadowCard";
 import OccupationsLoading from "../components/loading/OccupationsLoading";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
+import SelectedOccupationCard from "../components/SelectedOccupationCard";
 
 interface Values {
   occupation: string;
@@ -168,14 +168,7 @@ const OccupationsScreen = ({ navigation }) => {
         <CustomText style={styles.title} bold>
           What is your occupation?
         </CustomText>
-        <ShadowCard style={styles.selectedOccupation} disabled>
-          <CustomText style={styles.selectedOccupationText} bold>
-            Selected Occupation
-          </CustomText>
-          <CustomText style={styles.selectedOccupationText} numberOfLines={1}>
-            {chosenOccupation || "Please choose an occupation"}
-          </CustomText>
-        </ShadowCard>
+        <SelectedOccupationCard occupation={chosenOccupation} />
         <Formik
           initialValues={{ occupation: "" }}
           onSubmit={handleSubmitForm}
@@ -230,12 +223,6 @@ const styles = StyleService.create({
   title: {
     fontSize: 26,
     marginBottom: 10,
-  },
-  selectedOccupation: {
-    padding: 20,
-  },
-  selectedOccupationText: {
-    fontSize: 16,
   },
   flatList: {
     marginVertical: 5,

@@ -26,9 +26,11 @@ import type {
   PagerViewOnPageScrollEventData,
   ResultsCountData,
   ResultsViewPagerConfig,
+  TaskObject,
 } from "../../types";
 import ResultsIntroductionScreen from "./ResultsIntroductionModal";
 import ResultCard from "../../components/ResultCard";
+import { tasksSelector } from "../../app/features/tasks/tasksSlice";
 
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props: any) => (
@@ -57,6 +59,7 @@ const config: ResultsViewPagerConfig[] = [
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
 const ResultsPagerScreen = ({ navigation }) => {
+  const tasks = useAppSelector(tasksSelector.selectAll);
   const scrollOffsetAnimatedValue = useRef(new Animated.Value(0)).current;
   const positionAnimatedValue = useRef(new Animated.Value(0)).current;
   const results = useAppSelector((state) => state.results);
@@ -108,16 +111,23 @@ const ResultsPagerScreen = ({ navigation }) => {
   }) => {
     const similar = results.similar.filter((e) => e.title === item.title);
     const missing = results.missing.filter((e) => e.title === item.title);
-    const data = {
-      notRelevant: 10,
-      similar,
-      missing,
-    };
+    const notRelevant: TaskObject[] = [];
+    tasks
+      .filter((e) => {
+        return results.similar.filter((d) => e.IWA_Title !== d.similarIWA);
+      })
+      .forEach((e) => {
+        if (!notRelevant.some((v: TaskObject) => v.IWA_Title === e.IWA_Title)) {
+          notRelevant.push(e);
+        }
+      });
     return (
       <ResultCard
         index={index + 1}
         item={item}
-        data={data}
+        similar={similar.length}
+        missing={missing.length}
+        notRelevant={notRelevant.length}
         onSelectCategory={handleSelectCategory}
       />
     );

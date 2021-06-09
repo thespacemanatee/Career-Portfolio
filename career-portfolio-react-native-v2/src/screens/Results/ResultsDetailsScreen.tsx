@@ -14,12 +14,15 @@ import {
   ResultsMissingData,
   ResultsSimilarData,
   RESULTS_TYPE,
+  TaskObject,
 } from "../../types";
 import SelectedOccupationCard from "../../components/SelectedOccupationCard";
+import { tasksSelector } from "../../app/features/tasks/tasksSlice";
 
 const BackIcon = (props: any) => <Icon {...props} name="arrow-back" />;
 
 const ResultsDetailsScreen = ({ route, navigation }) => {
+  const storeTasks = useAppSelector(tasksSelector.selectAll);
   const results = useAppSelector((state) => state.results);
   const [tasks, setTasks] = useState([]);
   const { title, type, occupation } = route.params;
@@ -60,8 +63,20 @@ const ResultsDetailsScreen = ({ route, navigation }) => {
           }
         });
       setTasks(temp);
+    } else if (type === RESULTS_TYPE.NOT_RELEVANT) {
+      const temp1: TaskObject[] = [];
+      storeTasks
+        .filter((e) => {
+          return results.similar.filter((d) => e.IWA_Title !== d.similarIWA);
+        })
+        .forEach((e) => {
+          if (!temp1.some((v: TaskObject) => v.IWA_Title === e.IWA_Title)) {
+            temp1.push(e);
+          }
+        });
+      setTasks(temp1);
     }
-  }, [occupation, results.missing, results.similar, type]);
+  }, [occupation, results.missing, results.similar, storeTasks, type]);
 
   const renderTasks = ({ item, index }) => {
     let task: string;
@@ -69,6 +84,8 @@ const ResultsDetailsScreen = ({ route, navigation }) => {
       task = item.similarIWA;
     } else if (type === RESULTS_TYPE.MISSING) {
       task = item.missingIWA;
+    } else if (type === RESULTS_TYPE.NOT_RELEVANT) {
+      task = item.IWA_Title;
     }
     return (
       <Card disabled>

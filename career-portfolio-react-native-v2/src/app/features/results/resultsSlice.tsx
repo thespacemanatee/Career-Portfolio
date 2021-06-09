@@ -2,7 +2,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
-import {
+import type {
   ResultsCountData,
   ResultsMissingData,
   ResultsPayload,
@@ -37,6 +37,7 @@ interface ResultsState {
   count: ResultsCountData[];
   similar: ResultsSimilarData[];
   missing: ResultsMissingData[];
+  status?: string;
 }
 
 const initialState: ResultsState = {
@@ -50,9 +51,13 @@ const resultsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(fetchResults.pending, (state) => {
+      state.status = "pending";
+    });
     builder.addCase(
       fetchResults.fulfilled,
       (state, action: PayloadAction<ResultsState>) => {
+        state.status = "fulfilled";
         let { count, similar, missing } = action.payload;
         count = count.slice(1).map((e) => {
           return {
@@ -94,6 +99,9 @@ const resultsSlice = createSlice({
         state.missing = missing;
       }
     );
+    builder.addCase(fetchResults.rejected, (state) => {
+      state.status = "rejected";
+    });
   },
 });
 

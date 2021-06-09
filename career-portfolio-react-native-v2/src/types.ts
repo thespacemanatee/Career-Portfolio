@@ -67,9 +67,3 @@ export enum RESULTS_TYPE {
   SIMILAR = "Similar",
   MISSING = "Missing",
 }
-
-export interface TaskBarChartData {
-  notRelevant: number;
-  similar: ResultsSimilarData[];
-  missing: ResultsMissingData[];
-}

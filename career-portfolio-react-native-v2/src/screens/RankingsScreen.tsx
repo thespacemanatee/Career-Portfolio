@@ -12,7 +12,6 @@ import {
   Spinner,
   Card,
 } from "@ui-kitten/components";
-import { unwrapResult } from "@reduxjs/toolkit";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { CommonActions } from "@react-navigation/native";
 
@@ -20,7 +19,6 @@ import { setAllTasks, tasksSelector } from "../app/features/tasks/tasksSlice";
 import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
 import RankingCard from "../components/RankingCard";
-import { handleErrorResponse } from "../helpers/utils";
 import { fetchResults } from "../app/features/results/resultsSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { ResultsPayload } from "../types";
@@ -33,9 +31,10 @@ const HelpIcon = (props: any) => (
 const RankingsScreen = ({ navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
   const form = useAppSelector((state) => state.form);
+  const resultsStatus = useAppSelector((state) => state.results.status);
   const [combinedTasks, setCombinedTasks] = useState([]);
   const [deletedTasks, setDeletedTasks] = useState([]);
-  const [visible, setVisible] = useState(false);
+  const [error, setError] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
 
@@ -65,26 +64,18 @@ const RankingsScreen = ({ navigation }) => {
   );
 
   const postResult = async (data: ResultsPayload) => {
-    setVisible(true);
+    await dispatch(fetchResults(data));
 
-    await dispatch(fetchResults(data))
-      .then(unwrapResult)
-      .then((res) => {
-        console.log(res);
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 1,
-            routes: [{ name: "Welcome" }, { name: "ResultsStack" }],
-          })
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-        handleErrorResponse(err);
-      })
-      .finally(() => {
-        setVisible(false);
-      });
+    if (resultsStatus === "fulfilled") {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [{ name: "Welcome" }, { name: "ResultsStack" }],
+        })
+      );
+    } else if (resultsStatus === "rejected") {
+      setError(true);
+    }
   };
 
   const handleSubmit = () => {
@@ -133,7 +124,10 @@ const RankingsScreen = ({ navigation }) => {
       />
       <Divider />
       <Layout style={styles.layout}>
-        <Modal visible={visible} backdropStyle={styles.backdrop}>
+        <Modal
+          visible={resultsStatus === "pending"}
+          backdropStyle={styles.backdrop}
+        >
           <Card disabled>
             <Spinner size="large" />
           </Card>

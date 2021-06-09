@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleService } from "@ui-kitten/components";
 
-import { ResultsCountData, TaskBarChartData } from "../types";
+import { ResultsCountData } from "../types";
 import CustomText from "./CustomText";
 import ShadowCard from "./ShadowCard";
 import TaskBarChart from "./TaskBarChart";
@@ -9,12 +9,16 @@ import TaskBarChart from "./TaskBarChart";
 const ResultCard = ({
   index,
   item,
-  data,
+  similar,
+  missing,
+  notRelevant,
   onSelectCategory,
 }: {
   index: number;
   item: ResultsCountData;
-  data: TaskBarChartData;
+  similar: number;
+  missing: number;
+  notRelevant: number;
   onSelectCategory: (type: string, occupation: string) => void;
 }) => {
   return (
@@ -23,9 +27,9 @@ const ResultCard = ({
         style={styles.titleText}
       >{`${index}. ${item.title}`}</CustomText>
       <TaskBarChart
-        notRelevant={10}
-        similar={data.similar}
-        missing={data.missing}
+        notRelevant={notRelevant}
+        similar={similar}
+        missing={missing}
         occupation={item.title}
         onSelectCategory={onSelectCategory}
       />

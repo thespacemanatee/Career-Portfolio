@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { View, TouchableOpacity } from "react-native";
 import { StyleService } from "@ui-kitten/components";
-import { ResultsMissingData, ResultsSimilarData, RESULTS_TYPE } from "../types";
+import { RESULTS_TYPE } from "../types";
 import Colors from "../helpers/color";
 
 const TaskBarChart = ({
@@ -12,14 +12,14 @@ const TaskBarChart = ({
   onSelectCategory,
 }: {
   notRelevant: number;
-  similar: ResultsSimilarData[];
-  missing: ResultsMissingData[];
+  similar: number;
+  missing: number;
   occupation: string;
   onSelectCategory: (type: string, occupation: string) => void;
 }) => {
   const totalTasks = useMemo(
-    () => notRelevant + similar.length + missing.length,
-    [missing.length, notRelevant, similar.length]
+    () => notRelevant + similar + missing,
+    [missing, notRelevant, similar]
   );
 
   const handleSelectCategory = (type: string) => {
@@ -39,19 +39,13 @@ const TaskBarChart = ({
       />
 
       <TouchableOpacity
-        style={[
-          styles.similar,
-          { width: `${(similar.length / totalTasks) * 100}%` },
-        ]}
+        style={[styles.similar, { width: `${(similar / totalTasks) * 100}%` }]}
         onPress={() => {
           handleSelectCategory(RESULTS_TYPE.SIMILAR);
         }}
       />
       <TouchableOpacity
-        style={[
-          styles.missing,
-          { width: `${(missing.length / totalTasks) * 100}%` },
-        ]}
+        style={[styles.missing, { width: `${(missing / totalTasks) * 100}%` }]}
         onPress={() => {
           handleSelectCategory(RESULTS_TYPE.MISSING);
         }}

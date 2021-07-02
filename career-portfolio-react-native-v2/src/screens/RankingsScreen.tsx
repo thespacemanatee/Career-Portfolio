@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Alert, Platform, View } from "react-native";
+import { Platform, View } from "react-native";
 import {
   Divider,
   Layout,
@@ -8,19 +8,13 @@ import {
   Button,
   TopNavigationAction,
   Icon,
-  Modal,
-  Spinner,
-  Card,
 } from "@ui-kitten/components";
 import DraggableFlatList from "react-native-draggable-flatlist";
-import { CommonActions } from "@react-navigation/native";
-import { unwrapResult } from "@reduxjs/toolkit";
 
 import { setAllTasks, tasksSelector } from "../app/features/tasks/tasksSlice";
 import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
 import RankingCard from "../components/RankingCard";
-import { fetchResults } from "../app/features/results/resultsSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { ResultsPayload } from "../types";
 
@@ -32,10 +26,8 @@ const HelpIcon = (props: any) => (
 const RankingsScreen = ({ navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
   const form = useAppSelector((state) => state.form);
-  const resultsStatus = useAppSelector((state) => state.results.status);
   const [combinedTasks, setCombinedTasks] = useState([]);
   const [deletedTasks, setDeletedTasks] = useState([]);
-  const [error, setError] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
 
@@ -52,34 +44,20 @@ const RankingsScreen = ({ navigation }) => {
     />
   );
 
-  const HelpAction = () => (
-    <TopNavigationAction
-      icon={HelpIcon}
-      onPress={() => {
-        alert(
-          "Help",
-          "Drag and reorder each task to the top (most preferred) or bottom (least preferred)."
-        );
-      }}
-    />
-  );
-
-  const postResult = async (data: ResultsPayload) => {
-    await dispatch(fetchResults(data))
-      .then(unwrapResult)
-      .then(() => {
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 1,
-            routes: [{ name: "Welcome" }, { name: "ResultsStack" }],
-          })
-        );
-      })
-      .catch((err) => {
-        Alert.alert("Error", err);
-        setError(true);
-      });
+  const handleHelp = () => {
+    alert(
+      "Help",
+      "Drag and reorder each task to the top (most preferred) or bottom (least preferred)."
+    );
   };
+
+  useEffect(() => {
+    handleHelp();
+  }, []);
+
+  const HelpAction = () => (
+    <TopNavigationAction icon={HelpIcon} onPress={handleHelp} />
+  );
 
   const handleSubmit = () => {
     const tasksArray = tasks.map((e) => {
@@ -94,7 +72,9 @@ const RankingsScreen = ({ navigation }) => {
       ...form,
       task_list: tasksArray,
     };
-    postResult(payload);
+    navigation.navigate("SubmitLoading", {
+      payload,
+    });
   };
 
   useEffect(() => {
@@ -126,14 +106,6 @@ const RankingsScreen = ({ navigation }) => {
       />
       <Divider />
       <Layout style={styles.layout}>
-        <Modal
-          visible={resultsStatus === "pending"}
-          backdropStyle={styles.backdrop}
-        >
-          <Card disabled>
-            <Spinner size="large" />
-          </Card>
-        </Modal>
         <CustomText style={styles.title} bold>
           Rank your tasks in order of preference.
         </CustomText>

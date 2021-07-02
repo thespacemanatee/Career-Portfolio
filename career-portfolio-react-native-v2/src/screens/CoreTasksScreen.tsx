@@ -40,16 +40,19 @@ const CoreTasksScreen = ({ navigation }) => {
     />
   );
 
+  const handleHelp = () => {
+    alert(
+      "Help",
+      `These are the tasks typically done by a ${chosenOccupation}. Check the box to indicate a Core task. Swipe right to delete tasks.`
+    );
+  };
+
+  useEffect(() => {
+    handleHelp();
+  }, []);
+
   const HelpAction = () => (
-    <TopNavigationAction
-      icon={HelpIcon}
-      onPress={() => {
-        alert(
-          "Help",
-          `These are the tasks typically done by a ${chosenOccupation}. Check the box to indicate a Core task. Swipe right to delete tasks.`
-        );
-      }}
-    />
+    <TopNavigationAction icon={HelpIcon} onPress={handleHelp} />
   );
 
   useEffect(() => {

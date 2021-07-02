@@ -32,10 +32,17 @@ const ResultCard = ({
 
   const { width } = Dimensions.get("window");
 
-  const animatedStyle = useAnimatedStyle(() => {
+  const animatedBarStyle = useAnimatedStyle(() => {
     const translateX = interpolate(progress.value, [0, 1], [-width, 0]);
     return {
       transform: [{ translateX }],
+    };
+  });
+
+  const animatedTextStyle = useAnimatedStyle(() => {
+    const opacity = interpolate(progress.value, [0, 1], [0, 1]);
+    return {
+      opacity,
     };
   });
 
@@ -45,11 +52,13 @@ const ResultCard = ({
 
   return (
     <ShadowCard style={styles.resultCard}>
-      <CustomText
-        style={styles.titleText}
-      >{`${index}. ${item.title}`}</CustomText>
+      <Animated.View style={animatedTextStyle}>
+        <CustomText
+          style={styles.titleText}
+        >{`${index}. ${item.title}`}</CustomText>
+      </Animated.View>
       <View style={styles.taskbarContainer}>
-        <Animated.View style={animatedStyle}>
+        <Animated.View style={animatedBarStyle}>
           <TaskBarChart
             notRelevant={notRelevant}
             similar={similar}

@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from "react";
-import { View, Platform, FlatList } from "react-native";
+import React, { useState, useCallback, useEffect } from "react";
+import { View, Platform, FlatList, Alert } from "react-native";
 import {
   Divider,
   Layout,
@@ -70,16 +70,19 @@ const OccupationsScreen = ({ navigation }) => {
     />
   );
 
+  const handleHelp = () => {
+    alert(
+      "Help",
+      "If you are unemployed, please enter your previous occupation."
+    );
+  };
+
+  useEffect(() => {
+    handleHelp();
+  }, []);
+
   const HelpAction = () => (
-    <TopNavigationAction
-      icon={HelpIcon}
-      onPress={() => {
-        alert(
-          "Help",
-          "If you are unemployed, please enter your previous occupation."
-        );
-      }}
-    />
+    <TopNavigationAction icon={HelpIcon} onPress={handleHelp} />
   );
 
   const handleNavigation = () => {
@@ -115,6 +118,10 @@ const OccupationsScreen = ({ navigation }) => {
   const handleSubmitForm = async (values: Values) => {
     const { occupation } = values;
     setUserInput(occupation);
+    if (!occupation) {
+      Alert.alert("Error", "Please input an occupation!");
+      return;
+    }
     try {
       setLoading(true);
       const url = `https://thingproxy.freeboard.io/fetch/https://services.onetcenter.org/ws/online/search?keyword=${occupation}&start=1&end=100`;
@@ -125,7 +132,7 @@ const OccupationsScreen = ({ navigation }) => {
       });
 
       const titles: string[] = [];
-      res.data.occupation.forEach((item) => {
+      res.data.occupation?.forEach((item) => {
         titles.push(item.title);
       });
       setOccupations(titles);

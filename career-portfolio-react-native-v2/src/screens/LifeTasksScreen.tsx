@@ -43,16 +43,22 @@ const LifeTasksScreen = ({ navigation }) => {
       }}
     />
   );
+  
+  const handleHelp = () => {
+    alert(
+      "Help",
+      "A task is made up of an action, object and purpose.\nExample: Interview (action) people (object) to understand perspective on current social trends (purpose)."
+    );
+  }
+
+  useEffect(() => {
+    handleHelp();
+  }, []);
 
   const HelpAction = () => (
     <TopNavigationAction
       icon={HelpIcon}
-      onPress={() => {
-        alert(
-          "Help",
-          "A task is made up of an action, object and purpose.\nExample: Interview (action) people (object) to understand perspective on current social trends (purpose)."
-        );
-      }}
+      onPress={handleHelp}
     />
   );
 

@@ -16,6 +16,7 @@ import AddByActionScreen from "../screens/LifeTasks/AddByActionScreen";
 import AddByOccupationScreen from "../screens/LifeTasks/AddByOccupationScreen";
 import ResultsPagerScreen from "../screens/Results/ResultsPagerScreen";
 import ResultsDetailsScreen from "../screens/Results/ResultsDetailsScreen";
+import SubmitLoadingScreen from "../screens/SubmitLoadingScreen";
 
 const AppNavigator = () => {
   const { Navigator, Screen } = createStackNavigator();
@@ -73,6 +74,7 @@ const AppNavigator = () => {
           <Screen name="CoreTasks" component={CoreTasksScreen} />
           <Screen name="LifeTasksStack" component={LifeTasksStackNavigator} />
           <Screen name="Rankings" component={RankingsScreen} />
+          <Screen name="SubmitLoading" component={SubmitLoadingScreen} />
           <Screen name="ResultsStack" component={ResultsStackNavigator} />
         </Navigator>
       </SafeAreaView>

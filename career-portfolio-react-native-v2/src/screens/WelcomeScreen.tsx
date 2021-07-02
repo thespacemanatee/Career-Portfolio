@@ -35,7 +35,7 @@ const WelcomeScreen = ({ navigation }) => {
   useEffect(() => {
     animationProgress.value = withRepeat(
       withTiming(1, {
-        duration: 2500,
+        duration: 3000,
       }),
       -1,
       true

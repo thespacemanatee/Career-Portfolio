@@ -14,6 +14,7 @@ import {
 } from "@ui-kitten/components";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { CommonActions } from "@react-navigation/native";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 import { setAllTasks, tasksSelector } from "../app/features/tasks/tasksSlice";
 import alert from "../components/CustomAlert";
@@ -22,7 +23,6 @@ import RankingCard from "../components/RankingCard";
 import { fetchResults } from "../app/features/results/resultsSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { ResultsPayload } from "../types";
-import { unwrapResult } from "@reduxjs/toolkit";
 
 const BackIcon = (props: any) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props: any) => (
@@ -76,7 +76,7 @@ const RankingsScreen = ({ navigation }) => {
         );
       })
       .catch((err) => {
-        Alert.alert("Error");
+        Alert.alert("Error", err);
         setError(true);
       });
   };

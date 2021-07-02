@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Dimensions, View } from "react-native";
 import {
   Divider,
@@ -7,9 +7,8 @@ import {
   StyleService,
   Button,
 } from "@ui-kitten/components";
-import {
-  runOnJS,
-  useDerivedValue,
+import Animated, {
+  useAnimatedProps,
   useSharedValue,
   withRepeat,
   withTiming,
@@ -19,16 +18,19 @@ import CustomText from "../components/CustomText";
 import { useAppSelector } from "../app/hooks";
 import { LottieView } from "..";
 
+const AnimatedLottieView = Animated.createAnimatedComponent(LottieView);
+
 const WelcomeScreen = ({ navigation }) => {
   const count = useAppSelector((state) => state.results.count);
-  const [progress, setProgress] = useState(0);
   const animationProgress = useSharedValue(0);
 
   const { height } = Dimensions.get("window");
 
-  useDerivedValue(() => {
-    runOnJS(setProgress)(animationProgress.value);
-  }, [animationProgress]);
+  const animatedProps = useAnimatedProps(() => {
+    return {
+      progress: animationProgress.value,
+    };
+  });
 
   useEffect(() => {
     animationProgress.value = withRepeat(
@@ -54,10 +56,10 @@ const WelcomeScreen = ({ navigation }) => {
         <View />
         <View>
           <View style={{ height: height / 3 }}>
-            <LottieView
+            <AnimatedLottieView
               // eslint-disable-next-line global-require
               source={require("../../assets/welcome-hero.json")}
-              progress={progress}
+              animatedProps={animatedProps}
             />
           </View>
           <CustomText bold style={styles.title}>

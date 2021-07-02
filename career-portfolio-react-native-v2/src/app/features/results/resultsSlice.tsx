@@ -24,10 +24,12 @@ export const fetchResults = createAsyncThunk(
     const { onet_title, user_id, count, similar, missing } = response.data;
 
     const responseData: ResultsState = {
-      count: JSON.parse(count.replace(/\bNaN\b/g, "null")),
-      similar: JSON.parse(similar.replace(/\bNaN\b/g, "null")),
-      missing: JSON.parse(missing.replace(/\bNaN\b/g, "null")),
+      count: JSON.parse(count),
+      similar: JSON.parse(similar),
+      missing: JSON.parse(missing),
     };
+
+    console.log(responseData);
 
     return responseData;
   }
@@ -38,18 +40,25 @@ interface ResultsState {
   similar: ResultsSimilarData[];
   missing: ResultsMissingData[];
   status?: string;
+  opened?: boolean;
 }
 
 const initialState: ResultsState = {
   count: null,
   similar: null,
   missing: null,
+  status: "idle",
+  opened: false,
 };
 
 const resultsSlice = createSlice({
   name: "results",
   initialState,
-  reducers: {},
+  reducers: {
+    markAsRead: (state) => {
+      state.opened = true;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchResults.pending, (state) => {
       state.status = "pending";
@@ -104,5 +113,7 @@ const resultsSlice = createSlice({
     });
   },
 });
+
+export const { markAsRead } = resultsSlice.actions;
 
 export default resultsSlice.reducer;

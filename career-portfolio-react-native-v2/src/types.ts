@@ -62,7 +62,7 @@ export enum TaskType {
 }
 
 export enum ResultsType {
-  NOT_RELEVANT = "Irrelevant",
+  IRRELEVANT = "Irrelevant",
   SIMILAR = "Similar",
   MISSING = "Missing",
 }

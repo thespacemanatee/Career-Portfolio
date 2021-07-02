@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { View, Animated } from "react-native";
 import { Layout, StyleService, Button } from "@ui-kitten/components";
 import PagerView from "react-native-pager-view";
@@ -9,6 +9,8 @@ import type { PagerViewOnPageScrollEventData } from "../../types";
 import Ticker from "../../components/pager/Ticker";
 import TaskBarChart from "../../components/TaskBarChartDemo";
 import Item from "../../components/pager/Item";
+import { useAppDispatch } from "../../app/hooks";
+import { markAsRead } from "../../app/features/results/resultsSlice";
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
@@ -24,6 +26,12 @@ const missing = new Array(7);
 const ResultsIntroductionModal = ({ onClose }: { onClose?: () => void }) => {
   const scrollOffsetAnimatedValue = useRef(new Animated.Value(0)).current;
   const positionAnimatedValue = useRef(new Animated.Value(0)).current;
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(markAsRead());
+  }, [dispatch]);
 
   return (
     <Layout style={styles.layout}>

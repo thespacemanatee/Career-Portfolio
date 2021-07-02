@@ -63,7 +63,7 @@ const ResultsDetailsScreen = ({ route, navigation }) => {
           }
         });
       setTasks(temp);
-    } else if (type === ResultsType.NOT_RELEVANT) {
+    } else if (type === ResultsType.IRRELEVANT) {
       const temp1: TaskObject[] = [];
       storeTasks
         .filter((e) => {
@@ -84,7 +84,7 @@ const ResultsDetailsScreen = ({ route, navigation }) => {
       task = item.similarIWA;
     } else if (type === ResultsType.MISSING) {
       task = item.missingIWA;
-    } else if (type === ResultsType.NOT_RELEVANT) {
+    } else if (type === ResultsType.IRRELEVANT) {
       task = item.IWA_Title;
     }
     return (
@@ -103,10 +103,11 @@ const ResultsDetailsScreen = ({ route, navigation }) => {
       />
       <Layout style={styles.layout}>
         <SelectedOccupationCard occupation={occupation} />
-        <CustomText
-          style={styles.tasksText}
-          bold
-        >{`${type} Tasks:`}</CustomText>
+        <CustomText style={styles.tasksText} bold>
+          {type === ResultsType.IRRELEVANT
+            ? "Tasks Specific to Current Job"
+            : `${type} Tasks:`}
+        </CustomText>
         <FlatList
           data={tasks}
           renderItem={renderTasks}

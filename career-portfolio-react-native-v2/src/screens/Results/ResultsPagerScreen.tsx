@@ -66,7 +66,7 @@ const ResultsPagerScreen = ({ navigation }) => {
   const results = useAppSelector((state) => state.results);
   const scrollOffsetAnimatedValue = useRef(new Animated.Value(0)).current;
   const positionAnimatedValue = useRef(new Animated.Value(0)).current;
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(!results.opened);
   const [pagePosition, setPagePosition] = useState(0);
 
   const { width, height } = useWindowDimensions();

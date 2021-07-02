@@ -10,8 +10,6 @@ import { useAppDispatch } from "../app/hooks";
 import CustomText from "../components/CustomText";
 
 const SubmitLoadingScreen = ({ navigation, route }) => {
-  const [error, setError] = useState(false);
-
   const { payload } = route.params;
 
   const { height } = Dimensions.get("window");
@@ -30,10 +28,12 @@ const SubmitLoadingScreen = ({ navigation, route }) => {
             })
           );
         })
-        .catch((err) => {
-          Alert.alert("Error", err);
+        .catch(() => {
+          Alert.alert(
+            "Error",
+            "Unable to contact the server. Please try again later!"
+          );
           navigation.goBack();
-          setError(true);
         });
     };
     postResult();

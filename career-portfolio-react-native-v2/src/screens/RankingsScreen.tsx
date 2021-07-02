@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Platform, View } from "react-native";
+import { Alert, Platform, View } from "react-native";
 import {
   Divider,
   Layout,
@@ -22,6 +22,7 @@ import RankingCard from "../components/RankingCard";
 import { fetchResults } from "../app/features/results/resultsSlice";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { ResultsPayload } from "../types";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const BackIcon = (props: any) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props: any) => (
@@ -64,18 +65,20 @@ const RankingsScreen = ({ navigation }) => {
   );
 
   const postResult = async (data: ResultsPayload) => {
-    await dispatch(fetchResults(data));
-
-    if (resultsStatus === "fulfilled") {
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 1,
-          routes: [{ name: "Welcome" }, { name: "ResultsStack" }],
-        })
-      );
-    } else if (resultsStatus === "rejected") {
-      setError(true);
-    }
+    await dispatch(fetchResults(data))
+      .then(unwrapResult)
+      .then(() => {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{ name: "Welcome" }, { name: "ResultsStack" }],
+          })
+        );
+      })
+      .catch((err) => {
+        Alert.alert("Error");
+        setError(true);
+      });
   };
 
   const handleSubmit = () => {
@@ -91,7 +94,6 @@ const RankingsScreen = ({ navigation }) => {
       ...form,
       task_list: tasksArray,
     };
-    // console.log(payload);
     postResult(payload);
   };
 

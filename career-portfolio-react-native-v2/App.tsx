@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Platform } from "react-native";
+import { Platform, LogBox } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import * as eva from "@eva-design/eva";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -18,6 +18,8 @@ import { store, persistor } from "./src/app/store";
 import { setVerbs, setOccupations } from "./src/app/features/local/localSlice";
 import AppNavigator from "./src/navigation/AppNavigator";
 import { getActionVerbsArray, getOccupationsArray } from "./src/helpers/utils";
+
+LogBox.ignoreLogs(['ReactNativeFiberHostComponent: Calling getNode() on the ref of an Animated component is no longer necessary.']);
 
 export default function App() {
   const [ready, setReady] = useState(false);

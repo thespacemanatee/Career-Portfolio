@@ -29,8 +29,6 @@ export const fetchResults = createAsyncThunk(
       missing: JSON.parse(missing),
     };
 
-    console.log(responseData);
-
     return responseData;
   }
 );

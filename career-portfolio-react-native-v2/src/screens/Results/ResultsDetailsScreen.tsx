@@ -135,5 +135,6 @@ const styles = StyleService.create({
   },
   tasksText: {
     fontSize: 26,
+    marginVertical: 12,
   },
 });

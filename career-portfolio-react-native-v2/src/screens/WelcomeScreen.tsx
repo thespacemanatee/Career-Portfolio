@@ -8,6 +8,7 @@ import {
   Button,
 } from "@ui-kitten/components";
 import Animated, {
+  Easing,
   useAnimatedProps,
   useSharedValue,
   withRepeat,
@@ -36,6 +37,7 @@ const WelcomeScreen = ({ navigation }) => {
     animationProgress.value = withRepeat(
       withTiming(1, {
         duration: 3000,
+        easing: Easing.linear,
       }),
       -1,
       true

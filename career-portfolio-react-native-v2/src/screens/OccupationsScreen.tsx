@@ -15,7 +15,11 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { Buffer } from "buffer";
-import { ONET_USERNAME, ONET_PASSWORD } from "react-native-dotenv";
+import {
+  ONET_USERNAME,
+  ONET_PASSWORD,
+  ONET_ENDPOINT,
+} from "react-native-dotenv";
 
 import { addSelection } from "../app/features/form/formSlice";
 import { setAllTasks } from "../app/features/tasks/tasksSlice";
@@ -121,7 +125,7 @@ const OccupationsScreen = ({ navigation }) => {
     }
     try {
       setLoading(true);
-      const url = `https://thingproxy.freeboard.io/fetch/https://services.onetcenter.org/ws/online/search?keyword=${occupation}&start=1&end=100`;
+      const url = `${ONET_ENDPOINT}${occupation}&start=1&end=100`;
       const res = await axios.get(url, {
         headers: {
           Authorization: `Basic ${Buffer.from(

@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import { RESULTS_ENDPOINT } from "react-native-dotenv";
 
 import type {
   ResultsCountData,
@@ -14,7 +15,7 @@ export const fetchResults = createAsyncThunk(
   async (data: ResultsPayload) => {
     const response = await axios({
       method: "post",
-      url: "https://rjiu5d34rj.execute-api.ap-southeast-1.amazonaws.com/test/post-json",
+      url: RESULTS_ENDPOINT,
       headers: {
         "Content-Type": "application/json",
       },

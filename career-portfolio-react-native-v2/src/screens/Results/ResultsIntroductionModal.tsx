@@ -7,7 +7,7 @@ import CustomText from "../../components/CustomText";
 import Pagination from "../../components/pager/Pagination";
 import type { PagerViewOnPageScrollEventData } from "../../types";
 import Ticker from "../../components/pager/Ticker";
-import TaskBarChart from "../../components/TaskBarChartDemo";
+import TaskBarChartDemo from "../../components/TaskBarChartDemo";
 import Item from "../../components/pager/Item";
 import { useAppDispatch } from "../../app/hooks";
 import { markAsRead } from "../../app/features/results/resultsSlice";
@@ -18,10 +18,6 @@ const config = [
   { type: "Your Options", color: "black" },
   { type: "Occupations", color: "black" },
 ];
-
-const notRelevant = new Array(5);
-const similar = new Array(10);
-const missing = new Array(7);
 
 const ResultsIntroductionModal = ({ onClose }: { onClose?: () => void }) => {
   const scrollOffsetAnimatedValue = useRef(new Animated.Value(0)).current;
@@ -104,11 +100,7 @@ const ResultsIntroductionModal = ({ onClose }: { onClose?: () => void }) => {
                 <CustomText bold style={styles.contentText}>
                   Tap for more information!
                 </CustomText>
-                <TaskBarChart
-                  notRelevant={notRelevant}
-                  similar={similar}
-                  missing={missing}
-                />
+                <TaskBarChartDemo notRelevant={5} similar={8} missing={3} />
               </View>
               <Button onPress={onClose}>I&apos;M READY!</Button>
             </View>

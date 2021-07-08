@@ -4,18 +4,20 @@ import { StyleService } from "@ui-kitten/components";
 import { ResultsType } from "../types";
 import Colors from "../helpers/color";
 
-const TaskBarChart = ({
-  notRelevant,
-  similar,
-  missing,
-  occupation,
-  onSelectCategory,
-}: {
+interface TaskBarChartProps {
   notRelevant: number;
   similar: number;
   missing: number;
   occupation: string;
   onSelectCategory: (type: string, occupation: string) => void;
+}
+
+const TaskBarChart: React.FC<TaskBarChartProps> = ({
+  notRelevant,
+  similar,
+  missing,
+  occupation,
+  onSelectCategory,
 }) => {
   const totalTasks = useMemo(
     () => notRelevant + similar + missing,
@@ -59,6 +61,8 @@ const styles = StyleService.create({
   barChart: {
     height: 35,
     flexDirection: "row",
+    borderRadius: 8,
+    overflow: "hidden",
   },
   notRelevant: {
     backgroundColor: Colors.NOT_RELEVANT,

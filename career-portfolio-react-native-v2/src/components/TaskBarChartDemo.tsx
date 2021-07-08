@@ -3,21 +3,33 @@ import { View, TouchableOpacity } from "react-native";
 import { StyleService, Tooltip } from "@ui-kitten/components";
 import Colors from "../helpers/color";
 
-const TaskBarChartDemo = ({ notRelevant, similar, missing }) => {
+interface TaskBarChartDemoProps {
+  notRelevant: number;
+  similar: number;
+  missing: number;
+  occupation: string;
+  onSelectCategory: (type: string, occupation: string) => void;
+}
+
+const TaskBarChartDemo: React.FC<TaskBarChartDemoProps> = ({
+  notRelevant,
+  similar,
+  missing,
+}) => {
   const [notRelevantVisible, setNotRelevantVisible] = useState(false);
   const [similarVisible, setSimilarVisible] = useState(false);
   const [missingVisible, setMissingVisible] = useState(false);
 
   const totalTasks = useMemo(
-    () => notRelevant.length + similar.length + missing.length,
-    [missing.length, notRelevant.length, similar.length]
+    () => notRelevant + similar + missing,
+    [missing, notRelevant, similar]
   );
 
   const renderNotRelevant = () => (
     <TouchableOpacity
       style={[
         styles.notRelevant,
-        { width: `${(notRelevant.length / totalTasks) * 100}%` },
+        { width: `${(notRelevant / totalTasks) * 100}%` },
       ]}
       onPress={() => {
         setNotRelevantVisible(true);
@@ -27,10 +39,7 @@ const TaskBarChartDemo = ({ notRelevant, similar, missing }) => {
 
   const renderSimilar = () => (
     <TouchableOpacity
-      style={[
-        styles.similar,
-        { width: `${(similar.length / totalTasks) * 100}%` },
-      ]}
+      style={[styles.similar, { width: `${(similar / totalTasks) * 100}%` }]}
       onPress={() => {
         setSimilarVisible(true);
       }}
@@ -39,10 +48,7 @@ const TaskBarChartDemo = ({ notRelevant, similar, missing }) => {
 
   const renderMissing = () => (
     <TouchableOpacity
-      style={[
-        styles.missing,
-        { width: `${(missing.length / totalTasks) * 100}%` },
-      ]}
+      style={[styles.missing, { width: `${(missing / totalTasks) * 100}%` }]}
       onPress={() => {
         setMissingVisible(true);
       }}
@@ -86,6 +92,8 @@ const styles = StyleService.create({
   barChart: {
     height: 35,
     flexDirection: "row",
+    borderRadius: 8,
+    overflow: "hidden",
   },
   notRelevant: {
     backgroundColor: Colors.NOT_RELEVANT,

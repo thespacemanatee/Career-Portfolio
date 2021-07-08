@@ -1,13 +1,9 @@
-<h1 align="center">Welcome to Career Portfolio React Native 👋</h1>
+<h1 align="center">Career Portfolio React Native</h1>
 <p>
   <a href="https://opensource.org/licenses/MIT" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
   </a>
 </p>
-
-> A modern cross-platform mobile application that helps you decide and transition to new and exciting careers based on your work and life experiences.
-
-### 🏠 [Homepage](https://lkycic.sutd.edu.sg)
 
 ### ✨ [Demo](https://expo.io/@thespacemanatee/career-portfolio-react-native-v2)
 
@@ -22,14 +18,6 @@ yarn install
 ```sh
 yarn start
 ```
-
-## Author
-
-👤 **Chong Chee Kit**
-
-* Website: https://cheekit.tech/
-* Github: [@thespacemanatee](https://github.com/thespacemanatee)
-* LinkedIn: [@https:\/\/www.linkedin.com\/in\/chee-kit\/](https://linkedin.com/in/https:\/\/www.linkedin.com\/in\/chee-kit\/)
 
 ## 🤝 Contributing
 

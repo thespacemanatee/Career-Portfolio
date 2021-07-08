@@ -19,7 +19,9 @@ import { setVerbs, setOccupations } from "./src/app/features/local/localSlice";
 import AppNavigator from "./src/navigation/AppNavigator";
 import { getActionVerbsArray, getOccupationsArray } from "./src/helpers/utils";
 
-LogBox.ignoreLogs(['ReactNativeFiberHostComponent: Calling getNode() on the ref of an Animated component is no longer necessary.']);
+LogBox.ignoreLogs([
+  "ReactNativeFiberHostComponent: Calling getNode() on the ref of an Animated component is no longer necessary.",
+]);
 
 export default function App() {
   const [ready, setReady] = useState(false);

@@ -15,6 +15,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { Buffer } from "buffer";
+import { ONET_USERNAME, ONET_PASSWORD } from "react-native-dotenv";
 
 import { addSelection } from "../app/features/form/formSlice";
 import { setAllTasks } from "../app/features/tasks/tasksSlice";
@@ -34,10 +35,6 @@ const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props) => (
   <Icon {...props} name="question-mark-circle-outline" />
 );
-
-const username = "singapore_university";
-const password = "3594cgj";
-const token = Buffer.from(`${username}:${password}`).toString("base64");
 
 const OccupationsScreen = ({ navigation }) => {
   const form = useAppSelector((state) => state.form);
@@ -127,7 +124,9 @@ const OccupationsScreen = ({ navigation }) => {
       const url = `https://thingproxy.freeboard.io/fetch/https://services.onetcenter.org/ws/online/search?keyword=${occupation}&start=1&end=100`;
       const res = await axios.get(url, {
         headers: {
-          Authorization: `Basic ${token}`,
+          Authorization: `Basic ${Buffer.from(
+            `${ONET_USERNAME}:${ONET_PASSWORD}`
+          ).toString("base64")}`,
         },
       });
 

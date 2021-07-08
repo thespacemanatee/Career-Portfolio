@@ -2,6 +2,7 @@
 <p>
   <a href="https://opensource.org/licenses/MIT" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
+    <a href="https://www.codacy.com/gh/thespacemanatee/Career-Portfolio/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=thespacemanatee/Career-Portfolio&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/b6b3c8a242474ea1b43fb7f9074ab496"/></a>
   </a>
 </p>
 

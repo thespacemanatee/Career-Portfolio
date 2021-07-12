@@ -69,7 +69,7 @@ const CoreTasksScreen = ({ navigation }) => {
 
   const renderEmptyComponent = () => (
     <View style={styles.emptyComponent}>
-      <CustomText bold>NO TASKS FOUND</CustomText>
+      <CustomText fontFamily="bold">NO TASKS FOUND</CustomText>
     </View>
   );
 
@@ -83,7 +83,7 @@ const CoreTasksScreen = ({ navigation }) => {
       />
       <Divider />
       <Layout style={styles.layout}>
-        <CustomText style={styles.title} bold>
+        <CustomText style={styles.title} fontFamily="bold">
           What does your work schedule look like?
         </CustomText>
         <SelectedOccupationCard occupation={chosenOccupation} />

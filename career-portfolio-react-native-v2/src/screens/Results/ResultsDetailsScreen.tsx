@@ -103,7 +103,7 @@ const ResultsDetailsScreen = ({ route, navigation }) => {
       />
       <Layout style={styles.layout}>
         <SelectedOccupationCard occupation={occupation} />
-        <CustomText style={styles.tasksText} bold>
+        <CustomText style={styles.tasksText} fontFamily="bold">
           {type === ResultsType.IRRELEVANT
             ? "Tasks Specific to Current Job"
             : `${type} Tasks:`}

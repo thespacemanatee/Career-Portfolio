@@ -51,7 +51,7 @@ const SubmitLoadingScreen = ({ navigation, route }) => {
         />
       </View>
       <View style={styles.loadingText}>
-        <CustomText bold style={styles.loadingText}>
+        <CustomText fontFamily="bold" style={styles.loadingText}>
           You are on your way...
         </CustomText>
       </View>

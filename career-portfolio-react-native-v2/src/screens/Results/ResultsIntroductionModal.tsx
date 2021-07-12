@@ -61,28 +61,28 @@ const ResultsIntroductionModal = ({ onClose }: { onClose?: () => void }) => {
             </CustomText>
             <CustomText style={styles.contentText}>
               1.{" "}
-              <CustomText bold style={styles.contentText}>
+              <CustomText fontFamily="bold" style={styles.contentText}>
                 Familiarity{" "}
               </CustomText>
               (jobs with similar tasks)
             </CustomText>
             <CustomText style={styles.contentText}>
               2.{" "}
-              <CustomText bold style={styles.contentText}>
+              <CustomText fontFamily="bold" style={styles.contentText}>
                 Preference{" "}
               </CustomText>{" "}
               (based on your ranking of tasks)
             </CustomText>
             <CustomText style={styles.contentText}>
               3.{" "}
-              <CustomText bold style={styles.contentText}>
+              <CustomText fontFamily="bold" style={styles.contentText}>
                 Personality{" "}
               </CustomText>{" "}
               (jobs of people whose personality are similar to yours)
             </CustomText>
             <CustomText style={styles.contentText}>
               4.{" "}
-              <CustomText bold style={styles.contentText}>
+              <CustomText fontFamily="bold" style={styles.contentText}>
                 Best Fit{" "}
               </CustomText>{" "}
               (combination of the above)
@@ -97,7 +97,7 @@ const ResultsIntroductionModal = ({ onClose }: { onClose?: () => void }) => {
                 <CustomText style={styles.contentText}>
                   Each occupation is made up of tasks.
                 </CustomText>
-                <CustomText bold style={styles.contentText}>
+                <CustomText fontFamily="bold" style={styles.contentText}>
                   Tap for more information!
                 </CustomText>
                 <TaskBarChartDemo notRelevant={5} similar={8} missing={3} />

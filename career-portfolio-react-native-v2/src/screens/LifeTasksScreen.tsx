@@ -89,7 +89,7 @@ const LifeTasksScreen = ({ navigation }) => {
 
   const renderEmptyComponent = () => (
     <View style={styles.emptyComponent}>
-      <CustomText bold>NO TASKS</CustomText>
+      <CustomText fontFamily="bold">NO TASKS</CustomText>
     </View>
   );
 
@@ -103,10 +103,10 @@ const LifeTasksScreen = ({ navigation }) => {
       />
       <Divider />
       <Layout style={styles.layout}>
-        <CustomText style={styles.title} bold>
+        <CustomText style={styles.title} fontFamily="bold">
           What other tasks have you done in past jobs, or outside work?
         </CustomText>
-        <CustomText style={styles.buttonGroupTitle} bold>
+        <CustomText style={styles.buttonGroupTitle} fontFamily="bold">
           Search task by:
         </CustomText>
         <View style={styles.controlContainer}>

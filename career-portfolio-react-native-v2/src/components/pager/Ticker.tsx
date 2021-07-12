@@ -29,8 +29,8 @@ const Ticker = ({
         {config.map((item, index) => {
           return (
             <CustomText
-              bold
               key={String(index)}
+              fontFamily="bold"
               style={{
                 ...styles.tickerText,
                 color: item.color,

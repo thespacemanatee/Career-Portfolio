@@ -7,8 +7,6 @@ interface TaskBarChartDemoProps {
   notRelevant: number;
   similar: number;
   missing: number;
-  occupation: string;
-  onSelectCategory: (type: string, occupation: string) => void;
 }
 
 const TaskBarChartDemo: React.FC<TaskBarChartDemoProps> = ({

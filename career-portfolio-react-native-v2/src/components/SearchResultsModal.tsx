@@ -26,7 +26,7 @@ const SearchResultsModal = ({ data, onSelect }) => {
 
   const renderEmptyComponent = () => (
     <View style={styles.emptyComponent}>
-      <CustomText bold>NO ACTIONS FOUND</CustomText>
+      <CustomText>NO ACTIONS FOUND</CustomText>
     </View>
   );
 

@@ -71,7 +71,7 @@ const AddByOccupationScreen = ({ navigation }) => {
 
   const renderEmptyComponent = () => (
     <View style={styles.emptyComponent}>
-      <CustomText bold>NO TASKS FOUND</CustomText>
+      <CustomText fontFamily="bold">NO TASKS FOUND</CustomText>
     </View>
   );
 

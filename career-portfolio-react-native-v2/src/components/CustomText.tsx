@@ -1,5 +1,5 @@
 import React from "react";
-import { Animated, StyleProp, TextStyle } from "react-native";
+import { Animated, TextProps } from "react-native";
 import { FontWeight } from "../types";
 
 const fontWeights = {
@@ -12,19 +12,21 @@ const fontWeights = {
   regular: "Manrope-Regular",
 };
 
-interface CustomTextProps {
-  children: React.ReactChild;
-  fontFamily: FontWeight;
-  style?: StyleProp<TextStyle>;
+interface CustomTextProps extends TextProps {
+  fontFamily?: FontWeight;
 }
 
 const CustomText: React.FC<CustomTextProps> = ({
   children,
   fontFamily,
+  numberOfLines,
   style,
 }) => {
   return (
-    <Animated.Text style={[style, { fontFamily: fontWeights[fontFamily] }]}>
+    <Animated.Text
+      numberOfLines={numberOfLines}
+      style={[style, { fontFamily: fontWeights[fontFamily || "semiBold"] }]}
+    >
       {children}
     </Animated.Text>
   );

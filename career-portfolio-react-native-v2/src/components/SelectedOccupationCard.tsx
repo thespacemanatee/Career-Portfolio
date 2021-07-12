@@ -6,7 +6,7 @@ import ShadowCard from "./ShadowCard";
 const SelectedOccupationCard = ({ occupation }) => {
   return (
     <ShadowCard style={styles.selectedOccupation} disabled>
-      <CustomText style={styles.selectedOccupationText} bold>
+      <CustomText style={styles.selectedOccupationText} fontFamily="bold">
         Selected Occupation
       </CustomText>
       <CustomText style={styles.selectedOccupationText} numberOfLines={1}>

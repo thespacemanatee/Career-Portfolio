@@ -92,7 +92,7 @@ const RankingsScreen = ({ navigation }) => {
 
   const renderEmptyComponent = () => (
     <View style={styles.emptyComponent}>
-      <CustomText bold>NO TASKS FOUND</CustomText>
+      <CustomText fontFamily="bold">NO TASKS FOUND</CustomText>
     </View>
   );
 
@@ -106,7 +106,7 @@ const RankingsScreen = ({ navigation }) => {
       />
       <Divider />
       <Layout style={styles.layout}>
-        <CustomText style={styles.title} bold>
+        <CustomText style={styles.title} fontFamily="bold">
           Rank your tasks in order of preference.
         </CustomText>
         <DraggableFlatList

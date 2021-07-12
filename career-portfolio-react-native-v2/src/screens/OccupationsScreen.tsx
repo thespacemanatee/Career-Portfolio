@@ -161,7 +161,7 @@ const OccupationsScreen = ({ navigation }) => {
       <OccupationsLoading />
     ) : (
       <View style={styles.emptyComponent}>
-        <CustomText bold>NO OCCUPATIONS FOUND</CustomText>
+        <CustomText fontFamily="bold">NO OCCUPATIONS FOUND</CustomText>
       </View>
     );
 
@@ -175,7 +175,7 @@ const OccupationsScreen = ({ navigation }) => {
       />
       <Divider />
       <Layout style={styles.layout}>
-        <CustomText style={styles.title} bold>
+        <CustomText style={styles.title} fontFamily="bold">
           What is your occupation?
         </CustomText>
         <SelectedOccupationCard occupation={chosenOccupation} />

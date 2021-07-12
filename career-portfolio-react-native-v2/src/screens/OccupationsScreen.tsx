@@ -30,6 +30,7 @@ import OccupationCard from "../components/OccupationCard";
 import OccupationsLoading from "../components/loading/OccupationsLoading";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import SelectedOccupationCard from "../components/SelectedOccupationCard";
+import CustomTextInput from "../components/CustomTextInput";
 
 interface Values {
   occupation: string;
@@ -113,7 +114,7 @@ const OccupationsScreen = ({ navigation }) => {
   };
 
   const SearchSchema = Yup.object().shape({
-    occupation: Yup.string(),
+    occupation: Yup.string().required("Please enter a valid occupation!"),
   });
 
   const handleSubmitForm = async (values: Values) => {
@@ -184,9 +185,9 @@ const OccupationsScreen = ({ navigation }) => {
           onSubmit={handleSubmitForm}
           validationSchema={SearchSchema}
         >
-          {({ handleChange, handleBlur, handleSubmit, values }) => (
+          {({ handleChange, handleBlur, handleSubmit, errors, values }) => (
             <>
-              <Input
+              <CustomTextInput
                 label="Search Occupations"
                 returnKeyType="next"
                 size="large"
@@ -194,6 +195,7 @@ const OccupationsScreen = ({ navigation }) => {
                 value={values.occupation}
                 onChangeText={handleChange("occupation")}
                 onBlur={handleBlur("occupation")}
+                errorText={errors.occupation}
               />
               <Button
                 style={styles.button}

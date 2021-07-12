@@ -1,15 +1,33 @@
 import React from "react";
-import { View, StyleSheet, Platform } from "react-native";
+import { View, StyleSheet, Platform, TextInputProps } from "react-native";
 import { Input, useTheme } from "@ui-kitten/components";
 
 import CustomText from "./CustomText";
 
-const CustomTextInput = ({ errorText, description, ...props }) => {
+interface CustomTextInputProps extends TextInputProps {
+  errorText?: string;
+  description?: string;
+  label?: string;
+  size?: string;
+}
+
+const CustomTextInput: React.FC<CustomTextInputProps> = ({
+  errorText,
+  description,
+  label,
+  size,
+  ...props
+}) => {
   const theme = useTheme();
 
   return (
-    <View style={styles.container}>
-      <Input size="large" {...props} status={errorText ? "danger" : "basic"} />
+    <View>
+      <Input
+        label={label}
+        size={size}
+        {...props}
+        status={errorText ? "danger" : "basic"}
+      />
       {description && !errorText ? (
         <CustomText
           style={[styles.description, { color: theme["color-basic-600"] }]}
@@ -25,10 +43,6 @@ const CustomTextInput = ({ errorText, description, ...props }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    marginVertical: 12,
-  },
   description: {
     fontSize: 12,
     paddingTop: 8,

@@ -28,7 +28,8 @@ const SubmitLoadingScreen = ({ navigation, route }) => {
             })
           );
         })
-        .catch(() => {
+        .catch((err) => {
+          console.error(err);
           Alert.alert(
             "Error",
             "Unable to contact the server. Please try again later!"

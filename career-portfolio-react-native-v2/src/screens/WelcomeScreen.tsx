@@ -64,7 +64,7 @@ const WelcomeScreen = ({ navigation }) => {
               animatedProps={animatedProps}
             />
           </View>
-          <CustomText bold style={styles.title}>
+          <CustomText fontFamily="bold" style={styles.title}>
             Discovering Your Options
           </CustomText>
         </View>

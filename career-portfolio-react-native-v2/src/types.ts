@@ -73,3 +73,12 @@ export enum ResultsCategory {
   PERSONALITY = "PERSONALITY",
   BEST_FIT = "BEST FIT",
 }
+
+export type FontWeight =
+  | "bold"
+  | "semiBold"
+  | " extraBold"
+  | "extraLight"
+  | "light"
+  | "medium"
+  | "regular";

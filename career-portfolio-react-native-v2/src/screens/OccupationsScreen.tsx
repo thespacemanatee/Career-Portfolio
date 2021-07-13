@@ -75,7 +75,7 @@ const OccupationsScreen = ({ navigation }) => {
   const handleHelp = () => {
     alert(
       "Help",
-      "If you are unemployed, please enter your previous occupation."
+      "Please enter your current occupation, or any occupations previously held."
     );
   };
 

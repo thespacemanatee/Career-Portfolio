@@ -30,5 +30,5 @@ Give a ⭐️ if this project helped you!
 
 ## 📝 License
 
-Copyright © 2021 [Chong Chee Kit](https://github.com/thespacemanatee).<br />
+Copyright © 2021 [LKYCIC](https://lkycic.sutd.edu.sg).<br />
 This project is [MIT](https://opensource.org/licenses/MIT) licensed.

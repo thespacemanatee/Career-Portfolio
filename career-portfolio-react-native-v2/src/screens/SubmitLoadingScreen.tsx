@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Alert, Dimensions, StyleSheet, View } from "react-native";
 import { CommonActions } from "@react-navigation/native";
 import { unwrapResult } from "@reduxjs/toolkit";

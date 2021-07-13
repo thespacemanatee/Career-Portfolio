@@ -1,15 +1,11 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { View, Platform, FlatList, Alert } from "react-native";
+import { View, FlatList, Alert } from "react-native";
 import {
-  Divider,
-  Layout,
-  TopNavigation,
   StyleService,
   Button,
   Icon,
   TopNavigationAction,
   Spinner,
-  Input,
 } from "@ui-kitten/components";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -24,19 +20,19 @@ import {
 import { addSelection } from "../app/features/form/formSlice";
 import { setAllTasks } from "../app/features/tasks/tasksSlice";
 import { getTasksByOccupation, handleErrorResponse } from "../helpers/utils";
-import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
-import OccupationCard from "../components/OccupationCard";
+import alert from "../components/CustomAlert";
 import OccupationsLoading from "../components/loading/OccupationsLoading";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import SelectedOccupationCard from "../components/SelectedOccupationCard";
+import OccupationCard from "../components/OccupationCard";
 import CustomTextInput from "../components/CustomTextInput";
+import { submissionNavigationRef } from "../navigation/NavigationHelper";
 
 interface Values {
   occupation: string;
 }
 
-const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props) => (
   <Icon {...props} name="question-mark-circle-outline" />
 );
@@ -47,6 +43,10 @@ const OccupationsScreen = ({ navigation }) => {
   const [occupations, setOccupations] = useState<string[]>();
   const [chosenOccupation, setChosenOccupation] = useState();
   const [userInput, setUserInput] = useState<string>();
+
+  useEffect(() => {
+    submissionNavigationRef.current = navigation;
+  }, [navigation]);
 
   const dispatch = useAppDispatch();
 
@@ -59,29 +59,12 @@ const OccupationsScreen = ({ navigation }) => {
     );
   };
 
-  const BackAction = () => (
-    <TopNavigationAction
-      icon={BackIcon}
-      onPress={() => {
-        if (Platform.OS === "web") {
-          window.history.back();
-        } else {
-          navigation.goBack();
-        }
-      }}
-    />
-  );
-
   const handleHelp = () => {
     alert(
       "Help",
       "Please enter your current occupation, or any occupations previously held."
     );
   };
-
-  useEffect(() => {
-    handleHelp();
-  }, []);
 
   const HelpAction = () => (
     <TopNavigationAction icon={HelpIcon} onPress={handleHelp} />
@@ -167,58 +150,58 @@ const OccupationsScreen = ({ navigation }) => {
     );
 
   return (
+    // <View style={styles.screen}>
+    //   <TopNavigation
+    //     title="Choose Your Occupation"
+    //     alignment="center"
+    //     accessoryLeft={BackAction}
+    //     accessoryRight={HelpAction}
+    //   />
+    //   <Divider />
     <View style={styles.screen}>
-      <TopNavigation
-        title="Choose Your Occupation"
-        alignment="center"
-        accessoryLeft={BackAction}
-        accessoryRight={HelpAction}
-      />
-      <Divider />
-      <Layout style={styles.layout}>
-        <CustomText style={styles.title} fontFamily="bold">
-          What is your occupation?
-        </CustomText>
-        <SelectedOccupationCard occupation={chosenOccupation} />
-        <Formik
-          initialValues={{ occupation: "" }}
-          onSubmit={handleSubmitForm}
-          validationSchema={SearchSchema}
-        >
-          {({ handleChange, handleBlur, handleSubmit, errors, values }) => (
-            <>
-              <CustomTextInput
-                label="Search Occupations"
-                returnKeyType="next"
-                size="large"
-                placeholder="Enter your occupation here"
-                value={values.occupation}
-                onChangeText={handleChange("occupation")}
-                onBlur={handleBlur("occupation")}
-                errorText={errors.occupation}
-              />
-              <Button
-                style={styles.button}
-                onPress={() => handleSubmit()}
-                appearance="outline"
-                accessoryRight={loading ? LoadingIndicator : null}
-              >
-                SEARCH
-              </Button>
-              <FlatList
-                style={styles.flatList}
-                data={occupations}
-                renderItem={renderListItems}
-                keyExtractor={(item, index) => String(index)}
-                ListEmptyComponent={renderEmptyComponent}
-                contentContainerStyle={styles.contentContainer}
-              />
-              <Button onPress={handleNavigation}>NEXT</Button>
-            </>
-          )}
-        </Formik>
-      </Layout>
+      <CustomText style={styles.title} fontFamily="bold">
+        What is your occupation?
+      </CustomText>
+      <SelectedOccupationCard occupation={chosenOccupation} />
+      <Formik
+        initialValues={{ occupation: "" }}
+        onSubmit={handleSubmitForm}
+        validationSchema={SearchSchema}
+      >
+        {({ handleChange, handleBlur, handleSubmit, errors, values }) => (
+          <>
+            <CustomTextInput
+              label="Search Occupations"
+              returnKeyType="next"
+              size="large"
+              placeholder="Enter your occupation here"
+              value={values.occupation}
+              onChangeText={handleChange("occupation")}
+              onBlur={handleBlur("occupation")}
+              errorText={errors.occupation}
+            />
+            <Button
+              style={styles.button}
+              onPress={() => handleSubmit()}
+              appearance="outline"
+              accessoryRight={loading ? LoadingIndicator : null}
+            >
+              SEARCH
+            </Button>
+            <FlatList
+              style={styles.flatList}
+              data={occupations}
+              renderItem={renderListItems}
+              keyExtractor={(item, index) => String(index)}
+              ListEmptyComponent={renderEmptyComponent}
+              contentContainerStyle={styles.contentContainer}
+            />
+            <Button onPress={handleNavigation}>NEXT</Button>
+          </>
+        )}
+      </Formik>
     </View>
+    // </View>
   );
 };
 
@@ -227,10 +210,6 @@ export default OccupationsScreen;
 const styles = StyleService.create({
   screen: {
     flex: 1,
-  },
-  layout: {
-    flex: 1,
-    padding: 10,
   },
   title: {
     fontSize: 26,

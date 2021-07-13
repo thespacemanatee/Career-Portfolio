@@ -1,9 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Platform, View } from "react-native";
+import { View } from "react-native";
 import {
-  Divider,
-  Layout,
-  TopNavigation,
   StyleService,
   Button,
   TopNavigationAction,
@@ -18,7 +15,6 @@ import RankingCard from "../components/RankingCard";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { ResultsPayload } from "../types";
 
-const BackIcon = (props: any) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props: any) => (
   <Icon {...props} name="question-mark-circle-outline" />
 );
@@ -31,29 +27,12 @@ const RankingsScreen = ({ navigation }) => {
 
   const dispatch = useAppDispatch();
 
-  const BackAction = () => (
-    <TopNavigationAction
-      icon={BackIcon}
-      onPress={() => {
-        if (Platform.OS === "web") {
-          window.history.back();
-        } else {
-          navigation.goBack();
-        }
-      }}
-    />
-  );
-
   const handleHelp = () => {
     alert(
       "Help",
       "Drag and reorder each task to the top (most preferred) or bottom (least preferred)."
     );
   };
-
-  useEffect(() => {
-    handleHelp();
-  }, []);
 
   const HelpAction = () => (
     <TopNavigationAction icon={HelpIcon} onPress={handleHelp} />
@@ -98,28 +77,19 @@ const RankingsScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <TopNavigation
-        title="Rank Your Tasks"
-        alignment="center"
-        accessoryLeft={BackAction}
-        accessoryRight={HelpAction}
+      <CustomText style={styles.title} fontFamily="bold">
+        Rank your tasks in order of preference.
+      </CustomText>
+      <DraggableFlatList
+        style={styles.flatList}
+        renderItem={renderTasks}
+        data={combinedTasks}
+        keyExtractor={(item) => String(item.taskId)}
+        contentContainerStyle={styles.contentContainer}
+        ListEmptyComponent={renderEmptyComponent}
+        onDragEnd={handleDragEnd}
       />
-      <Divider />
-      <Layout style={styles.layout}>
-        <CustomText style={styles.title} fontFamily="bold">
-          Rank your tasks in order of preference.
-        </CustomText>
-        <DraggableFlatList
-          style={styles.flatList}
-          renderItem={renderTasks}
-          data={combinedTasks}
-          keyExtractor={(item) => String(item.taskId)}
-          contentContainerStyle={styles.contentContainer}
-          ListEmptyComponent={renderEmptyComponent}
-          onDragEnd={handleDragEnd}
-        />
-        <Button onPress={handleSubmit}>SUBMIT</Button>
-      </Layout>
+      <Button onPress={handleSubmit}>SUBMIT</Button>
     </View>
   );
 };
@@ -129,10 +99,6 @@ export default RankingsScreen;
 const styles = StyleService.create({
   screen: {
     flex: 1,
-  },
-  layout: {
-    flex: 1,
-    padding: 10,
   },
   title: {
     fontSize: 26,

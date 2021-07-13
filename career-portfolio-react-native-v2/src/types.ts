@@ -77,7 +77,7 @@ export enum ResultsCategory {
 export type FontWeight =
   | "bold"
   | "semiBold"
-  | " extraBold"
+  | "extraBold"
   | "extraLight"
   | "light"
   | "medium"

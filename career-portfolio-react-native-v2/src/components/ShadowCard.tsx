@@ -17,14 +17,16 @@ const ShadowCard = ({
 }: ShadowCardProps) => {
   const styles = useStyleSheet(themedStyles);
   return (
-    <TouchableOpacity
-      style={styles.shadowContainer}
-      activeOpacity={0.5}
-      onPress={onPress}
-      disabled={disabled}
-    >
-      <View style={[style, styles.shadow]}>{children}</View>
-    </TouchableOpacity>
+    <View needsOffscreenAlphaCompositing renderToHardwareTextureAndroid>
+      <TouchableOpacity
+        style={styles.shadowContainer}
+        activeOpacity={0.5}
+        onPress={onPress}
+        disabled={disabled}
+      >
+        <View style={[style, styles.shadow]}>{children}</View>
+      </TouchableOpacity>
+    </View>
   );
 };
 

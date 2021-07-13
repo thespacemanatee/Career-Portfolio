@@ -24,7 +24,7 @@ if (
 const ICON_SIZE = 30;
 
 const TrashIcon = (props) => (
-  <Icon fill="white" {...props} name="trash" style={styles.icon} />
+  <Icon fill="red" {...props} name="trash" style={styles.icon} />
 );
 
 const ChevronIcon = (props) => (
@@ -111,7 +111,7 @@ export default LifeTasksCard;
 const styles = StyleService.create({
   container: {
     flex: 1,
-    backgroundColor: "red",
+    // backgroundColor: "red",
     borderRadius: 5,
   },
   contentContainer: {

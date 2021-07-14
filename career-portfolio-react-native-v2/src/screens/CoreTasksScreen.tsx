@@ -13,6 +13,7 @@ import CustomText from "../components/CustomText";
 import TaskCard from "../components/TaskCard";
 import { useAppSelector } from "../app/hooks";
 import SelectedOccupationCard from "../components/SelectedOccupationCard";
+import ListEmptyComponent from "../components/ListEmptyComponent";
 
 const HelpIcon = (props) => (
   <Icon {...props} name="question-mark-circle-outline" />
@@ -47,9 +48,7 @@ const CoreTasksScreen = ({ navigation }) => {
   };
 
   const renderEmptyComponent = () => (
-    <View style={styles.emptyComponent}>
-      <CustomText fontFamily="bold">NO TASKS FOUND</CustomText>
-    </View>
+    <ListEmptyComponent label="NO TASKS FOUND" />
   );
 
   return (
@@ -94,11 +93,6 @@ const styles = StyleService.create({
     marginVertical: 5,
   },
   contentContainer: {
-    flexGrow: 1,
-  },
-  emptyComponent: {
-    justifyContent: "center",
-    alignItems: "center",
     flexGrow: 1,
   },
   cardContainer: {

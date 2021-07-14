@@ -28,6 +28,7 @@ import SelectedOccupationCard from "../components/SelectedOccupationCard";
 import OccupationCard from "../components/OccupationCard";
 import CustomTextInput from "../components/CustomTextInput";
 import { submissionNavigationRef } from "../navigation/NavigationHelper";
+import ListEmptyComponent from "../components/ListEmptyComponent";
 
 interface Values {
   occupation: string;
@@ -144,9 +145,7 @@ const OccupationsScreen = ({ navigation }) => {
     loading ? (
       <OccupationsLoading />
     ) : (
-      <View style={styles.emptyComponent}>
-        <CustomText fontFamily="bold">NO OCCUPATIONS FOUND</CustomText>
-      </View>
+      <ListEmptyComponent label="NO OCCUPATIONS FOUND" />
     );
 
   return (
@@ -215,11 +214,6 @@ const styles = StyleService.create({
     marginVertical: 5,
   },
   contentContainer: {
-    flexGrow: 1,
-  },
-  emptyComponent: {
-    justifyContent: "center",
-    alignItems: "center",
     flexGrow: 1,
   },
   indicator: {

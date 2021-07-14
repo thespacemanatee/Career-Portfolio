@@ -14,6 +14,7 @@ import CustomText from "../components/CustomText";
 import RankingCard from "../components/RankingCard";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { ResultsPayload } from "../types";
+import ListEmptyComponent from "../components/ListEmptyComponent";
 
 const HelpIcon = (props: any) => (
   <Icon {...props} name="question-mark-circle-outline" />
@@ -70,9 +71,7 @@ const RankingsScreen = ({ navigation }) => {
   }, []);
 
   const renderEmptyComponent = () => (
-    <View style={styles.emptyComponent}>
-      <CustomText fontFamily="bold">NO TASKS FOUND</CustomText>
-    </View>
+    <ListEmptyComponent label="NO TASKS FOUND" />
   );
 
   return (
@@ -107,11 +106,6 @@ const styles = StyleService.create({
     marginVertical: 5,
   },
   contentContainer: {
-    flexGrow: 1,
-  },
-  emptyComponent: {
-    justifyContent: "center",
-    alignItems: "center",
     flexGrow: 1,
   },
   backdrop: {

@@ -14,10 +14,10 @@ import { Formik } from "formik";
 import { tasksSelector } from "../../app/features/tasks/tasksSlice";
 import { getTasksByAction } from "../../helpers/utils";
 import SearchList from "../../components/SearchResultsModal";
-import CustomText from "../../components/CustomText";
 import TaskSearchResultCard from "../../components/TaskSearchResultCard";
 import { TaskObject, TaskType } from "../../types";
 import { useAppSelector } from "../../app/hooks";
+import ListEmptyComponent from "../../components/ListEmptyComponent";
 
 const BackIcon = (props: any) => <Icon {...props} name="arrow-back" />;
 
@@ -69,9 +69,7 @@ const AddByActionScreen = ({ navigation }) => {
   };
 
   const renderEmptyComponent = () => (
-    <View style={styles.emptyComponent}>
-      <CustomText fontFamily="bold">NO TASKS FOUND</CustomText>
-    </View>
+    <ListEmptyComponent label="NO TASKS FOUND" />
   );
 
   return (
@@ -131,11 +129,6 @@ const styles = StyleService.create({
     marginVertical: 10,
   },
   contentContainer: {
-    flexGrow: 1,
-  },
-  emptyComponent: {
-    justifyContent: "center",
-    alignItems: "center",
     flexGrow: 1,
   },
 });

@@ -16,6 +16,7 @@ import {
 import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
 import LifeTaskCard from "../components/LifeTaskCard";
+import ListEmptyComponent from "../components/ListEmptyComponent";
 
 const HelpIcon = (props) => (
   <Icon {...props} name="question-mark-circle-outline" />
@@ -66,11 +67,7 @@ const LifeTasksScreen = ({ navigation }) => {
     return <LifeTaskCard taskObject={itemData.item} />;
   };
 
-  const renderEmptyComponent = () => (
-    <View style={styles.emptyComponent}>
-      <CustomText fontFamily="bold">NO TASKS</CustomText>
-    </View>
-  );
+  const renderEmptyComponent = () => <ListEmptyComponent label="NO TASKS" />;
 
   return (
     <View style={styles.screen}>
@@ -140,11 +137,6 @@ const styles = StyleService.create({
     marginVertical: 5,
   },
   contentContainer: {
-    flexGrow: 1,
-  },
-  emptyComponent: {
-    justifyContent: "center",
-    alignItems: "center",
     flexGrow: 1,
   },
 });

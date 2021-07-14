@@ -1,13 +1,9 @@
 import React from "react";
-import {
-  FlatList,
-  TouchableOpacity,
-  View,
-  useWindowDimensions,
-} from "react-native";
+import { FlatList, TouchableOpacity, useWindowDimensions } from "react-native";
 import { Card, Modal, StyleService } from "@ui-kitten/components";
 
 import CustomText from "./CustomText";
+import ListEmptyComponent from "./ListEmptyComponent";
 
 const ITEM_HEIGHT = 40;
 
@@ -25,9 +21,7 @@ const SearchResultsModal = ({ data, onSelect }) => {
   };
 
   const renderEmptyComponent = () => (
-    <View style={styles.emptyComponent}>
-      <CustomText>NO ACTIONS FOUND</CustomText>
-    </View>
+    <ListEmptyComponent label="NO ACTIONS FOUND" />
   );
 
   const getItemLayout = (itemData: any[], index: number) => ({
@@ -74,11 +68,6 @@ const styles = StyleService.create({
     height: ITEM_HEIGHT,
   },
   contentContainer: {
-    flexGrow: 1,
-  },
-  emptyComponent: {
-    justifyContent: "center",
-    alignItems: "center",
     flexGrow: 1,
   },
 });

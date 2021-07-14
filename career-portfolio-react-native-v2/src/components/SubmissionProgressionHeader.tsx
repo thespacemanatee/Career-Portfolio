@@ -2,6 +2,8 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { useTheme } from "@ui-kitten/components";
 import Animated, {
+  Extrapolate,
+  interpolate,
   useAnimatedStyle,
   useDerivedValue,
 } from "react-native-reanimated";
@@ -24,7 +26,12 @@ const SubmissionProgressionHeader: React.FC<SubmissionProgressionHeaderProps> =
 
     const barAnimatedStyle = useAnimatedStyle(() => {
       return {
-        width: `${(progress.value * 100).toFixed(0)}%`,
+        width: `${interpolate(
+          progress.value,
+          [0, 1],
+          [3, 100],
+          Extrapolate.CLAMP
+        )}%`,
       };
     });
 
@@ -77,7 +84,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   progressText: {
-    fontFamily: "Manrope-Medium",
     fontSize: 12,
   },
   progressBarContainer: {

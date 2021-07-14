@@ -1,21 +1,12 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   StyleSheet,
   View,
   Animated,
-  Platform,
   useWindowDimensions,
   FlatList,
 } from "react-native";
-import {
-  Divider,
-  Layout,
-  TopNavigation,
-  Icon,
-  TopNavigationAction,
-  Modal,
-  Card,
-} from "@ui-kitten/components";
+import { Icon, TopNavigationAction, Modal, Card } from "@ui-kitten/components";
 import PagerView from "react-native-pager-view";
 
 import { useAppSelector } from "../../app/hooks";
@@ -34,8 +25,8 @@ import {
 import ResultsIntroductionScreen from "./ResultsIntroductionModal";
 import ResultCard from "../../components/ResultCard";
 import { tasksSelector } from "../../app/features/tasks/tasksSlice";
+import { submissionNavigationRef } from "../../navigation/NavigationHelper";
 
-const BackIcon = (props: any) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props: any) => (
   <Icon {...props} name="question-mark-circle-outline" />
 );
@@ -71,18 +62,9 @@ const ResultsPagerScreen = ({ navigation }) => {
 
   const { width, height } = useWindowDimensions();
 
-  const BackAction = () => (
-    <TopNavigationAction
-      icon={BackIcon}
-      onPress={() => {
-        if (Platform.OS === "web") {
-          window.history.back();
-        } else {
-          navigation.goBack();
-        }
-      }}
-    />
-  );
+  useEffect(() => {
+    submissionNavigationRef.current = navigation;
+  }, [navigation]);
 
   const HelpAction = () => (
     <TopNavigationAction
@@ -161,65 +143,56 @@ const ResultsPagerScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <TopNavigation
-        title="Results"
-        alignment="center"
-        accessoryLeft={BackAction}
-        accessoryRight={HelpAction}
-      />
-      <Divider />
-      <Layout style={styles.layout}>
-        <Modal
-          visible={visible}
-          backdropStyle={styles.backdrop}
-          onBackdropPress={handleCloseHelp}
+      <Modal
+        visible={visible}
+        backdropStyle={styles.backdrop}
+        onBackdropPress={handleCloseHelp}
+      >
+        <Card
+          disabled
+          style={{
+            height: (height / 4) * 2.5,
+            width: (width / 4) * 3.5,
+          }}
         >
-          <Card
-            disabled
-            style={{
-              height: (height / 4) * 2.5,
-              width: (width / 4) * 3.5,
-            }}
-          >
-            <ResultsIntroductionScreen onClose={handleCloseHelp} />
-          </Card>
-        </Modal>
-        <Ticker
+          <ResultsIntroductionScreen onClose={handleCloseHelp} />
+        </Card>
+      </Modal>
+      <Ticker
+        scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}
+        positionAnimatedValue={positionAnimatedValue}
+        config={config}
+      />
+      <AnimatedPagerView
+        initialPage={0}
+        style={styles.pagerView}
+        onPageScroll={Animated.event<PagerViewOnPageScrollEventData>(
+          [
+            {
+              nativeEvent: {
+                offset: scrollOffsetAnimatedValue,
+                position: positionAnimatedValue,
+              },
+            },
+          ],
+          {
+            listener: ({ nativeEvent: { offset, position } }) => {
+              // console.log(`Position: ${position} Offset: ${offset}`);
+              setPagePosition(position);
+            },
+            useNativeDriver: true,
+          }
+        )}
+      >
+        {config.map((item, index) => renderPage(item, index))}
+      </AnimatedPagerView>
+      <View style={styles.pageIndicator}>
+        <Pagination
           scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}
           positionAnimatedValue={positionAnimatedValue}
           config={config}
         />
-        <AnimatedPagerView
-          initialPage={0}
-          style={styles.pagerView}
-          onPageScroll={Animated.event<PagerViewOnPageScrollEventData>(
-            [
-              {
-                nativeEvent: {
-                  offset: scrollOffsetAnimatedValue,
-                  position: positionAnimatedValue,
-                },
-              },
-            ],
-            {
-              listener: ({ nativeEvent: { offset, position } }) => {
-                // console.log(`Position: ${position} Offset: ${offset}`);
-                setPagePosition(position);
-              },
-              useNativeDriver: true,
-            }
-          )}
-        >
-          {config.map((item, index) => renderPage(item, index))}
-        </AnimatedPagerView>
-        <View style={styles.pageIndicator}>
-          <Pagination
-            scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}
-            positionAnimatedValue={positionAnimatedValue}
-            config={config}
-          />
-        </View>
-      </Layout>
+      </View>
     </View>
   );
 };
@@ -229,10 +202,6 @@ export default ResultsPagerScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-  },
-  layout: {
-    flex: 1,
-    padding: 10,
   },
   pagerView: {
     flex: 1,

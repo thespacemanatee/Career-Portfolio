@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { View, Platform, FlatList } from "react-native";
+import { View, FlatList } from "react-native";
 import {
-  Divider,
-  Layout,
-  TopNavigation,
   StyleService,
   Button,
   Icon,
@@ -17,7 +14,6 @@ import TaskCard from "../components/TaskCard";
 import { useAppSelector } from "../app/hooks";
 import SelectedOccupationCard from "../components/SelectedOccupationCard";
 
-const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
 const HelpIcon = (props) => (
   <Icon {...props} name="question-mark-circle-outline" />
 );
@@ -27,29 +23,12 @@ const CoreTasksScreen = ({ navigation }) => {
   const chosenOccupation = useAppSelector((state) => state.form.onet_title);
   const [coreTasks, setCoreTasks] = useState([]);
 
-  const BackAction = () => (
-    <TopNavigationAction
-      icon={BackIcon}
-      onPress={() => {
-        if (Platform.OS === "web") {
-          window.history.back();
-        } else {
-          navigation.goBack();
-        }
-      }}
-    />
-  );
-
   const handleHelp = () => {
     alert(
       "Help",
       `These are the tasks typically done by a ${chosenOccupation}. Check the box to indicate a Core task. Swipe right to delete tasks.`
     );
   };
-
-  useEffect(() => {
-    handleHelp();
-  }, []);
 
   const HelpAction = () => (
     <TopNavigationAction icon={HelpIcon} onPress={handleHelp} />
@@ -75,28 +54,25 @@ const CoreTasksScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <TopNavigation
-        title="Choose Your Core Tasks"
-        alignment="center"
-        accessoryLeft={BackAction}
-        accessoryRight={HelpAction}
-      />
-      <Divider />
-      <Layout style={styles.layout}>
-        <CustomText style={styles.title} fontFamily="bold">
-          What does your work schedule look like?
-        </CustomText>
+      <CustomText style={styles.title} fontFamily="bold">
+        What does your work schedule look like?
+      </CustomText>
+      <View
+        needsOffscreenAlphaCompositing
+        renderToHardwareTextureAndroid
+        style={styles.cardContainer}
+      >
         <SelectedOccupationCard occupation={chosenOccupation} />
-        <FlatList
-          style={styles.flatList}
-          renderItem={renderTasks}
-          data={coreTasks}
-          keyExtractor={(item) => String(item.taskId)}
-          contentContainerStyle={styles.contentContainer}
-          ListEmptyComponent={renderEmptyComponent}
-        />
-        <Button onPress={handleNavigation}>NEXT</Button>
-      </Layout>
+      </View>
+      <FlatList
+        style={styles.flatList}
+        renderItem={renderTasks}
+        data={coreTasks}
+        keyExtractor={(item) => String(item.taskId)}
+        contentContainerStyle={styles.contentContainer}
+        ListEmptyComponent={renderEmptyComponent}
+      />
+      <Button onPress={handleNavigation}>NEXT</Button>
     </View>
   );
 };
@@ -106,10 +82,6 @@ export default CoreTasksScreen;
 const styles = StyleService.create({
   screen: {
     flex: 1,
-  },
-  layout: {
-    flex: 1,
-    padding: 10,
   },
   title: {
     fontSize: 26,
@@ -128,5 +100,8 @@ const styles = StyleService.create({
     justifyContent: "center",
     alignItems: "center",
     flexGrow: 1,
+  },
+  cardContainer: {
+    padding: 6,
   },
 });

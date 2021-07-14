@@ -1,6 +1,6 @@
 import React from "react";
-import { View, TouchableOpacity, Platform, ViewStyle } from "react-native";
-import { StyleService, useStyleSheet } from "@ui-kitten/components";
+import { View, TouchableOpacity, ViewStyle } from "react-native";
+import { StyleService } from "@ui-kitten/components";
 
 interface ShadowCardProps {
   style?: ViewStyle;
@@ -9,13 +9,12 @@ interface ShadowCardProps {
   disabled?: boolean;
 }
 
-const ShadowCard = ({
+const ShadowCard: React.FC<ShadowCardProps> = ({
   style,
   children,
   onPress,
   disabled,
-}: ShadowCardProps) => {
-  const styles = useStyleSheet(themedStyles);
+}) => {
   return (
     <TouchableOpacity
       style={styles.shadowContainer}
@@ -28,15 +27,9 @@ const ShadowCard = ({
   );
 };
 
-ShadowCard.defaultProps = {
-  style: null,
-  onPress: null,
-  disabled: false,
-};
-
 export default ShadowCard;
 
-const themedStyles = StyleService.create({
+const styles = StyleService.create({
   shadowContainer: {
     shadowColor: "#000",
     shadowOffset: {
@@ -46,16 +39,10 @@ const themedStyles = StyleService.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    borderRadius: 10,
-    marginBottom: 10,
+    borderRadius: 8,
   },
   shadow: {
-    borderRadius: 10,
-    overflow: "hidden",
-    backgroundColor: Platform.select({
-      web: "#FAFAFA",
-      ios: "white",
-      android: "white",
-    }),
+    borderRadius: 8,
+    backgroundColor: "white",
   },
 });

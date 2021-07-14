@@ -1,12 +1,6 @@
 import React, { useEffect } from "react";
 import { Dimensions, View } from "react-native";
-import {
-  Divider,
-  Layout,
-  TopNavigation,
-  StyleService,
-  Button,
-} from "@ui-kitten/components";
+import { Layout, StyleService, Button } from "@ui-kitten/components";
 import Animated, {
   Easing,
   useAnimatedProps,
@@ -45,15 +39,13 @@ const WelcomeScreen = ({ navigation }) => {
   }, [animationProgress]);
 
   const handleNext = () => {
-    navigation.navigate("Occupations");
+    navigation.navigate("CreateSubmission");
   };
   const handleViewResults = () => {
     navigation.navigate("ResultsStack");
   };
   return (
     <View style={styles.screen}>
-      <TopNavigation title="Welcome" alignment="center" />
-      <Divider />
       <Layout style={styles.layout}>
         <View />
         <View>

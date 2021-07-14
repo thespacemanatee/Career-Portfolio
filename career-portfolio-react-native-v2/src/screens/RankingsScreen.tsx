@@ -1,24 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
-import {
-  StyleService,
-  Button,
-  TopNavigationAction,
-  Icon,
-} from "@ui-kitten/components";
+import { StyleService, Button, useTheme } from "@ui-kitten/components";
 import DraggableFlatList from "react-native-draggable-flatlist";
 
 import { setAllTasks, tasksSelector } from "../app/features/tasks/tasksSlice";
-import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
 import RankingCard from "../components/RankingCard";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { ResultsPayload } from "../types";
 import ListEmptyComponent from "../components/ListEmptyComponent";
-
-const HelpIcon = (props: any) => (
-  <Icon {...props} name="question-mark-circle-outline" />
-);
+import ScreenTitle from "../components/ScreenTitle";
 
 const RankingsScreen = ({ navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
@@ -28,16 +19,7 @@ const RankingsScreen = ({ navigation }) => {
 
   const dispatch = useAppDispatch();
 
-  const handleHelp = () => {
-    alert(
-      "Help",
-      "Drag and reorder each task to the top (most preferred) or bottom (least preferred)."
-    );
-  };
-
-  const HelpAction = () => (
-    <TopNavigationAction icon={HelpIcon} onPress={handleHelp} />
-  );
+  const theme = useTheme();
 
   const handleSubmit = () => {
     const tasksArray = tasks.map((e) => {
@@ -76,9 +58,15 @@ const RankingsScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <CustomText style={styles.title} fontFamily="bold">
-        Rank your tasks in order of preference.
-      </CustomText>
+      <ScreenTitle title="Rank your tasks in order of preference.">
+        <CustomText style={styles.subtitle} fontFamily="semiBold">
+          Drag and{" "}
+          <CustomText style={{ color: theme["color-primary-500"] }}>
+            reorder
+          </CustomText>{" "}
+          each task to the top (most preferred) or bottom (least preferred).
+        </CustomText>
+      </ScreenTitle>
       <DraggableFlatList
         style={styles.flatList}
         renderItem={renderTasks}
@@ -99,8 +87,8 @@ const styles = StyleService.create({
   screen: {
     flex: 1,
   },
-  title: {
-    fontSize: 26,
+  subtitle: {
+    fontSize: 14,
   },
   flatList: {
     marginVertical: 5,

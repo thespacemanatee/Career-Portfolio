@@ -1,28 +1,43 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { useTheme } from "@ui-kitten/components";
+import { StyleSheet, View } from "react-native";
+
 import CustomText from "./CustomText";
-import ShadowCard from "./ShadowCard";
 
 const SelectedOccupationCard = ({ occupation }) => {
+  const theme = useTheme();
   return (
-    <ShadowCard style={styles.selectedOccupation} disabled>
-      <CustomText style={styles.selectedOccupationText} fontFamily="bold">
-        Selected Occupation
+    <View
+      style={[styles.container, { backgroundColor: theme["color-basic-600"] }]}
+    >
+      <CustomText fontFamily="bold" style={styles.titleText}>
+        Current Selection
       </CustomText>
-      <CustomText style={styles.selectedOccupationText} numberOfLines={1}>
-        {occupation || "Please choose an occupation"}
+      <CustomText
+        fontFamily="extraBold"
+        style={styles.subtitleText}
+        numberOfLines={2}
+      >
+        {occupation}
       </CustomText>
-    </ShadowCard>
+    </View>
   );
 };
 
 export default SelectedOccupationCard;
 
 const styles = StyleSheet.create({
-  selectedOccupation: {
-    padding: 20,
+  container: {
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
   },
-  selectedOccupationText: {
-    fontSize: 16,
+  titleText: {
+    color: "white",
+    fontSize: 14,
+  },
+  subtitleText: {
+    color: "white",
+    fontSize: 24,
   },
 });

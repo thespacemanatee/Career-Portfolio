@@ -7,6 +7,7 @@ import CustomText from "../components/CustomText";
 import TaskCard from "../components/TaskCard";
 import { useAppSelector } from "../app/hooks";
 import ListEmptyComponent from "../components/ListEmptyComponent";
+import ScreenTitle from "../components/ScreenTitle";
 
 const CoreTasksScreen = ({ navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
@@ -32,22 +33,16 @@ const CoreTasksScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <CustomText style={styles.title} fontFamily="bold">
-        What does your work schedule look like?
-      </CustomText>
-      <View style={styles.subtitleContainer}>
+      <ScreenTitle title="What does your work schedule look like?">
         <CustomText style={styles.subtitle} fontFamily="semiBold">
           Select the tasks that are{" "}
-          <CustomText
-            fontFamily="bold"
-            style={[styles.subtitle, { color: theme["color-primary-500"] }]}
-          >
+          <CustomText style={{ color: theme["color-primary-500"] }}>
             core
           </CustomText>{" "}
           to your work experience. Swipe right to delete tasks you&apos;ve never
           done before.
         </CustomText>
-      </View>
+      </ScreenTitle>
       <FlatList
         style={styles.flatList}
         renderItem={renderTasks}
@@ -66,12 +61,6 @@ export default CoreTasksScreen;
 const styles = StyleService.create({
   screen: {
     flex: 1,
-  },
-  title: {
-    fontSize: 26,
-  },
-  subtitleContainer: {
-    marginVertical: 12,
   },
   subtitle: {
     fontSize: 14,

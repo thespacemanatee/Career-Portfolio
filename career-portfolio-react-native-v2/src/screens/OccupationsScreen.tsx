@@ -1,12 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { View, FlatList, Alert } from "react-native";
-import {
-  StyleService,
-  Button,
-  Icon,
-  TopNavigationAction,
-  Spinner,
-} from "@ui-kitten/components";
+import { StyleService, Button, Spinner, useTheme } from "@ui-kitten/components";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -29,14 +23,11 @@ import OccupationCard from "../components/OccupationCard";
 import CustomTextInput from "../components/CustomTextInput";
 import { submissionNavigationRef } from "../navigation/NavigationHelper";
 import ListEmptyComponent from "../components/ListEmptyComponent";
+import ScreenTitle from "../components/ScreenTitle";
 
 interface Values {
   occupation: string;
 }
-
-const HelpIcon = (props) => (
-  <Icon {...props} name="question-mark-circle-outline" />
-);
 
 const OccupationsScreen = ({ navigation }) => {
   const form = useAppSelector((state) => state.form);
@@ -51,6 +42,8 @@ const OccupationsScreen = ({ navigation }) => {
 
   const dispatch = useAppDispatch();
 
+  const theme = useTheme();
+
   const LoadingIndicator = (props) => {
     const { style } = props;
     return (
@@ -59,17 +52,6 @@ const OccupationsScreen = ({ navigation }) => {
       </View>
     );
   };
-
-  const handleHelp = () => {
-    alert(
-      "Help",
-      "Please enter your current occupation, or any occupations previously held."
-    );
-  };
-
-  const HelpAction = () => (
-    <TopNavigationAction icon={HelpIcon} onPress={handleHelp} />
-  );
 
   const handleNavigation = () => {
     if (chosenOccupation) {
@@ -150,14 +132,16 @@ const OccupationsScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <CustomText style={styles.title} fontFamily="bold">
-        What is your occupation?
-      </CustomText>
-      <View
-        needsOffscreenAlphaCompositing
-        renderToHardwareTextureAndroid
-        style={styles.cardContainer}
-      >
+      <ScreenTitle title="What is your occupation?">
+        <CustomText style={styles.subtitle} fontFamily="semiBold">
+          Please enter your{" "}
+          <CustomText style={{ color: theme["color-primary-500"] }}>
+            current
+          </CustomText>{" "}
+          occupation, or any occupations previously held.
+        </CustomText>
+      </ScreenTitle>
+      <View style={styles.selectedOccupation}>
         <SelectedOccupationCard occupation={chosenOccupation} />
       </View>
       <Formik
@@ -168,7 +152,6 @@ const OccupationsScreen = ({ navigation }) => {
         {({ handleChange, handleBlur, handleSubmit, errors, values }) => (
           <>
             <CustomTextInput
-              label="Search Occupations"
               returnKeyType="next"
               size="large"
               placeholder="Enter your occupation here"
@@ -206,9 +189,11 @@ const styles = StyleService.create({
   screen: {
     flex: 1,
   },
-  title: {
-    fontSize: 26,
-    marginBottom: 10,
+  subtitle: {
+    fontSize: 14,
+  },
+  selectedOccupation: {
+    marginBottom: 12,
   },
   flatList: {
     marginVertical: 5,

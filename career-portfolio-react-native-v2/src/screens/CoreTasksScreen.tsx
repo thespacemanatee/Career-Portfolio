@@ -1,39 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { View, FlatList } from "react-native";
-import {
-  StyleService,
-  Button,
-  Icon,
-  TopNavigationAction,
-} from "@ui-kitten/components";
+import { StyleService, Button, useTheme } from "@ui-kitten/components";
 
 import { tasksSelector } from "../app/features/tasks/tasksSlice";
-import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
 import TaskCard from "../components/TaskCard";
 import { useAppSelector } from "../app/hooks";
-import SelectedOccupationCard from "../components/SelectedOccupationCard";
 import ListEmptyComponent from "../components/ListEmptyComponent";
-
-const HelpIcon = (props) => (
-  <Icon {...props} name="question-mark-circle-outline" />
-);
+import ScreenTitle from "../components/ScreenTitle";
 
 const CoreTasksScreen = ({ navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
-  const chosenOccupation = useAppSelector((state) => state.form.onet_title);
   const [coreTasks, setCoreTasks] = useState([]);
 
-  const handleHelp = () => {
-    alert(
-      "Help",
-      `These are the tasks typically done by a ${chosenOccupation}. Check the box to indicate a Core task. Swipe right to delete tasks.`
-    );
-  };
-
-  const HelpAction = () => (
-    <TopNavigationAction icon={HelpIcon} onPress={handleHelp} />
-  );
+  const theme = useTheme();
 
   useEffect(() => {
     setCoreTasks(tasks.filter((e) => e.task_type !== "life"));
@@ -53,16 +33,16 @@ const CoreTasksScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <CustomText style={styles.title} fontFamily="bold">
-        What does your work schedule look like?
-      </CustomText>
-      <View
-        needsOffscreenAlphaCompositing
-        renderToHardwareTextureAndroid
-        style={styles.cardContainer}
-      >
-        <SelectedOccupationCard occupation={chosenOccupation} />
-      </View>
+      <ScreenTitle title="What does your work schedule look like?">
+        <CustomText style={styles.subtitle} fontFamily="semiBold">
+          Select the tasks that are{" "}
+          <CustomText style={{ color: theme["color-primary-500"] }}>
+            core
+          </CustomText>{" "}
+          to your work experience. Swipe right to delete tasks you&apos;ve never
+          done before.
+        </CustomText>
+      </ScreenTitle>
       <FlatList
         style={styles.flatList}
         renderItem={renderTasks}
@@ -82,8 +62,8 @@ const styles = StyleService.create({
   screen: {
     flex: 1,
   },
-  title: {
-    fontSize: 26,
+  subtitle: {
+    fontSize: 14,
   },
   selectedOccupation: {
     padding: 20,

@@ -60,15 +60,15 @@ const fadeSlideConfig: () => StackNavigationOptions = () => ({
   },
   cardStyleInterpolator: forSlide,
   transitionSpec: {
-    open: customTransitionSpec,
-    close: customTransitionSpec,
+    open: fadeSlideTransitionSpec,
+    close: fadeSlideTransitionSpec,
   },
 });
 
-const customTransitionSpec: TransitionSpec = {
+const fadeSlideTransitionSpec: TransitionSpec = {
   animation: "timing",
   config: {
-    duration: 1000,
+    duration: 500,
   },
 };
 
@@ -97,7 +97,7 @@ const forSlide: StackCardStyleInterpolator = ({
     cardStyle: {
       opacity: Animated.multiply(
         progress.interpolate({
-          inputRange: [0, 1, 2],
+          inputRange: [0.75, 1, 1.75],
           outputRange: [0, 1, 0],
           extrapolate: "clamp",
         }),
@@ -108,7 +108,7 @@ const forSlide: StackCardStyleInterpolator = ({
           translateX: Animated.multiply(
             progress.interpolate({
               inputRange: [0, 1, 2],
-              outputRange: [screen.width, 0, screen.width * -0.5],
+              outputRange: [screen.width, 0, screen.width * -1],
               extrapolate: "clamp",
             }),
             inverted
@@ -133,7 +133,7 @@ const AppNavigator = () => {
     const toValue =
       (submissionRoutes.length > 0 ? submissionRoutes[0].state.index : 0) /
       NUMBER_OF_SUBMISSION_SCREENS;
-    submissionProgress.value = withTiming(toValue, { duration: 1000 });
+    submissionProgress.value = withTiming(toValue, { duration: 500 });
   };
 
   const backAnimatedStyle = useAnimatedStyle(() => {

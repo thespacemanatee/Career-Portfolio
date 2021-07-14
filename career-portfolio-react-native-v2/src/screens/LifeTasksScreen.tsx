@@ -4,9 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   StyleService,
   Button,
-  Icon,
-  TopNavigationAction,
   ButtonGroup,
+  useTheme,
 } from "@ui-kitten/components";
 
 import {
@@ -17,10 +16,7 @@ import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
 import LifeTaskCard from "../components/LifeTaskCard";
 import ListEmptyComponent from "../components/ListEmptyComponent";
-
-const HelpIcon = (props) => (
-  <Icon {...props} name="question-mark-circle-outline" />
-);
+import ScreenTitle from "../components/ScreenTitle";
 
 const LifeTasksScreen = ({ navigation }) => {
   const tasks = useSelector(tasksSelector.selectAll);
@@ -28,16 +24,7 @@ const LifeTasksScreen = ({ navigation }) => {
 
   const dispatch = useDispatch();
 
-  const handleHelp = () => {
-    alert(
-      "Help",
-      "A task is made up of an action, object and purpose.\nExample: Interview (action) people (object) to understand perspective on current social trends (purpose)."
-    );
-  };
-
-  const HelpAction = () => (
-    <TopNavigationAction icon={HelpIcon} onPress={handleHelp} />
-  );
+  const theme = useTheme();
 
   useEffect(() => {
     setLifeTasks(tasks.filter((e) => e.task_type === "life"));
@@ -71,9 +58,19 @@ const LifeTasksScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <CustomText style={styles.title} fontFamily="bold">
-        What other tasks have you done in past jobs, or outside work?
-      </CustomText>
+      <ScreenTitle title="What other tasks have you done in past jobs, or outside work?">
+        <CustomText style={styles.subtitle} fontFamily="semiBold">
+          A task is made up of an{" "}
+          <CustomText style={{ color: theme["color-primary-500"] }}>
+            action
+          </CustomText>
+          , object and purpose.
+        </CustomText>
+        <CustomText style={styles.subtitle} fontFamily="semiBold">
+          Example: Interview (action) people (object) to understand perspective
+          on current social trends (purpose).
+        </CustomText>
+      </ScreenTitle>
       <CustomText style={styles.buttonGroupTitle} fontFamily="bold">
         Search task by:
       </CustomText>
@@ -123,8 +120,8 @@ const styles = StyleService.create({
   screen: {
     flex: 1,
   },
-  title: {
-    fontSize: 26,
+  subtitle: {
+    fontSize: 14,
   },
   buttonGroupTitle: {
     marginVertical: 5,

@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 import alert from "../components/CustomAlert";
 import * as data from "../data/career_data.json";
 
@@ -33,8 +31,8 @@ export const getActionVerbsArray = () => {
       const { Task } = element;
       const actionVerb = `${Task}`.split(/[ ,]+/, 1).toString();
       if (
-        !tempArray.find((v) =>
-          _.isEqual(`${v}`.split(/[ ,]+/, 1).toString(), actionVerb)
+        !tempArray.find(
+          (v) => `${v}`.split(/[ ,]+/, 1).toString() === actionVerb
         )
       )
         tempArray.push(actionVerb);
@@ -49,7 +47,7 @@ export const getOccupationsArray = () => {
     const tempArray = [];
     dataArray.forEach((element) => {
       const { Title } = element;
-      if (!tempArray.find((v) => _.isEqual(v, Title))) tempArray.push(Title);
+      if (!tempArray.find((v) => v === Title)) tempArray.push(Title);
     });
     tempArray.sort();
     resolve(tempArray);

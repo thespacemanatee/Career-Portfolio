@@ -22,7 +22,7 @@ import {
   ResultsSimilarData,
   ResultsMissingData,
 } from "../../types";
-import ResultsIntroductionScreen from "./ResultsIntroductionModal";
+import ResultsIntroductionModal from "./ResultsIntroductionModal";
 import ResultCard from "../../components/ResultCard";
 import { tasksSelector } from "../../app/features/tasks/tasksSlice";
 import { submissionNavigationRef } from "../../navigation/NavigationHelper";
@@ -57,7 +57,7 @@ const ResultsPagerScreen = ({ navigation }) => {
   const results = useAppSelector((state) => state.results);
   const scrollOffsetAnimatedValue = useRef(new Animated.Value(0)).current;
   const positionAnimatedValue = useRef(new Animated.Value(0)).current;
-  const [visible, setVisible] = useState(!results.opened);
+  const [visible, setVisible] = useState(false);
   const [pagePosition, setPagePosition] = useState(0);
 
   const { width, height } = useWindowDimensions();
@@ -65,6 +65,16 @@ const ResultsPagerScreen = ({ navigation }) => {
   useEffect(() => {
     submissionNavigationRef.current = navigation;
   }, [navigation]);
+
+  useEffect(() => {
+    const unsubscribe = setTimeout(() => {
+      setVisible(!results.opened);
+    }, 1000);
+    return () => {
+      clearTimeout(unsubscribe);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const HelpAction = () => (
     <TopNavigationAction
@@ -155,7 +165,7 @@ const ResultsPagerScreen = ({ navigation }) => {
             width: (width / 4) * 3.5,
           }}
         >
-          <ResultsIntroductionScreen onClose={handleCloseHelp} />
+          <ResultsIntroductionModal onClose={handleCloseHelp} />
         </Card>
       </Modal>
       <Ticker

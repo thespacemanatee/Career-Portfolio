@@ -57,7 +57,13 @@ const CoreTasksScreen = ({ navigation }) => {
       <CustomText style={styles.title} fontFamily="bold">
         What does your work schedule look like?
       </CustomText>
-      <SelectedOccupationCard occupation={chosenOccupation} />
+      <View
+        needsOffscreenAlphaCompositing
+        renderToHardwareTextureAndroid
+        style={styles.cardContainer}
+      >
+        <SelectedOccupationCard occupation={chosenOccupation} />
+      </View>
       <FlatList
         style={styles.flatList}
         renderItem={renderTasks}
@@ -94,5 +100,8 @@ const styles = StyleService.create({
     justifyContent: "center",
     alignItems: "center",
     flexGrow: 1,
+  },
+  cardContainer: {
+    padding: 6,
   },
 });

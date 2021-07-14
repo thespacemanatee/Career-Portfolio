@@ -51,30 +51,35 @@ const ResultCard = ({
   }, [progress]);
 
   return (
-    <ShadowCard style={styles.resultCard}>
-      <Animated.View style={animatedTextStyle}>
-        <CustomText
-          style={styles.titleText}
-        >{`${index}. ${item.title}`}</CustomText>
-      </Animated.View>
-      <View style={styles.taskbarContainer}>
-        <Animated.View style={animatedBarStyle}>
-          <TaskBarChart
-            notRelevant={notRelevant}
-            similar={similar}
-            missing={missing}
-            occupation={item.title}
-            onSelectCategory={onSelectCategory}
-          />
+    <View style={styles.container}>
+      <ShadowCard style={styles.resultCard}>
+        <Animated.View style={animatedTextStyle}>
+          <CustomText
+            style={styles.titleText}
+          >{`${index}. ${item.title}`}</CustomText>
         </Animated.View>
-      </View>
-    </ShadowCard>
+        <View style={styles.taskbarContainer}>
+          <Animated.View style={animatedBarStyle}>
+            <TaskBarChart
+              notRelevant={notRelevant}
+              similar={similar}
+              missing={missing}
+              occupation={item.title}
+              onSelectCategory={onSelectCategory}
+            />
+          </Animated.View>
+        </View>
+      </ShadowCard>
+    </View>
   );
 };
 
 export default ResultCard;
 
 const styles = StyleService.create({
+  container: {
+    marginBottom: 20,
+  },
   resultCard: {
     padding: 20,
   },

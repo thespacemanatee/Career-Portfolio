@@ -150,19 +150,17 @@ const OccupationsScreen = ({ navigation }) => {
     );
 
   return (
-    // <View style={styles.screen}>
-    //   <TopNavigation
-    //     title="Choose Your Occupation"
-    //     alignment="center"
-    //     accessoryLeft={BackAction}
-    //     accessoryRight={HelpAction}
-    //   />
-    //   <Divider />
     <View style={styles.screen}>
       <CustomText style={styles.title} fontFamily="bold">
         What is your occupation?
       </CustomText>
-      <SelectedOccupationCard occupation={chosenOccupation} />
+      <View
+        needsOffscreenAlphaCompositing
+        renderToHardwareTextureAndroid
+        style={styles.cardContainer}
+      >
+        <SelectedOccupationCard occupation={chosenOccupation} />
+      </View>
       <Formik
         initialValues={{ occupation: "" }}
         onSubmit={handleSubmitForm}
@@ -181,7 +179,6 @@ const OccupationsScreen = ({ navigation }) => {
               errorText={errors.occupation}
             />
             <Button
-              style={styles.button}
               onPress={() => handleSubmit()}
               appearance="outline"
               accessoryRight={loading ? LoadingIndicator : null}
@@ -201,7 +198,6 @@ const OccupationsScreen = ({ navigation }) => {
         )}
       </Formik>
     </View>
-    // </View>
   );
 };
 
@@ -221,9 +217,6 @@ const styles = StyleService.create({
   contentContainer: {
     flexGrow: 1,
   },
-  button: {
-    marginVertical: 10,
-  },
   emptyComponent: {
     justifyContent: "center",
     alignItems: "center",
@@ -232,5 +225,8 @@ const styles = StyleService.create({
   indicator: {
     position: "absolute",
     right: 0,
+  },
+  cardContainer: {
+    padding: 6,
   },
 });

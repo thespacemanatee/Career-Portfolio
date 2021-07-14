@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Platform, FlatList } from "react-native";
+import { View, FlatList } from "react-native";
 import {
   StyleService,
   Button,

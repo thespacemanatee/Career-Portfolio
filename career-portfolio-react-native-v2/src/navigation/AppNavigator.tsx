@@ -6,8 +6,6 @@ import {
   TransitionPresets,
 } from "@react-navigation/stack";
 import {
-  // eslint-disable-next-line import/no-named-default
-  default as Reanimated,
   Extrapolate,
   interpolate,
   useAnimatedStyle,
@@ -16,8 +14,8 @@ import {
 } from "react-native-reanimated";
 import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { StyleService, useTheme } from "@ui-kitten/components";
-import { Animated, TouchableOpacity, View } from "react-native";
+import { StyleService } from "@ui-kitten/components";
+import { Animated, View } from "react-native";
 import { TransitionSpec } from "@react-navigation/stack/lib/typescript/src/types";
 
 import WelcomeScreen from "../screens/WelcomeScreen";
@@ -31,8 +29,8 @@ import ResultsPagerScreen from "../screens/Results/ResultsPagerScreen";
 import ResultsDetailsScreen from "../screens/Results/ResultsDetailsScreen";
 import SubmitLoadingScreen from "../screens/SubmitLoadingScreen";
 import SubmissionProgressionHeader from "../components/SubmissionProgressionHeader";
-import CustomText from "../components/CustomText";
-import { isReadyRef, submissionNavigationRef } from "./NavigationHelper";
+import { isReadyRef } from "./NavigationHelper";
+import ThemedBackButton from "../components/ThemedBackButton";
 
 const modalConfig: () => StackNavigationOptions = () => ({
   headerShown: false,
@@ -121,17 +119,12 @@ const forSlide: StackCardStyleInterpolator = ({
   };
 };
 
-const NUMBER_OF_SUBMISSION_SCREENS = 4;
-
-const AnimatedTouchableOpacity =
-  Reanimated.createAnimatedComponent(TouchableOpacity);
+export const NUMBER_OF_SUBMISSION_SCREENS = 4;
 
 const AppNavigator = () => {
   const submissionProgress = useSharedValue(0);
 
   const { Navigator, Screen } = createStackNavigator();
-
-  const theme = useTheme();
 
   const handleNavigationStateChange = ({ routes }) => {
     const submissionRoutes = routes.filter(
@@ -143,60 +136,43 @@ const AppNavigator = () => {
     submissionProgress.value = withTiming(toValue, { duration: 1000 });
   };
 
-  const CreateSubmissionStackNavigator = () => {
-    const handleGoBack = () => {
-      submissionNavigationRef.current.goBack();
+  const backAnimatedStyle = useAnimatedStyle(() => {
+    const prevScreen =
+      (NUMBER_OF_SUBMISSION_SCREENS - 1) / NUMBER_OF_SUBMISSION_SCREENS;
+    return {
+      opacity: interpolate(
+        submissionProgress.value,
+        [prevScreen, 1],
+        [1, 0],
+        Extrapolate.CLAMP
+      ),
+      height: interpolate(
+        submissionProgress.value,
+        [prevScreen, 1],
+        [20, 0],
+        Extrapolate.CLAMP
+      ),
     };
+  });
 
-    const backAnimatedStyle = useAnimatedStyle(() => {
-      const prevScreen =
-        (NUMBER_OF_SUBMISSION_SCREENS - 1) / NUMBER_OF_SUBMISSION_SCREENS;
-      return {
-        opacity: interpolate(
-          submissionProgress.value,
-          [prevScreen, 1],
-          [1, 0],
-          Extrapolate.CLAMP
-        ),
-        height: interpolate(
-          submissionProgress.value,
-          [prevScreen, 1],
-          [20, 0],
-          Extrapolate.CLAMP
-        ),
-      };
-    });
-
+  const CreateSubmissionStackNavigator = () => {
     return (
-      <>
-        <View style={styles.createSubmissionBackground} />
-        <View style={styles.createSubmissionContainer}>
-          <AnimatedTouchableOpacity
-            onPress={handleGoBack}
-            style={backAnimatedStyle}
-          >
-            <CustomText
-              fontFamily="medium"
-              style={{ color: theme["color-primary-500"] }}
-            >
-              Back
-            </CustomText>
-          </AnimatedTouchableOpacity>
-          <View style={styles.submissionProgressHeader}>
-            <SubmissionProgressionHeader
-              headerTitle="Make a Submission"
-              progress={submissionProgress}
-            />
-          </View>
-          <Navigator screenOptions={fadeSlideConfig}>
-            <Screen name="Occupations" component={OccupationsScreen} />
-            <Screen name="CoreTasks" component={CoreTasksScreen} />
-            <Screen name="LifeTasksStack" component={LifeTasksStackNavigator} />
-            <Screen name="Rankings" component={RankingsScreen} />
-            <Screen name="SubmitLoading" component={SubmitLoadingScreen} />
-          </Navigator>
+      <View style={styles.screen}>
+        <ThemedBackButton style={backAnimatedStyle} />
+        <View style={styles.submissionProgressHeader}>
+          <SubmissionProgressionHeader
+            headerTitle="Make a Submission"
+            progress={submissionProgress}
+          />
         </View>
-      </>
+        <Navigator screenOptions={fadeSlideConfig}>
+          <Screen name="Occupations" component={OccupationsScreen} />
+          <Screen name="CoreTasks" component={CoreTasksScreen} />
+          <Screen name="LifeTasksStack" component={LifeTasksStackNavigator} />
+          <Screen name="Rankings" component={RankingsScreen} />
+          <Screen name="SubmitLoading" component={SubmitLoadingScreen} />
+        </Navigator>
+      </View>
     );
   };
 
@@ -212,10 +188,13 @@ const AppNavigator = () => {
 
   const ResultsStackNavigator = () => {
     return (
-      <Navigator screenOptions={modalConfig}>
-        <Screen name="ResultsPager" component={ResultsPagerScreen} />
-        <Screen name="ResultsDetails" component={ResultsDetailsScreen} />
-      </Navigator>
+      <View style={styles.screen}>
+        <ThemedBackButton style={[styles.backButton, backAnimatedStyle]} />
+        <Navigator screenOptions={modalConfig}>
+          <Screen name="ResultsPager" component={ResultsPagerScreen} />
+          <Screen name="ResultsDetails" component={ResultsDetailsScreen} />
+        </Navigator>
+      </View>
     );
   };
 
@@ -226,7 +205,7 @@ const AppNavigator = () => {
         isReadyRef.current = true;
       }}
     >
-      <SafeAreaView style={styles.screen}>
+      <SafeAreaView style={styles.navigationContainer}>
         <Navigator screenOptions={slideConfig}>
           <Screen name="Welcome" component={WelcomeScreen} />
           <Screen
@@ -243,21 +222,18 @@ const AppNavigator = () => {
 export default AppNavigator;
 
 const styles = StyleService.create({
+  navigationContainer: {
+    flex: 1,
+  },
   screen: {
     flex: 1,
-    backgroundColor: "white",
-  },
-  createSubmissionBackground: {
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-    backgroundColor: "white",
-  },
-  createSubmissionContainer: {
-    flex: 1,
     padding: 16,
+    backgroundColor: "white",
   },
   submissionProgressHeader: {
     marginVertical: 12,
+  },
+  backButton: {
+    marginBottom: 12,
   },
 });

@@ -9,31 +9,23 @@ interface ShadowCardProps {
   disabled?: boolean;
 }
 
-const ShadowCard = ({
+const ShadowCard: React.FC<ShadowCardProps> = ({
   style,
   children,
   onPress,
   disabled,
-}: ShadowCardProps) => {
+}) => {
   const styles = useStyleSheet(themedStyles);
   return (
-    <View needsOffscreenAlphaCompositing renderToHardwareTextureAndroid>
-      <TouchableOpacity
-        style={styles.shadowContainer}
-        activeOpacity={0.5}
-        onPress={onPress}
-        disabled={disabled}
-      >
-        <View style={[style, styles.shadow]}>{children}</View>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity
+      style={styles.shadowContainer}
+      activeOpacity={0.5}
+      onPress={onPress}
+      disabled={disabled}
+    >
+      <View style={[style, styles.shadow]}>{children}</View>
+    </TouchableOpacity>
   );
-};
-
-ShadowCard.defaultProps = {
-  style: null,
-  onPress: null,
-  disabled: false,
 };
 
 export default ShadowCard;
@@ -48,16 +40,11 @@ const themedStyles = StyleService.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    borderRadius: 10,
-    marginBottom: 10,
+    borderRadius: 8,
+    margin: 8,
   },
   shadow: {
-    borderRadius: 10,
-    overflow: "hidden",
-    backgroundColor: Platform.select({
-      web: "#FAFAFA",
-      ios: "white",
-      android: "white",
-    }),
+    borderRadius: 8,
+    backgroundColor: "white",
   },
 });

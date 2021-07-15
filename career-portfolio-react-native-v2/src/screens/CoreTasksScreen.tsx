@@ -1,19 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, FlatList } from "react-native";
 import { StyleService, Button, useTheme } from "@ui-kitten/components";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { tasksSelector } from "../app/features/tasks/tasksSlice";
 import CustomText from "../components/CustomText";
 import TaskCard from "../components/TaskCard";
 import { useAppSelector } from "../app/hooks";
 import ListEmptyComponent from "../components/ListEmptyComponent";
-import ScreenTitle from "../components/ScreenTitle";
+import SectionTitle from "../components/SectionTitle";
+import { submissionProgressRef } from "../navigation/NavigationHelper";
 
 const CoreTasksScreen = ({ navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
   const [coreTasks, setCoreTasks] = useState([]);
 
   const theme = useTheme();
+
+  useFocusEffect(
+    useCallback(() => {
+      submissionProgressRef.current = 1;
+    }, [])
+  );
 
   useEffect(() => {
     setCoreTasks(tasks.filter((e) => e.task_type !== "life"));
@@ -33,7 +41,7 @@ const CoreTasksScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <ScreenTitle title="What does your work schedule look like?">
+      <SectionTitle title="What does your work schedule look like?">
         <CustomText style={styles.subtitle} fontFamily="semiBold">
           Select the tasks that are{" "}
           <CustomText style={{ color: theme["color-primary-500"] }}>
@@ -42,7 +50,7 @@ const CoreTasksScreen = ({ navigation }) => {
           to your work experience. Swipe right to delete tasks you&apos;ve never
           done before.
         </CustomText>
-      </ScreenTitle>
+      </SectionTitle>
       <FlatList
         style={styles.flatList}
         renderItem={renderTasks}

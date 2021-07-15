@@ -2,26 +2,26 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import CustomText from "./CustomText";
 
-interface ScreenTitleProps {
+interface SectionTitleProps {
   title: string;
 }
 
-const ScreenTitle: React.FC<ScreenTitleProps> = ({ title, children }) => {
+const SectionTitle: React.FC<SectionTitleProps> = ({ title, children }) => {
   return (
     <>
-      <CustomText style={styles.title} fontFamily="extraBold">
+      <CustomText style={styles.title} fontFamily="bold">
         {title}
       </CustomText>
-      {children && <View style={styles.subtitleContainer}>{children}</View>}
+      <View style={styles.subtitleContainer}>{children}</View>
     </>
   );
 };
 
-export default ScreenTitle;
+export default SectionTitle;
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 24,
+    fontSize: 20,
   },
   subtitleContainer: {
     marginVertical: 12,

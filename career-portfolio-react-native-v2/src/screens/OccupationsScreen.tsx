@@ -10,6 +10,7 @@ import {
   ONET_PASSWORD,
   ONET_ENDPOINT,
 } from "react-native-dotenv";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { addSelection } from "../app/features/form/formSlice";
 import { setAllTasks } from "../app/features/tasks/tasksSlice";
@@ -21,9 +22,12 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import SelectedOccupationCard from "../components/SelectedOccupationCard";
 import OccupationCard from "../components/OccupationCard";
 import CustomTextInput from "../components/CustomTextInput";
-import { navigationRef } from "../navigation/NavigationHelper";
+import {
+  navigationRef,
+  submissionProgressRef,
+} from "../navigation/NavigationHelper";
 import ListEmptyComponent from "../components/ListEmptyComponent";
-import ScreenTitle from "../components/ScreenTitle";
+import SectionTitle from "../components/SectionTitle";
 
 interface Values {
   occupation: string;
@@ -39,6 +43,12 @@ const OccupationsScreen = ({ navigation }) => {
   useEffect(() => {
     navigationRef.current = navigation;
   }, [navigation]);
+
+  useFocusEffect(
+    useCallback(() => {
+      submissionProgressRef.current = 0;
+    }, [])
+  );
 
   const dispatch = useAppDispatch();
 
@@ -132,7 +142,7 @@ const OccupationsScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <ScreenTitle title="What is your occupation?">
+      <SectionTitle title="What is your occupation?">
         <CustomText style={styles.subtitle} fontFamily="semiBold">
           Please enter your{" "}
           <CustomText style={{ color: theme["color-primary-500"] }}>
@@ -140,7 +150,7 @@ const OccupationsScreen = ({ navigation }) => {
           </CustomText>{" "}
           occupation, or any occupations previously held.
         </CustomText>
-      </ScreenTitle>
+      </SectionTitle>
       <View style={styles.selectedOccupation}>
         <SelectedOccupationCard occupation={chosenOccupation} />
       </View>

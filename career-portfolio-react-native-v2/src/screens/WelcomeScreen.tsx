@@ -45,44 +45,30 @@ const WelcomeScreen = ({ navigation }) => {
     navigation.navigate("ResultsStack");
   };
   return (
-    <View style={styles.screen}>
-      <Layout style={styles.layout}>
-        <View />
-        <View>
-          <View style={{ height: height / 3 }}>
-            <AnimatedLottieView
-              // eslint-disable-next-line global-require
-              source={require("../../assets/welcome-hero.json")}
-              animatedProps={animatedProps}
-            />
-          </View>
-          <CustomText fontFamily="bold" style={styles.title}>
-            Discovering Your Options
-          </CustomText>
+    <Layout style={styles.layout}>
+      <View />
+      <View>
+        <View style={{ height: height / 3 }}>
+          <AnimatedLottieView
+            // eslint-disable-next-line global-require
+            source={require("../../assets/welcome-hero.json")}
+            animatedProps={animatedProps}
+          />
         </View>
-        <View>
-          <Button style={styles.button} onPress={handleNext}>
-            START
-          </Button>
-          <Button
-            disabled={count === null}
-            appearance="outline"
-            onPress={handleViewResults}
-          >
-            VIEW RESULTS
-          </Button>
-        </View>
-      </Layout>
-    </View>
+        <CustomText fontFamily="bold" style={styles.title}>
+          Discovering Your Options
+        </CustomText>
+      </View>
+      <Button style={styles.button} onPress={handleNext}>
+        START
+      </Button>
+    </Layout>
   );
 };
 
 export default WelcomeScreen;
 
 const styles = StyleService.create({
-  screen: {
-    flex: 1,
-  },
   layout: {
     flex: 1,
     justifyContent: "space-between",

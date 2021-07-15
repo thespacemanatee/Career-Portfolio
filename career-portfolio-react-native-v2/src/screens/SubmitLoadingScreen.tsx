@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Alert, Dimensions, StyleSheet, View } from "react-native";
-import { CommonActions } from "@react-navigation/native";
+import { CommonActions, useFocusEffect } from "@react-navigation/native";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { Layout } from "@ui-kitten/components";
 
@@ -8,6 +8,7 @@ import { LottieView } from "..";
 import { fetchResults } from "../app/features/results/resultsSlice";
 import { useAppDispatch } from "../app/hooks";
 import CustomText from "../components/CustomText";
+import { submissionProgressRef } from "../navigation/NavigationHelper";
 
 const SubmitLoadingScreen = ({ navigation, route }) => {
   const { payload } = route.params;
@@ -15,6 +16,12 @@ const SubmitLoadingScreen = ({ navigation, route }) => {
   const { height } = Dimensions.get("window");
 
   const dispatch = useAppDispatch();
+
+  useFocusEffect(
+    useCallback(() => {
+      submissionProgressRef.current = 4;
+    }, [])
+  );
 
   useEffect(() => {
     const postResult = () => {
@@ -24,9 +31,19 @@ const SubmitLoadingScreen = ({ navigation, route }) => {
           navigation.dispatch(
             CommonActions.reset({
               index: 1,
-              routes: [{ name: "Welcome" }, { name: "ResultsStack" }],
+              routes: [
+                { name: "Home" },
+                {
+                  name: "History",
+                  state: {
+                    index: 1,
+                    routes: [{ name: "Past Results" }, { name: "Results" }],
+                  },
+                },
+              ],
             })
           );
+          submissionProgressRef.current = 0;
         })
         .catch((err) => {
           console.error(err);

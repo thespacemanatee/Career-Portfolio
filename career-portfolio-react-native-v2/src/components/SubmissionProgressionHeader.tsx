@@ -10,6 +10,7 @@ import Animated, {
 
 import CustomText from "./CustomText";
 import ReText from "./ReText";
+import ScreenTitle from "./ScreenTitle";
 
 interface SubmissionProgressionHeaderProps {
   headerTitle: string;
@@ -37,9 +38,7 @@ const SubmissionProgressionHeader: React.FC<SubmissionProgressionHeaderProps> =
 
     return (
       <View>
-        <CustomText fontFamily="extraBold" style={styles.headerTitle}>
-          {headerTitle}
-        </CustomText>
+        <ScreenTitle title={headerTitle} />
         <View style={styles.progressContainer}>
           <View style={styles.progressTextContainer}>
             <ReText

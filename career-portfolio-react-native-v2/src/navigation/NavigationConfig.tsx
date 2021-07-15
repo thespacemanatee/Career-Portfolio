@@ -1,10 +1,32 @@
+import React from "react";
 import { TransitionPresets } from "@react-navigation/stack";
 import {
   StackCardStyleInterpolator,
   StackNavigationOptions,
   TransitionSpec,
 } from "@react-navigation/stack/lib/typescript/src/types";
+import { Icon } from "@ui-kitten/components";
 import { Animated } from "react-native";
+
+export const tabConfig = ({ route }) => ({
+  tabBarIcon: ({ focused, color, size }) => {
+    let iconName: string;
+
+    if (route.name === "Home") {
+      iconName = focused ? "home" : "home-outline";
+    } else if (route.name === "History") {
+      iconName = focused ? "pie-chart" : "pie-chart-outline";
+    }
+
+    return (
+      <Icon
+        name={iconName}
+        fill={color}
+        style={{ height: size, width: size }}
+      />
+    );
+  },
+});
 
 export const modalConfig: () => StackNavigationOptions = () => ({
   headerShown: false,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, FlatList } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -7,6 +7,7 @@ import {
   ButtonGroup,
   useTheme,
 } from "@ui-kitten/components";
+import { useFocusEffect } from "@react-navigation/native";
 
 import {
   tasksSelector,
@@ -16,7 +17,8 @@ import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
 import LifeTaskCard from "../components/LifeTaskCard";
 import ListEmptyComponent from "../components/ListEmptyComponent";
-import ScreenTitle from "../components/ScreenTitle";
+import SectionTitle from "../components/SectionTitle";
+import { submissionProgressRef } from "../navigation/NavigationHelper";
 
 const LifeTasksScreen = ({ navigation }) => {
   const tasks = useSelector(tasksSelector.selectAll);
@@ -25,6 +27,12 @@ const LifeTasksScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const theme = useTheme();
+
+  useFocusEffect(
+    useCallback(() => {
+      submissionProgressRef.current = 2;
+    }, [])
+  );
 
   useEffect(() => {
     setLifeTasks(tasks.filter((e) => e.task_type === "life"));
@@ -58,7 +66,7 @@ const LifeTasksScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <ScreenTitle title="What other tasks have you done in past jobs, or outside work?">
+      <SectionTitle title="What other tasks have you done in past jobs, or outside work?">
         <CustomText style={styles.subtitle} fontFamily="semiBold">
           A task is made up of an{" "}
           <CustomText style={{ color: theme["color-primary-500"] }}>
@@ -70,7 +78,7 @@ const LifeTasksScreen = ({ navigation }) => {
           Example: Interview (action) people (object) to understand perspective
           on current social trends (purpose).
         </CustomText>
-      </ScreenTitle>
+      </SectionTitle>
       <CustomText style={styles.buttonGroupTitle} fontFamily="bold">
         Search task by:
       </CustomText>

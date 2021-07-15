@@ -1,10 +1,6 @@
 import React from "react";
-import {
-  createStackNavigator,
-  StackCardStyleInterpolator,
-  StackNavigationOptions,
-  TransitionPresets,
-} from "@react-navigation/stack";
+import { View } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
 import {
   Extrapolate,
   interpolate,
@@ -15,8 +11,6 @@ import {
 import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleService } from "@ui-kitten/components";
-import { Animated, View } from "react-native";
-import { TransitionSpec } from "@react-navigation/stack/lib/typescript/src/types";
 
 import WelcomeScreen from "../screens/WelcomeScreen";
 import OccupationsScreen from "../screens/OccupationsScreen";
@@ -29,97 +23,14 @@ import ResultsPagerScreen from "../screens/Results/ResultsPagerScreen";
 import ResultsDetailsScreen from "../screens/Results/ResultsDetailsScreen";
 import SubmitLoadingScreen from "../screens/SubmitLoadingScreen";
 import SubmissionProgressionHeader from "../components/SubmissionProgressionHeader";
-import { isReadyRef } from "./NavigationHelper";
+import { isReadyRef, navigationRef } from "./NavigationHelper";
 import ThemedBackButton from "../components/ThemedBackButton";
-
-const modalConfig: () => StackNavigationOptions = () => ({
-  headerShown: false,
-  gestureEnabled: true,
-  cardShadowEnabled: false,
-  cardOverlayEnabled: false,
-  cardStyle: {
-    backgroundColor: "transparent",
-  },
-  ...TransitionPresets.ModalPresentationIOS,
-});
-
-const slideConfig: () => StackNavigationOptions = () => ({
-  headerShown: false,
-  gestureEnabled: true,
-  cardOverlayEnabled: true,
-  ...TransitionPresets.SlideFromRightIOS,
-});
-
-const fadeSlideConfig: () => StackNavigationOptions = () => ({
-  headerShown: false,
-  gestureEnabled: true,
-  cardShadowEnabled: false,
-  cardOverlayEnabled: false,
-  cardStyle: {
-    backgroundColor: "transparent",
-  },
-  cardStyleInterpolator: forSlide,
-  transitionSpec: {
-    open: fadeSlideTransitionSpec,
-    close: fadeSlideTransitionSpec,
-  },
-});
-
-const fadeSlideTransitionSpec: TransitionSpec = {
-  animation: "timing",
-  config: {
-    duration: 500,
-  },
-};
-
-const forSlide: StackCardStyleInterpolator = ({
-  current,
-  next,
-  inverted,
-  layouts: { screen },
-}) => {
-  const progress = Animated.add(
-    current.progress.interpolate({
-      inputRange: [0, 1],
-      outputRange: [0, 1],
-      extrapolate: "clamp",
-    }),
-    next
-      ? next.progress.interpolate({
-          inputRange: [0, 1],
-          outputRange: [0, 1],
-          extrapolate: "clamp",
-        })
-      : 0
-  );
-
-  return {
-    cardStyle: {
-      opacity: Animated.multiply(
-        progress.interpolate({
-          inputRange: [0.75, 1, 1.75],
-          outputRange: [0, 1, 0],
-          extrapolate: "clamp",
-        }),
-        inverted
-      ),
-      transform: [
-        {
-          translateX: Animated.multiply(
-            progress.interpolate({
-              inputRange: [0, 1, 2],
-              outputRange: [screen.width, 0, screen.width * -1],
-              extrapolate: "clamp",
-            }),
-            inverted
-          ),
-        },
-      ],
-    },
-  };
-};
-
-export const NUMBER_OF_SUBMISSION_SCREENS = 4;
+import {
+  fadeSlideConfig,
+  modalConfig,
+  NUMBER_OF_SUBMISSION_SCREENS,
+  slideConfig,
+} from "./NavigationConfig";
 
 const AppNavigator = () => {
   const submissionProgress = useSharedValue(0);

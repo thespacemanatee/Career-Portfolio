@@ -1,16 +1,9 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { persistStore, persistReducer } from "redux-persist";
 
 import formReducer from "./features/form/formSlice";
 import localReducer from "./features/local/localSlice";
 import tasksReducer from "./features/tasks/tasksSlice";
 import resultsReducer from "./features/results/resultsSlice";
-
-const persistConfig = {
-  key: "root",
-  storage: AsyncStorage,
-};
 
 const rootReducer = combineReducers({
   form: formReducer,
@@ -19,16 +12,14 @@ const rootReducer = combineReducers({
   results: resultsReducer,
 });
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
-export const store = configureStore({
-  reducer: persistedReducer,
+const store = configureStore({
+  reducer: rootReducer,
+  devTools: process.env.NODE_ENV !== "production",
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: false,
-    }),
+    getDefaultMiddleware({ serializableCheck: false }),
 });
 
-export const persistor = persistStore(store);
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+export default store;

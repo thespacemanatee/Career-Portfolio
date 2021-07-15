@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { View } from "react-native";
 import { StyleService, Button, useTheme } from "@ui-kitten/components";
 import DraggableFlatList from "react-native-draggable-flatlist";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { setAllTasks, tasksSelector } from "../app/features/tasks/tasksSlice";
 import CustomText from "../components/CustomText";
@@ -9,7 +10,8 @@ import RankingCard from "../components/RankingCard";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { ResultsPayload } from "../types";
 import ListEmptyComponent from "../components/ListEmptyComponent";
-import ScreenTitle from "../components/ScreenTitle";
+import SectionTitle from "../components/SectionTitle";
+import { submissionProgressRef } from "../navigation/NavigationHelper";
 
 const RankingsScreen = ({ navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
@@ -20,6 +22,12 @@ const RankingsScreen = ({ navigation }) => {
   const dispatch = useAppDispatch();
 
   const theme = useTheme();
+
+  useFocusEffect(
+    useCallback(() => {
+      submissionProgressRef.current = 3;
+    }, [])
+  );
 
   const handleSubmit = () => {
     const tasksArray = tasks.map((e) => {
@@ -34,6 +42,7 @@ const RankingsScreen = ({ navigation }) => {
       ...form,
       task_list: tasksArray,
     };
+    submissionProgressRef.current += 1;
     navigation.navigate("SubmitLoading", {
       payload,
     });
@@ -58,7 +67,7 @@ const RankingsScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <ScreenTitle title="Rank your tasks in order of preference.">
+      <SectionTitle title="Rank your tasks in order of preference.">
         <CustomText style={styles.subtitle} fontFamily="semiBold">
           Drag and{" "}
           <CustomText style={{ color: theme["color-primary-500"] }}>
@@ -66,7 +75,7 @@ const RankingsScreen = ({ navigation }) => {
           </CustomText>{" "}
           each task to the top (most preferred) or bottom (least preferred).
         </CustomText>
-      </ScreenTitle>
+      </SectionTitle>
       <DraggableFlatList
         style={styles.flatList}
         renderItem={renderTasks}

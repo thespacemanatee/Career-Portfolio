@@ -9,10 +9,10 @@ interface ScreenTitleProps {
 const ScreenTitle: React.FC<ScreenTitleProps> = ({ title, children }) => {
   return (
     <>
-      <CustomText style={styles.title} fontFamily="bold">
+      <CustomText style={styles.title} fontFamily="extraBold">
         {title}
       </CustomText>
-      <View style={styles.subtitleContainer}>{children}</View>
+      {children && <View style={styles.subtitleContainer}>{children}</View>}
     </>
   );
 };
@@ -21,7 +21,7 @@ export default ScreenTitle;
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 26,
+    fontSize: 24,
   },
   subtitleContainer: {
     marginVertical: 12,

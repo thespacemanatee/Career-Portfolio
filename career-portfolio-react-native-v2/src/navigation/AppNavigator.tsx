@@ -1,6 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   Extrapolate,
   interpolate,
@@ -23,26 +24,26 @@ import ResultsPagerScreen from "../screens/Results/ResultsPagerScreen";
 import ResultsDetailsScreen from "../screens/Results/ResultsDetailsScreen";
 import SubmitLoadingScreen from "../screens/SubmitLoadingScreen";
 import SubmissionProgressionHeader from "../components/SubmissionProgressionHeader";
-import { isReadyRef, navigationRef } from "./NavigationHelper";
+import { isReadyRef, submissionProgressRef } from "./NavigationHelper";
 import ThemedBackButton from "../components/ThemedBackButton";
 import {
   fadeSlideConfig,
   modalConfig,
-  NUMBER_OF_SUBMISSION_SCREENS,
   slideConfig,
+  NUMBER_OF_SUBMISSION_SCREENS,
+  tabConfig,
 } from "./NavigationConfig";
+import PastResultsScreen from "../screens/PastResultsScreen";
 
 const AppNavigator = () => {
   const submissionProgress = useSharedValue(0);
 
   const { Navigator, Screen } = createStackNavigator();
+  const Tab = createBottomTabNavigator();
 
-  const handleNavigationStateChange = ({ routes }) => {
-    const submissionRoutes = routes.filter(
-      (route) => route.name === "CreateSubmission"
-    );
+  const handleNavigationStateChange = () => {
     const toValue =
-      (submissionRoutes.length > 0 ? submissionRoutes[0].state.index : 0) /
+      (submissionProgressRef.current ? submissionProgressRef.current : 0) /
       NUMBER_OF_SUBMISSION_SCREENS;
     submissionProgress.value = withTiming(toValue, { duration: 500 });
   };
@@ -99,11 +100,32 @@ const AppNavigator = () => {
 
   const ResultsStackNavigator = () => {
     return (
+      <Navigator screenOptions={modalConfig}>
+        <Screen name="ResultsPager" component={ResultsPagerScreen} />
+        <Screen name="ResultsDetails" component={ResultsDetailsScreen} />
+      </Navigator>
+    );
+  };
+
+  const HomeStackNavigator = () => {
+    return (
+      <Navigator screenOptions={slideConfig}>
+        <Screen name="Welcome" component={WelcomeScreen} />
+        <Screen
+          name="CreateSubmission"
+          component={CreateSubmissionStackNavigator}
+        />
+      </Navigator>
+    );
+  };
+
+  const PastResultsStackNavigator = () => {
+    return (
       <View style={styles.screen}>
-        <ThemedBackButton style={[styles.backButton, backAnimatedStyle]} />
-        <Navigator screenOptions={modalConfig}>
-          <Screen name="ResultsPager" component={ResultsPagerScreen} />
-          <Screen name="ResultsDetails" component={ResultsDetailsScreen} />
+        <Navigator screenOptions={slideConfig}>
+          <Screen name="Past Results" component={PastResultsScreen} />
+          <Screen name="SubmitLoading" component={SubmitLoadingScreen} />
+          <Screen name="Results" component={ResultsStackNavigator} />
         </Navigator>
       </View>
     );
@@ -117,14 +139,10 @@ const AppNavigator = () => {
       }}
     >
       <SafeAreaView style={styles.navigationContainer}>
-        <Navigator screenOptions={slideConfig}>
-          <Screen name="Welcome" component={WelcomeScreen} />
-          <Screen
-            name="CreateSubmission"
-            component={CreateSubmissionStackNavigator}
-          />
-          <Screen name="ResultsStack" component={ResultsStackNavigator} />
-        </Navigator>
+        <Tab.Navigator screenOptions={tabConfig}>
+          <Tab.Screen name="Home" component={HomeStackNavigator} />
+          <Tab.Screen name="History" component={PastResultsStackNavigator} />
+        </Tab.Navigator>
       </SafeAreaView>
     </NavigationContainer>
   );

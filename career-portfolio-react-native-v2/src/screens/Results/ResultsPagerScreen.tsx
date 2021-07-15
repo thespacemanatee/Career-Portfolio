@@ -6,7 +6,13 @@ import {
   useWindowDimensions,
   FlatList,
 } from "react-native";
-import { Icon, TopNavigationAction, Modal, Card } from "@ui-kitten/components";
+import {
+  Icon,
+  TopNavigationAction,
+  Modal,
+  Card,
+  Layout,
+} from "@ui-kitten/components";
 import PagerView from "react-native-pager-view";
 
 import { useAppSelector } from "../../app/hooks";
@@ -152,7 +158,7 @@ const ResultsPagerScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.screen}>
+    <Layout style={styles.screen}>
       <Modal
         visible={visible}
         backdropStyle={styles.backdrop}
@@ -203,7 +209,7 @@ const ResultsPagerScreen = ({ navigation }) => {
           config={config}
         />
       </View>
-    </View>
+    </Layout>
   );
 };
 

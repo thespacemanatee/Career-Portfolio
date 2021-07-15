@@ -1,19 +1,19 @@
 import React, { createRef } from "react";
 
-export const submissionNavigationRef: React.MutableRefObject<any> = createRef();
+export const navigationRef: React.MutableRefObject<any> = createRef();
 
 export const isReadyRef: React.MutableRefObject<boolean | null> = createRef();
 
-export function navigate(name, params) {
-  if (isReadyRef.current && submissionNavigationRef.current) {
+export const navigate = (name: string, params) => {
+  if (isReadyRef.current && navigationRef.current) {
     // Perform navigation if the app has mounted
-    submissionNavigationRef.current.navigate(name, params);
+    navigationRef.current.navigate(name, params);
   }
-}
+};
 
-export function goBack() {
-  if (isReadyRef.current && submissionNavigationRef.current) {
+export const goBack = () => {
+  if (isReadyRef.current && navigationRef.current) {
     // Perform navigation if the app has mounted
-    submissionNavigationRef.current.goBack();
+    navigationRef.current.goBack();
   }
-}
+};

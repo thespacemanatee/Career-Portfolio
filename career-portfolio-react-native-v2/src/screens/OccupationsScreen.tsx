@@ -21,7 +21,7 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import SelectedOccupationCard from "../components/SelectedOccupationCard";
 import OccupationCard from "../components/OccupationCard";
 import CustomTextInput from "../components/CustomTextInput";
-import { submissionNavigationRef } from "../navigation/NavigationHelper";
+import { navigationRef } from "../navigation/NavigationHelper";
 import ListEmptyComponent from "../components/ListEmptyComponent";
 import ScreenTitle from "../components/ScreenTitle";
 
@@ -37,7 +37,7 @@ const OccupationsScreen = ({ navigation }) => {
   const [userInput, setUserInput] = useState<string>();
 
   useEffect(() => {
-    submissionNavigationRef.current = navigation;
+    navigationRef.current = navigation;
   }, [navigation]);
 
   const dispatch = useAppDispatch();

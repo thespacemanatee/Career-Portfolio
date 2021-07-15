@@ -25,7 +25,7 @@ import {
 import ResultsIntroductionModal from "./ResultsIntroductionModal";
 import ResultCard from "../../components/ResultCard";
 import { tasksSelector } from "../../app/features/tasks/tasksSlice";
-import { submissionNavigationRef } from "../../navigation/NavigationHelper";
+import { navigationRef } from "../../navigation/NavigationHelper";
 
 const HelpIcon = (props: any) => (
   <Icon {...props} name="question-mark-circle-outline" />
@@ -63,7 +63,7 @@ const ResultsPagerScreen = ({ navigation }) => {
   const { width, height } = useWindowDimensions();
 
   useEffect(() => {
-    submissionNavigationRef.current = navigation;
+    navigationRef.current = navigation;
   }, [navigation]);
 
   useEffect(() => {

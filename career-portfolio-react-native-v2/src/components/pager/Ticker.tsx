@@ -34,7 +34,6 @@ const Ticker = ({
               style={{
                 ...styles.tickerText,
                 color: item.color,
-                fontSize: TICKER_HEIGHT,
               }}
             >
               {item.type}
@@ -54,7 +53,7 @@ const styles = StyleSheet.create({
     height: TICKER_HEIGHT,
   },
   tickerText: {
-    fontSize: TICKER_HEIGHT,
+    fontSize: TICKER_HEIGHT - 2,
     lineHeight: TICKER_HEIGHT,
     textTransform: "uppercase",
   },

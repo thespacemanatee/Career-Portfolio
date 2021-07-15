@@ -1,7 +1,129 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { v4 as uuidv4 } from "uuid";
+
 import alert from "../components/CustomAlert";
 import * as data from "../data/career_data.json";
+import { ResultsLocalStorageItem, ResultsPayload } from "../types";
 
 const dataArray = Object.values(data);
+
+export const saveUserInput = async (payload: ResultsPayload) => {
+  try {
+    let savedEntries: ResultsLocalStorageItem = JSON.parse(
+      await AsyncStorage.getItem("savedEntries")
+    );
+
+    if (savedEntries === null) {
+      savedEntries = {};
+    }
+
+    const id = uuidv4();
+    const toSave: ResultsLocalStorageItem = {
+      [id]: {
+        date: new Date(),
+        payload,
+      },
+    };
+
+    Object.assign(savedEntries, toSave);
+
+    await AsyncStorage.setItem("savedEntries", JSON.stringify(savedEntries));
+  } catch (err) {
+    console.error("Error saving user input data", err);
+  }
+};
+
+/**
+ * ? Experimental
+ * @param result object containing the results from backend
+ * @param tasks tasks input by user
+ */
+// export const saveResultsToStorage = async (
+//   result: ResultsState,
+//   tasks: TaskObject[]
+// ) => {
+//   const { count, missing, similar } = result;
+//   try {
+//     let savedResults: ResultsLocalStorageData = JSON.parse(
+//       await AsyncStorage.getItem("results")
+//     );
+
+//     if (savedResults === null) {
+//       savedResults = [];
+//     }
+
+//     const familiarity = [...count]
+//       .sort((a, b) => b.similarTasks - a.similarTasks)
+//       .slice(0, 10);
+
+//     const preference = [...count]
+//       .sort((a, b) => b.preferenceScore - a.preferenceScore)
+//       .slice(0, 10);
+
+//     const personality = [...count]
+//       .sort((a, b) => b.riasecScore - a.riasecScore)
+//       .slice(0, 10);
+
+//     const bestFit = [...count]
+//       .sort((a, b) => b.similarityScore - a.similarityScore)
+//       .slice(0, 10);
+
+//     const id = uuidv4();
+//     const toSave: ResultsLocalStorageItem = {
+//       id,
+//       [ResultsCategory.FAMILIARITY]: {
+//         count: familiarity,
+//         missing: processResultBaseData(familiarity, missing),
+//         similar: processResultBaseData(familiarity, similar),
+//         irrelevant: processIrrelevantTasks(tasks, similar),
+//       },
+//       [ResultsCategory.PREFERENCE]: {
+//         count: preference,
+//         missing: processResultBaseData(preference, missing),
+//         similar: processResultBaseData(preference, similar),
+//         irrelevant: processIrrelevantTasks(tasks, similar),
+//       },
+//       [ResultsCategory.PERSONALITY]: {
+//         count: personality,
+//         missing: processResultBaseData(personality, missing),
+//         similar: processResultBaseData(personality, similar),
+//         irrelevant: processIrrelevantTasks(tasks, similar),
+//       },
+//       [ResultsCategory.BEST_FIT]: {
+//         count: bestFit,
+//         missing: processResultBaseData(bestFit, missing),
+//         similar: processResultBaseData(bestFit, similar),
+//         irrelevant: processIrrelevantTasks(tasks, similar),
+//       },
+//     };
+
+//     savedResults.push(toSave);
+//     console.log(savedResults);
+
+//     await AsyncStorage.setItem("results", JSON.stringify(savedResults));
+//   } catch (err) {
+//     // error reading value
+//     console.error("Error saving results data", err);
+//   }
+// };
+
+// const processResultBaseData = (
+//   result: ResultsCountData[],
+//   toFilter: ResultsBaseData[]
+// ): ResultsBaseData[][] => {
+//   return result.map((item: ResultsBaseData) =>
+//     toFilter.filter((e) => e.title === item.title)
+//   );
+// };
+
+// const processIrrelevantTasks = (
+//   result: TaskObject[],
+//   toFilter: ResultsSimilarData[]
+// ): ResultsSimilarData[][] => {
+//   return result.map((item: TaskObject) =>
+//     toFilter.filter((e) => e.similarIWA !== item.IWA_Title)
+//   );
+// };
 
 export const getTasksByAction = (action: string) => {
   let tempArray = dataArray.filter((e) => {

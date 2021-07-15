@@ -42,6 +42,7 @@ const RankingsScreen = ({ navigation }) => {
       ...form,
       task_list: tasksArray,
     };
+    submissionProgressRef.current += 1;
     navigation.navigate("SubmitLoading", {
       payload,
     });

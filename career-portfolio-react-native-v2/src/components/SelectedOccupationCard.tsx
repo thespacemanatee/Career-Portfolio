@@ -29,8 +29,7 @@ export default SelectedOccupationCard;
 const styles = StyleSheet.create({
   container: {
     borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 12,
+    padding: 12,
   },
   titleText: {
     color: "white",

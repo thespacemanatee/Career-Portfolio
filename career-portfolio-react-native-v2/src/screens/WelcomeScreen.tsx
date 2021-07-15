@@ -10,13 +10,11 @@ import Animated, {
 } from "react-native-reanimated";
 
 import CustomText from "../components/CustomText";
-import { useAppSelector } from "../app/hooks";
 import { LottieView } from "..";
 
 const AnimatedLottieView = Animated.createAnimatedComponent(LottieView);
 
 const WelcomeScreen = ({ navigation }) => {
-  const count = useAppSelector((state) => state.results.count);
   const animationProgress = useSharedValue(0);
 
   const { height } = Dimensions.get("window");
@@ -41,9 +39,7 @@ const WelcomeScreen = ({ navigation }) => {
   const handleNext = () => {
     navigation.navigate("CreateSubmission");
   };
-  const handleViewResults = () => {
-    navigation.navigate("ResultsStack");
-  };
+
   return (
     <Layout style={styles.layout}>
       <View />

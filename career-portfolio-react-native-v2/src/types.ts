@@ -1,15 +1,38 @@
 /* eslint-disable camelcase */
-export interface PagerViewOnPageScrollEventData {
+export type FontWeight =
+  | "bold"
+  | "semiBold"
+  | "extraBold"
+  | "extraLight"
+  | "light"
+  | "medium"
+  | "regular";
+
+export type PagerViewOnPageScrollEventData = {
   position: number;
   offset: number;
-}
+};
 
-export interface ResultsViewPagerConfig {
+export type ResultsViewPagerConfig = {
   type: ResultsCategory;
   color: string;
+};
+
+export type TaskObject = {
+  task: string;
+  taskId: number;
+  IWA_Title: string;
+  task_type: string;
+  deleted?: boolean;
+};
+
+export enum TaskType {
+  CORE = "core",
+  SUPPLEMENTARY = "supplementary",
+  LIFE = "life",
 }
 
-interface ResultsBaseData {
+export interface ResultsBaseData {
   inputTitle: string;
   title: string;
 }
@@ -40,25 +63,11 @@ export interface ResultsMissingData extends ResultsBaseData {
   missingIWA?: string;
 }
 
-export interface TaskObject {
-  task: string;
-  taskId: number;
-  IWA_Title: string;
-  task_type: string;
-  deleted?: boolean;
-}
-
 export interface ResultsPayload {
   input_title: string;
   onet_title: string;
   title_id: string;
   task_list: TaskObject[];
-}
-
-export enum TaskType {
-  CORE = "core",
-  SUPPLEMENTARY = "supplementary",
-  LIFE = "life",
 }
 
 export enum ResultsType {
@@ -74,11 +83,29 @@ export enum ResultsCategory {
   BEST_FIT = "BEST FIT",
 }
 
-export type FontWeight =
-  | "bold"
-  | "semiBold"
-  | "extraBold"
-  | "extraLight"
-  | "light"
-  | "medium"
-  | "regular";
+export type ResultsState = {
+  count: ResultsCountData[];
+  similar: ResultsSimilarData[];
+  missing: ResultsMissingData[];
+  status?: string;
+  opened?: boolean;
+};
+
+// type ResultsLocalStorageItemObject = {
+//   count: ResultsCountData[];
+//   missing: ResultsBaseData[][];
+//   similar: ResultsBaseData[][];
+//   irrelevant: ResultsSimilarData[][];
+// };
+
+export interface ResultsLocalStorageItem {
+  [id: string]: {
+    date: Date;
+    payload: ResultsPayload;
+  };
+
+  // [ResultsCategory.FAMILIARITY]: ResultsLocalStorageItemObject;
+  // [ResultsCategory.PREFERENCE]: ResultsLocalStorageItemObject;
+  // [ResultsCategory.PERSONALITY]: ResultsLocalStorageItemObject;
+  // [ResultsCategory.BEST_FIT]: ResultsLocalStorageItemObject;
+}

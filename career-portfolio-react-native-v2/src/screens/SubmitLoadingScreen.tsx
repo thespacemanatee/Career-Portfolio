@@ -1,14 +1,15 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Alert, Dimensions, StyleSheet, View } from "react-native";
-import { CommonActions, useFocusEffect } from "@react-navigation/native";
-import { unwrapResult } from "@reduxjs/toolkit";
+import { CommonActions } from "@react-navigation/native";
 import { Layout } from "@ui-kitten/components";
 
 import { LottieView } from "..";
-import { fetchResults } from "../app/features/results/resultsSlice";
+import { saveResults } from "../app/features/results/resultsSlice";
 import { useAppDispatch } from "../app/hooks";
 import CustomText from "../components/CustomText";
 import { submissionProgressRef } from "../navigation/NavigationHelper";
+import useFetchResults from "../helpers/hooks/useFetchResults";
+import { saveUserInput } from "../helpers/utils";
 
 const SubmitLoadingScreen = ({ navigation, route }) => {
   const { payload } = route.params;
@@ -17,46 +18,39 @@ const SubmitLoadingScreen = ({ navigation, route }) => {
 
   const dispatch = useAppDispatch();
 
-  useFocusEffect(
-    useCallback(() => {
-      submissionProgressRef.current = 4;
-    }, [])
-  );
+  const { result, error } = useFetchResults(payload);
 
   useEffect(() => {
-    const postResult = () => {
-      dispatch(fetchResults(payload))
-        .then(unwrapResult)
-        .then(() => {
-          navigation.dispatch(
-            CommonActions.reset({
-              index: 1,
-              routes: [
-                { name: "Home" },
-                {
-                  name: "History",
-                  state: {
-                    index: 1,
-                    routes: [{ name: "Past Results" }, { name: "Results" }],
-                  },
+    if (result) {
+      saveUserInput(payload).then(() => {
+        dispatch(saveResults(result));
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [
+              { name: "Home" },
+              {
+                name: "History",
+                state: {
+                  index: 1,
+                  routes: [{ name: "Past Results" }, { name: "Results" }],
                 },
-              ],
-            })
-          );
-          submissionProgressRef.current = 0;
-        })
-        .catch((err) => {
-          console.error(err);
-          Alert.alert(
-            "Error",
-            "Unable to contact the server. Please try again later!"
-          );
-          navigation.goBack();
-        });
-    };
-    postResult();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+              },
+            ],
+          })
+        );
+      });
+      submissionProgressRef.current = 0;
+    }
+    if (error) {
+      console.error(error);
+      Alert.alert(
+        "Error",
+        "Unable to contact the server. Please try again later!"
+      );
+      navigation.goBack();
+    }
+  }, [dispatch, error, navigation, payload, result]);
 
   return (
     <Layout style={styles.screen}>

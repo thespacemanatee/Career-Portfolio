@@ -8,7 +8,6 @@ import Animated, {
   useDerivedValue,
 } from "react-native-reanimated";
 
-import CustomText from "./CustomText";
 import ReText from "./ReText";
 import ScreenTitle from "./ScreenTitle";
 
@@ -72,9 +71,6 @@ const SubmissionProgressionHeader: React.FC<SubmissionProgressionHeaderProps> =
 export default SubmissionProgressionHeader;
 
 const styles = StyleSheet.create({
-  headerTitle: {
-    fontSize: 24,
-  },
   progressContainer: {
     height: 25,
     justifyContent: "flex-end",

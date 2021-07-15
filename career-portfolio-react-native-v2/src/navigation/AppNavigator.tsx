@@ -100,12 +100,10 @@ const AppNavigator = () => {
 
   const ResultsStackNavigator = () => {
     return (
-      // <View style={styles.screen}>
       <Navigator screenOptions={modalConfig}>
         <Screen name="ResultsPager" component={ResultsPagerScreen} />
         <Screen name="ResultsDetails" component={ResultsDetailsScreen} />
       </Navigator>
-      // </View>
     );
   };
 
@@ -126,6 +124,7 @@ const AppNavigator = () => {
       <View style={styles.screen}>
         <Navigator screenOptions={slideConfig}>
           <Screen name="Past Results" component={PastResultsScreen} />
+          <Screen name="SubmitLoading" component={SubmitLoadingScreen} />
           <Screen name="Results" component={ResultsStackNavigator} />
         </Navigator>
       </View>

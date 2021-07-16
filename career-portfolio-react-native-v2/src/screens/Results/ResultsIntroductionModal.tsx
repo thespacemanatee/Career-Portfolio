@@ -10,7 +10,6 @@ import Ticker from "../../components/pager/Ticker";
 import TaskBarChartDemo from "../../components/TaskBarChartDemo";
 import Item from "../../components/pager/Item";
 import { useAppDispatch } from "../../app/hooks";
-import { markAsRead } from "../../app/features/results/resultsSlice";
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
@@ -25,9 +24,7 @@ const ResultsIntroductionModal = ({ onClose }: { onClose?: () => void }) => {
 
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(markAsRead());
-  }, [dispatch]);
+  useEffect(() => {}, [dispatch]);
 
   return (
     <Layout style={styles.layout}>

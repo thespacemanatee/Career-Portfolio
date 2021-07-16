@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { ResultsLocalStorageItem } from "../../types";
+import { ResultsLocalStorage } from "../../types";
 
 const useFetchSubmissions = () => {
-  const [result, setResults] = useState<ResultsLocalStorageItem[]>(null);
+  const [result, setResults] = useState<ResultsLocalStorage>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [unmounted, setUnmounted] = useState(false);
@@ -25,7 +25,7 @@ const useFetchSubmissions = () => {
   const fetchSubmissions = useCallback(async () => {
     setLoading(true);
     try {
-      const res: ResultsLocalStorageItem[] = JSON.parse(
+      const res: ResultsLocalStorage = JSON.parse(
         await AsyncStorage.getItem("savedEntries")
       );
 

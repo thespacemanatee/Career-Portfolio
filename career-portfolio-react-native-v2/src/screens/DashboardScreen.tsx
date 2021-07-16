@@ -5,16 +5,24 @@ import { ScrollView } from "react-native-gesture-handler";
 
 import ScreenTitle from "../components/ScreenTitle";
 import useFetchSubmissions from "../helpers/hooks/useFetchSubmissions";
-import { ResultsLocalStorageItem } from "../types";
+import { ResultsLocalStorage, ResultsLocalStorageItem } from "../types";
 import ResultsOverviewCard from "../components/ResultsOverviewCard";
-import { useAppDispatch } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { setAllTasks } from "../app/features/tasks/tasksSlice";
 import { LottieView } from "..";
 import AnimatedFab from "../components/AnimatedFab";
 import useHandleScroll from "../helpers/hooks/useHandleScroll";
+import CustomText from "../components/CustomText";
+import SectionTitle from "../components/SectionTitle";
 
-const PastResultsScreen = ({ navigation }) => {
-  const [entries, setEntries] = useState<ResultsLocalStorageItem[]>(null);
+const DashboardScreen = ({ navigation }) => {
+  const recentlyOpened = useAppSelector(
+    (state) => state.results.recentlyOpened
+  );
+  const [previousSubmissions, setPreviousSubmissions] =
+    useState<ResultsLocalStorage>(null);
+  const [recentlyOpenedItem, setRecentlyOpenedItem] =
+    useState<ResultsLocalStorageItem>(null);
 
   const { height } = Dimensions.get("window");
 
@@ -29,11 +37,15 @@ const PastResultsScreen = ({ navigation }) => {
   };
 
   const handleNavigateResults = (id: string) => {
-    dispatch(setAllTasks(entries[id].payload.task_list));
-    navigation.navigate("ResultsStack", {
-      screen: "SubmitLoading",
-      params: { payload: entries[id].payload, id },
-    });
+    if (id === recentlyOpened) {
+      navigation.navigate("ResultsStack", { screen: "ResultsPager" });
+    } else {
+      dispatch(setAllTasks(previousSubmissions[id].payload.task_list));
+      navigation.navigate("ResultsStack", {
+        screen: "SubmitLoading",
+        params: { payload: previousSubmissions[id].payload, id },
+      });
+    }
   };
 
   const handleResetSubmissions = () => {
@@ -50,14 +62,19 @@ const PastResultsScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    setEntries(result);
-  }, [result]);
+    const recent = { ...result };
+    if (result && recentlyOpened) {
+      setRecentlyOpenedItem(result[recentlyOpened]);
+      delete recent[recentlyOpened];
+    }
+    setPreviousSubmissions(recent);
+  }, [recentlyOpened, result]);
 
   return (
     <Layout style={styles.screen}>
       <View style={styles.header}>
         <ScreenTitle title="Hello there 👋" />
-        {entries && (
+        {previousSubmissions && (
           <Button
             onPress={handleResetSubmissions}
             appearance="ghost"
@@ -67,7 +84,7 @@ const PastResultsScreen = ({ navigation }) => {
           </Button>
         )}
       </View>
-      {!entries && (
+      {!previousSubmissions && (
         <View style={styles.emptyComponent}>
           <LottieView
             // eslint-disable-next-line global-require
@@ -76,25 +93,43 @@ const PastResultsScreen = ({ navigation }) => {
             loop
             style={{ height: height / 3 }}
           />
+          <CustomText style={styles.emptyText}>
+            You have no submissions.{"\n"}Start adding one!
+          </CustomText>
         </View>
       )}
-      {entries && (
-        <ScrollView onScroll={handleScroll}>
-          {Object.keys(entries).map((id, index) => {
-            return (
-              <View key={id} style={styles.cardContainer}>
-                <ResultsOverviewCard
-                  index={index}
-                  id={id}
-                  date={entries[id].date}
-                  onetTitle={entries[id].payload.onet_title}
-                  onPress={handleNavigateResults}
-                />
-              </View>
-            );
-          })}
-        </ScrollView>
-      )}
+      <ScrollView onScroll={handleScroll}>
+        {recentlyOpenedItem && (
+          <View style={styles.cardContainer}>
+            <SectionTitle title="Recently Opened" />
+            <ResultsOverviewCard
+              index={0}
+              id={recentlyOpened}
+              date={recentlyOpenedItem.date}
+              onetTitle={recentlyOpenedItem.payload.onet_title}
+              onPress={handleNavigateResults}
+            />
+          </View>
+        )}
+        {previousSubmissions && Object.keys(previousSubmissions).length > 0 && (
+          <View>
+            <SectionTitle title="Previous Submissions" />
+            {Object.keys(previousSubmissions).map((id, index) => {
+              return (
+                <View key={id} style={styles.cardContainer}>
+                  <ResultsOverviewCard
+                    index={index}
+                    id={id}
+                    date={previousSubmissions[id].date}
+                    onetTitle={previousSubmissions[id].payload.onet_title}
+                    onPress={handleNavigateResults}
+                  />
+                </View>
+              );
+            })}
+          </View>
+        )}
+      </ScrollView>
       <AnimatedFab
         icon="plus"
         label="Survey"
@@ -106,7 +141,7 @@ const PastResultsScreen = ({ navigation }) => {
   );
 };
 
-export default PastResultsScreen;
+export default DashboardScreen;
 
 const styles = StyleSheet.create({
   screen: {
@@ -124,6 +159,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  emptyText: {
+    textAlign: "center",
   },
   fab: {
     position: "absolute",

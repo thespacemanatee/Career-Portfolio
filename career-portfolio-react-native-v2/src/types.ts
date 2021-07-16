@@ -87,8 +87,7 @@ export type ResultsState = {
   count: ResultsCountData[];
   similar: ResultsSimilarData[];
   missing: ResultsMissingData[];
-  status?: string;
-  opened?: boolean;
+  recentlyOpened?: string;
 };
 
 // type ResultsLocalStorageItemObject = {
@@ -98,14 +97,15 @@ export type ResultsState = {
 //   irrelevant: ResultsSimilarData[][];
 // };
 
-export interface ResultsLocalStorageItem {
-  [id: string]: {
-    date: Date;
-    payload: ResultsPayload;
-  };
+export type ResultsLocalStorageItem = {
+  date: Date;
+  payload: ResultsPayload;
+};
+export type ResultsLocalStorage = {
+  [id: string]: ResultsLocalStorageItem;
 
   // [ResultsCategory.FAMILIARITY]: ResultsLocalStorageItemObject;
   // [ResultsCategory.PREFERENCE]: ResultsLocalStorageItemObject;
   // [ResultsCategory.PERSONALITY]: ResultsLocalStorageItemObject;
   // [ResultsCategory.BEST_FIT]: ResultsLocalStorageItemObject;
-}
+};

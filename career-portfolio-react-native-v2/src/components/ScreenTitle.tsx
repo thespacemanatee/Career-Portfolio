@@ -1,19 +1,23 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ViewProps } from "react-native";
 import CustomText from "./CustomText";
 
-interface ScreenTitleProps {
+interface ScreenTitleProps extends ViewProps {
   title: string;
 }
 
-const ScreenTitle: React.FC<ScreenTitleProps> = ({ title, children }) => {
+const ScreenTitle: React.FC<ScreenTitleProps> = ({
+  title,
+  children,
+  style,
+}) => {
   return (
-    <>
+    <View style={style}>
       <CustomText style={styles.title} fontFamily="extraBold">
         {title}
       </CustomText>
       {children && <View style={styles.subtitleContainer}>{children}</View>}
-    </>
+    </View>
   );
 };
 

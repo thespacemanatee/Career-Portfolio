@@ -6,19 +6,16 @@ const initialState: ResultsState = {
   count: null,
   similar: null,
   missing: null,
-  status: "idle",
-  opened: false,
 };
 
 const resultsSlice = createSlice({
   name: "results",
   initialState,
   reducers: {
-    markAsRead: (state) => {
-      state.opened = true;
+    setRecentlyOpened: (state, action: PayloadAction<string>) => {
+      state.recentlyOpened = action.payload;
     },
     saveResults: (state, action: PayloadAction<ResultsState>) => {
-      state.status = "fulfilled";
       let { count, similar, missing } = action.payload;
       count = count.slice(1).map((e) => {
         return {
@@ -62,6 +59,6 @@ const resultsSlice = createSlice({
   },
 });
 
-export const { markAsRead, saveResults } = resultsSlice.actions;
+export const { setRecentlyOpened, saveResults } = resultsSlice.actions;
 
 export default resultsSlice.reducer;

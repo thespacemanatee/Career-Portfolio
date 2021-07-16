@@ -32,6 +32,7 @@ import ResultsIntroductionModal from "./ResultsIntroductionModal";
 import ResultCard from "../../components/ResultCard";
 import { tasksSelector } from "../../app/features/tasks/tasksSlice";
 import { navigationRef } from "../../navigation/NavigationHelper";
+import ThemedBackButton from "../../components/ThemedBackButton";
 
 const HelpIcon = (props: any) => (
   <Icon {...props} name="question-mark-circle-outline" />
@@ -174,6 +175,7 @@ const ResultsPagerScreen = ({ navigation }) => {
           <ResultsIntroductionModal onClose={handleCloseHelp} />
         </Card>
       </Modal>
+      <ThemedBackButton style={styles.backButton} />
       <Ticker
         scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}
         positionAnimatedValue={positionAnimatedValue}
@@ -218,6 +220,9 @@ export default ResultsPagerScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+  },
+  backButton: {
+    marginBottom: 12,
   },
   pagerView: {
     flex: 1,

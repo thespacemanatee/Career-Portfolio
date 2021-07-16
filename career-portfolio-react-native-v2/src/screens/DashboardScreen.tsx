@@ -62,10 +62,13 @@ const DashboardScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    const recent = { ...result };
+    let recent = { ...result };
     if (result && recentlyOpened) {
       setRecentlyOpenedItem(result[recentlyOpened]);
       delete recent[recentlyOpened];
+    }
+    if (!(Object.keys(recent).length > 0)) {
+      recent = null;
     }
     setPreviousSubmissions(recent);
   }, [recentlyOpened, result]);
@@ -74,7 +77,7 @@ const DashboardScreen = ({ navigation }) => {
     <Layout style={styles.screen}>
       <View style={styles.header}>
         <ScreenTitle title="Hello there 👋" />
-        {previousSubmissions && (
+        {result && (
           <Button
             onPress={handleResetSubmissions}
             appearance="ghost"
@@ -84,7 +87,7 @@ const DashboardScreen = ({ navigation }) => {
           </Button>
         )}
       </View>
-      {!previousSubmissions && (
+      {!result && (
         <View style={styles.emptyComponent}>
           <LottieView
             // eslint-disable-next-line global-require
@@ -98,7 +101,7 @@ const DashboardScreen = ({ navigation }) => {
           </CustomText>
         </View>
       )}
-      <ScrollView onScroll={handleScroll}>
+      <ScrollView onScroll={handleScroll} style={styles.scrollView}>
         {recentlyOpenedItem && (
           <View style={styles.cardContainer}>
             <SectionTitle title="Recently Opened" />
@@ -111,7 +114,7 @@ const DashboardScreen = ({ navigation }) => {
             />
           </View>
         )}
-        {previousSubmissions && Object.keys(previousSubmissions).length > 0 && (
+        {previousSubmissions && (
           <View>
             <SectionTitle title="Previous Submissions" />
             {Object.keys(previousSubmissions).map((id, index) => {
@@ -154,6 +157,9 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     marginBottom: 16,
+  },
+  scrollView: {
+    flexGrow: 0,
   },
   emptyComponent: {
     flex: 1,

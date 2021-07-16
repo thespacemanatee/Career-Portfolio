@@ -7,7 +7,7 @@ import { ResultsLocalStorageItem, ResultsPayload } from "../types";
 
 const dataArray = Object.values(data);
 
-export const saveUserInput = async (payload: ResultsPayload) => {
+export const saveUserInput = async (payload: ResultsPayload, id: string) => {
   try {
     let savedEntries: ResultsLocalStorageItem = JSON.parse(
       await AsyncStorage.getItem("savedEntries")
@@ -17,9 +17,9 @@ export const saveUserInput = async (payload: ResultsPayload) => {
       savedEntries = {};
     }
 
-    const id = uuidv4();
+    const uuid = id || uuidv4();
     const toSave: ResultsLocalStorageItem = {
-      [id]: {
+      [uuid]: {
         date: new Date(),
         payload,
       },

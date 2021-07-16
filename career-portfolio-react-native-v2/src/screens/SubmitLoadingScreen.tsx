@@ -12,7 +12,7 @@ import useFetchResults from "../helpers/hooks/useFetchResults";
 import { saveUserInput } from "../helpers/utils";
 
 const SubmitLoadingScreen = ({ navigation, route }) => {
-  const { payload } = route.params;
+  const { payload, id } = route.params;
 
   const { height } = Dimensions.get("window");
 
@@ -22,18 +22,18 @@ const SubmitLoadingScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     if (result) {
-      saveUserInput(payload).then(() => {
+      saveUserInput(payload, id).then(() => {
         dispatch(saveResults(result));
         navigation.dispatch(
           CommonActions.reset({
             index: 1,
             routes: [
-              { name: "Home" },
+              { name: "Dashboard" },
               {
-                name: "History",
+                name: "ResultsStack",
                 state: {
                   index: 1,
-                  routes: [{ name: "Past Results" }, { name: "Results" }],
+                  routes: [{ name: "ResultsPager" }],
                 },
               },
             ],
@@ -50,7 +50,7 @@ const SubmitLoadingScreen = ({ navigation, route }) => {
       );
       navigation.goBack();
     }
-  }, [dispatch, error, navigation, payload, result]);
+  }, [dispatch, error, id, navigation, payload, result]);
 
   return (
     <Layout style={styles.screen}>

@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useCallback } from "react";
 import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import { useTheme } from "@ui-kitten/components";
 import Animated, {
   interpolate,
@@ -36,9 +37,11 @@ const ResultsOverviewCard: React.FC<ResultsOverviewCardProps> = ({
     onPress(id);
   };
 
-  useEffect(() => {
-    progress.value = withDelay(50 * index, withSpring(1));
-  }, [index, progress]);
+  useFocusEffect(
+    useCallback(() => {
+      progress.value = withDelay(50 * index, withSpring(1));
+    }, [index, progress])
+  );
 
   const animatedStyle = useAnimatedStyle(() => {
     const translateX = interpolate(progress.value, [0, 1], [-WIDTH, 0]);
@@ -56,7 +59,7 @@ const ResultsOverviewCard: React.FC<ResultsOverviewCardProps> = ({
           { backgroundColor: theme["color-basic-400"] },
         ]}
       >
-        <View style={styles.titleContainer}>
+        <View>
           <CustomText style={styles.smallText}>Selected Occupation</CustomText>
           <CustomText fontFamily="bold" style={styles.onetTitle}>
             {onetTitle}
@@ -76,12 +79,11 @@ export default ResultsOverviewCard;
 
 const styles = StyleSheet.create({
   container: {
-    height: 150,
+    height: 120,
     borderRadius: 8,
     padding: 12,
     justifyContent: "space-between",
   },
-  titleContainer: {},
   smallText: {
     fontSize: 12,
   },

@@ -1,7 +1,6 @@
 import React from "react";
 import { View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   Extrapolate,
   interpolate,
@@ -11,9 +10,8 @@ import {
 } from "react-native-reanimated";
 import { NavigationContainer } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { StyleService } from "@ui-kitten/components";
+import { Layout, StyleService } from "@ui-kitten/components";
 
-import WelcomeScreen from "../screens/WelcomeScreen";
 import OccupationsScreen from "../screens/OccupationsScreen";
 import CoreTasksScreen from "../screens/CoreTasksScreen";
 import LifeTasksScreen from "../screens/LifeTasksScreen";
@@ -24,6 +22,7 @@ import ResultsPagerScreen from "../screens/Results/ResultsPagerScreen";
 import ResultsDetailsScreen from "../screens/Results/ResultsDetailsScreen";
 import SubmitLoadingScreen from "../screens/SubmitLoadingScreen";
 import SubmissionProgressionHeader from "../components/SubmissionProgressionHeader";
+import DashboardScreen from "../screens/DashboardScreen";
 import { isReadyRef, submissionProgressRef } from "./NavigationHelper";
 import ThemedBackButton from "../components/ThemedBackButton";
 import {
@@ -31,15 +30,12 @@ import {
   modalConfig,
   slideConfig,
   NUMBER_OF_SUBMISSION_SCREENS,
-  tabConfig,
 } from "./NavigationConfig";
-import PastResultsScreen from "../screens/PastResultsScreen";
 
 const AppNavigator = () => {
   const submissionProgress = useSharedValue(0);
 
   const { Navigator, Screen } = createStackNavigator();
-  const Tab = createBottomTabNavigator();
 
   const handleNavigationStateChange = () => {
     const toValue =
@@ -69,7 +65,7 @@ const AppNavigator = () => {
 
   const CreateSubmissionStackNavigator = () => {
     return (
-      <View style={styles.screen}>
+      <Layout style={styles.screen}>
         <ThemedBackButton style={backAnimatedStyle} />
         <View style={styles.submissionProgressHeader}>
           <SubmissionProgressionHeader
@@ -84,7 +80,7 @@ const AppNavigator = () => {
           <Screen name="Rankings" component={RankingsScreen} />
           <Screen name="SubmitLoading" component={SubmitLoadingScreen} />
         </Navigator>
-      </View>
+      </Layout>
     );
   };
 
@@ -100,34 +96,13 @@ const AppNavigator = () => {
 
   const ResultsStackNavigator = () => {
     return (
-      <Navigator screenOptions={modalConfig}>
-        <Screen name="ResultsPager" component={ResultsPagerScreen} />
-        <Screen name="ResultsDetails" component={ResultsDetailsScreen} />
-      </Navigator>
-    );
-  };
-
-  const HomeStackNavigator = () => {
-    return (
-      <Navigator screenOptions={slideConfig}>
-        <Screen name="Welcome" component={WelcomeScreen} />
-        <Screen
-          name="CreateSubmission"
-          component={CreateSubmissionStackNavigator}
-        />
-      </Navigator>
-    );
-  };
-
-  const PastResultsStackNavigator = () => {
-    return (
-      <View style={styles.screen}>
+      <Layout style={styles.screen}>
         <Navigator screenOptions={slideConfig}>
-          <Screen name="Past Results" component={PastResultsScreen} />
           <Screen name="SubmitLoading" component={SubmitLoadingScreen} />
-          <Screen name="Results" component={ResultsStackNavigator} />
+          <Screen name="ResultsPager" component={ResultsPagerScreen} />
+          <Screen name="ResultsDetails" component={ResultsDetailsScreen} />
         </Navigator>
-      </View>
+      </Layout>
     );
   };
 
@@ -139,10 +114,14 @@ const AppNavigator = () => {
       }}
     >
       <SafeAreaView style={styles.navigationContainer}>
-        <Tab.Navigator screenOptions={tabConfig}>
-          <Tab.Screen name="Home" component={HomeStackNavigator} />
-          <Tab.Screen name="History" component={PastResultsStackNavigator} />
-        </Tab.Navigator>
+        <Navigator screenOptions={slideConfig}>
+          <Screen name="Dashboard" component={DashboardScreen} />
+          <Screen
+            name="CreateSubmissionStack"
+            component={CreateSubmissionStackNavigator}
+          />
+          <Screen name="ResultsStack" component={ResultsStackNavigator} />
+        </Navigator>
       </SafeAreaView>
     </NavigationContainer>
   );
@@ -157,7 +136,6 @@ const styles = StyleService.create({
   screen: {
     flex: 1,
     padding: 16,
-    backgroundColor: "white",
   },
   submissionProgressHeader: {
     marginVertical: 12,

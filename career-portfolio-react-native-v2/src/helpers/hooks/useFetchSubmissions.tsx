@@ -12,9 +12,13 @@ const useFetchSubmissions = () => {
   const resetSubmissions = async () => {
     try {
       await AsyncStorage.removeItem("savedEntries");
-      await fetchSubmissions();
+      setError(null);
     } catch (err) {
       setError(err);
+    }
+    if (!unmounted) {
+      setResults(null);
+      setLoading(false);
     }
   };
 
@@ -33,8 +37,8 @@ const useFetchSubmissions = () => {
     } catch (err) {
       if (!unmounted) {
         setResults(null);
-        setError(err);
         setLoading(false);
+        setError(err);
       }
     }
   }, [unmounted]);

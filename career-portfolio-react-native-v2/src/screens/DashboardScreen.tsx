@@ -10,6 +10,8 @@ import ResultsOverviewCard from "../components/ResultsOverviewCard";
 import { useAppDispatch } from "../app/hooks";
 import { setAllTasks } from "../app/features/tasks/tasksSlice";
 import { LottieView } from "..";
+import AnimatedFab from "../components/AnimatedFab";
+import useHandleScroll from "../helpers/hooks/useHandleScroll";
 
 const PastResultsScreen = ({ navigation }) => {
   const [entries, setEntries] = useState<ResultsLocalStorageItem[]>(null);
@@ -18,11 +20,20 @@ const PastResultsScreen = ({ navigation }) => {
 
   const { result, resetSubmissions } = useFetchSubmissions();
 
+  const { handleScroll, showButton } = useHandleScroll();
+
   const dispatch = useAppDispatch();
+
+  const handleCreateSubmission = () => {
+    navigation.navigate("CreateSubmissionStack");
+  };
 
   const handleNavigateResults = (id: string) => {
     dispatch(setAllTasks(entries[id].payload.task_list));
-    navigation.navigate("SubmitLoading", { payload: entries[id].payload });
+    navigation.navigate("ResultsStack", {
+      screen: "SubmitLoading",
+      params: { payload: entries[id].payload, id },
+    });
   };
 
   const handleResetSubmissions = () => {
@@ -45,7 +56,7 @@ const PastResultsScreen = ({ navigation }) => {
   return (
     <Layout style={styles.screen}>
       <View style={styles.header}>
-        <ScreenTitle title="History" />
+        <ScreenTitle title="Hello there 👋" />
         {entries && (
           <Button
             onPress={handleResetSubmissions}
@@ -68,7 +79,7 @@ const PastResultsScreen = ({ navigation }) => {
         </View>
       )}
       {entries && (
-        <ScrollView>
+        <ScrollView onScroll={handleScroll}>
           {Object.keys(entries).map((id, index) => {
             return (
               <View key={id} style={styles.cardContainer}>
@@ -84,6 +95,13 @@ const PastResultsScreen = ({ navigation }) => {
           })}
         </ScrollView>
       )}
+      <AnimatedFab
+        icon="plus"
+        label="Survey"
+        onPress={handleCreateSubmission}
+        style={styles.fab}
+        showLabel={showButton}
+      />
     </Layout>
   );
 };
@@ -93,6 +111,7 @@ export default PastResultsScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    padding: 16,
   },
   header: {
     flexDirection: "row",
@@ -105,5 +124,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 0,
   },
 });

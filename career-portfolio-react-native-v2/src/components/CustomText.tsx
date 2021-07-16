@@ -1,5 +1,7 @@
 import React from "react";
-import { Animated, TextProps } from "react-native";
+import { TextProps } from "react-native";
+import Animated from "react-native-reanimated";
+
 import { FontWeight } from "../types";
 
 const fontWeights = {
@@ -21,9 +23,11 @@ const CustomText: React.FC<CustomTextProps> = ({
   fontFamily,
   numberOfLines,
   style,
+  onLayout,
 }) => {
   return (
     <Animated.Text
+      onLayout={onLayout}
       numberOfLines={numberOfLines}
       style={[style, { fontFamily: fontWeights[fontFamily || "semiBold"] }]}
     >

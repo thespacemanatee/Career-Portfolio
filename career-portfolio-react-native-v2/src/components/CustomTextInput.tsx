@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Platform, TextInputProps } from "react-native";
-import { Input, useTheme } from "@ui-kitten/components";
+import { Input, Spinner, useTheme } from "@ui-kitten/components";
 
 import CustomText from "./CustomText";
 
@@ -9,6 +9,7 @@ interface CustomTextInputProps extends TextInputProps {
   description?: string;
   label?: string;
   size?: string;
+  loading?: boolean;
 }
 
 const CustomTextInput: React.FC<CustomTextInputProps> = ({
@@ -16,6 +17,7 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
   description,
   label,
   size,
+  loading,
   ...props
 }) => {
   const theme = useTheme();
@@ -23,10 +25,11 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
   return (
     <View>
       <Input
+        {...props}
         label={label}
         size={size}
-        {...props}
         status={errorText ? "danger" : "basic"}
+        accessoryRight={() => (loading ? <Spinner /> : null)}
       />
       {description && !errorText ? (
         <CustomText

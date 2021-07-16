@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { View, FlatList, Alert } from "react-native";
+import { View, FlatList, Alert, Keyboard, Pressable } from "react-native";
 import { StyleService, Button, Spinner, useTheme } from "@ui-kitten/components";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -37,8 +37,9 @@ const OccupationsScreen = ({ navigation }) => {
   const form = useAppSelector((state) => state.form);
   const [loading, setLoading] = useState(false);
   const [occupations, setOccupations] = useState<string[]>();
-  const [chosenOccupation, setChosenOccupation] = useState();
-  const [userInput, setUserInput] = useState<string>();
+  const [chosenOccupation, setChosenOccupation] = useState("");
+  const [userInput, setUserInput] = useState<string>("");
+  const [query, setQuery] = useState<Values>();
 
   useEffect(() => {
     navigationRef.current = navigation;
@@ -50,18 +51,18 @@ const OccupationsScreen = ({ navigation }) => {
     }, [])
   );
 
+  useEffect(() => {
+    const timeOutId = setTimeout(() => {
+      if (query?.occupation.length > 0) {
+        handleSubmitForm(query);
+      }
+    }, 200);
+    return () => clearTimeout(timeOutId);
+  }, [query]);
+
   const dispatch = useAppDispatch();
 
   const theme = useTheme();
-
-  const LoadingIndicator = (props) => {
-    const { style } = props;
-    return (
-      <View style={[style, styles.indicator]}>
-        <Spinner size="small" />
-      </View>
-    );
-  };
 
   const handleNavigation = () => {
     if (chosenOccupation) {
@@ -137,11 +138,13 @@ const OccupationsScreen = ({ navigation }) => {
     loading ? (
       <OccupationsLoading />
     ) : (
-      <ListEmptyComponent label="NO OCCUPATIONS FOUND" />
+      userInput.length > 0 && (
+        <ListEmptyComponent label="NO OCCUPATIONS FOUND" />
+      )
     );
 
   return (
-    <View style={styles.screen}>
+    <Pressable style={styles.screen} onPress={() => Keyboard.dismiss()}>
       <SectionTitle title="What is your occupation?">
         <CustomText style={styles.subtitle} fontFamily="semiBold">
           Please enter your{" "}
@@ -159,24 +162,21 @@ const OccupationsScreen = ({ navigation }) => {
         onSubmit={handleSubmitForm}
         validationSchema={SearchSchema}
       >
-        {({ handleChange, handleBlur, handleSubmit, errors, values }) => (
+        {({ handleChange, handleBlur, errors, values }) => (
           <>
             <CustomTextInput
               returnKeyType="next"
               size="large"
               placeholder="Enter your occupation here"
               value={values.occupation}
-              onChangeText={handleChange("occupation")}
+              onChangeText={(text) => {
+                handleChange("occupation")(text);
+                setQuery({ occupation: text });
+              }}
               onBlur={handleBlur("occupation")}
               errorText={errors.occupation}
+              loading={loading}
             />
-            <Button
-              onPress={() => handleSubmit()}
-              appearance="outline"
-              accessoryRight={loading ? LoadingIndicator : null}
-            >
-              SEARCH
-            </Button>
             <FlatList
               style={styles.flatList}
               data={occupations}
@@ -189,7 +189,7 @@ const OccupationsScreen = ({ navigation }) => {
           </>
         )}
       </Formik>
-    </View>
+    </Pressable>
   );
 };
 
@@ -206,14 +206,10 @@ const styles = StyleService.create({
     marginBottom: 12,
   },
   flatList: {
-    marginVertical: 5,
+    marginVertical: 12,
   },
   contentContainer: {
     flexGrow: 1,
-  },
-  indicator: {
-    position: "absolute",
-    right: 0,
   },
   cardContainer: {
     padding: 6,

@@ -28,7 +28,6 @@ const ResultsIntroductionModal = ({ onClose }: { onClose?: () => void }) => {
   useEffect(() => {
     AsyncStorage.getItem("settings").then((res) => {
       let settings = JSON.parse(res);
-      console.log(settings);
       if (!settings) {
         settings = {};
       }

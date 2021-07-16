@@ -185,7 +185,11 @@ const ResultsPagerScreen = ({ navigation }) => {
           positionAnimatedValue={positionAnimatedValue}
           config={config}
         />
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setVisible(true);
+          }}
+        >
           <HelpIcon />
         </TouchableOpacity>
       </View>

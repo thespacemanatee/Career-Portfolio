@@ -118,7 +118,7 @@ const DashboardScreen = ({ navigation }) => {
               return (
                 <View key={id} style={styles.cardContainer}>
                   <ResultsOverviewCard
-                    index={index}
+                    index={index + 1}
                     id={id}
                     date={previousSubmissions[id].date}
                     onetTitle={previousSubmissions[id].payload.onet_title}

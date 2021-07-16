@@ -5,15 +5,11 @@ import {
   Animated,
   useWindowDimensions,
   FlatList,
+  TouchableOpacity,
 } from "react-native";
-import {
-  Icon,
-  TopNavigationAction,
-  Modal,
-  Card,
-  Layout,
-} from "@ui-kitten/components";
+import { Icon, Modal, Card, Layout } from "@ui-kitten/components";
 import PagerView from "react-native-pager-view";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { useAppSelector } from "../../app/hooks";
 import Item from "../../components/pager/Item";
@@ -33,9 +29,15 @@ import ResultCard from "../../components/ResultCard";
 import { tasksSelector } from "../../app/features/tasks/tasksSlice";
 import { navigationRef } from "../../navigation/NavigationHelper";
 import ThemedBackButton from "../../components/ThemedBackButton";
+import { ICON_SIZE } from "../../helpers/config/config";
 
 const HelpIcon = (props: any) => (
-  <Icon {...props} name="question-mark-circle-outline" />
+  <Icon
+    {...props}
+    name="question-mark-circle-outline"
+    style={styles.helpIcon}
+    fill="black"
+  />
 );
 
 const config: ResultsViewPagerConfig[] = [
@@ -74,23 +76,24 @@ const ResultsPagerScreen = ({ navigation }) => {
   }, [navigation]);
 
   useEffect(() => {
-    const unsubscribe = setTimeout(() => {
-      setVisible(!results.opened);
-    }, 1000);
+    let unsubscribe;
+    AsyncStorage.getItem("settings")
+      .then((res) => {
+        const settings = JSON.parse(res);
+        unsubscribe = setTimeout(() => {
+          setVisible(!settings?.read);
+        }, 1000);
+      })
+      .catch(() => {
+        unsubscribe = setTimeout(() => {
+          setVisible(true);
+        }, 1000);
+      });
     return () => {
       clearTimeout(unsubscribe);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const HelpAction = () => (
-    <TopNavigationAction
-      icon={HelpIcon}
-      onPress={() => {
-        setVisible(true);
-      }}
-    />
-  );
 
   const handleCloseHelp = () => {
     setVisible(false);
@@ -176,11 +179,16 @@ const ResultsPagerScreen = ({ navigation }) => {
         </Card>
       </Modal>
       <ThemedBackButton style={styles.backButton} />
-      <Ticker
-        scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}
-        positionAnimatedValue={positionAnimatedValue}
-        config={config}
-      />
+      <View style={styles.headerContainer}>
+        <Ticker
+          scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}
+          positionAnimatedValue={positionAnimatedValue}
+          config={config}
+        />
+        <TouchableOpacity>
+          <HelpIcon />
+        </TouchableOpacity>
+      </View>
       <AnimatedPagerView
         initialPage={0}
         style={styles.pagerView}
@@ -224,6 +232,10 @@ const styles = StyleSheet.create({
   backButton: {
     marginBottom: 12,
   },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   pagerView: {
     flex: 1,
   },
@@ -233,9 +245,13 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flexGrow: 1,
-    padding: 15,
+    padding: 6,
   },
   backdrop: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  helpIcon: {
+    width: ICON_SIZE,
+    height: ICON_SIZE,
   },
 });

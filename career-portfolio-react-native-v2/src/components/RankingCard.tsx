@@ -10,6 +10,7 @@ import {
 import { StyleService, Card, Icon } from "@ui-kitten/components";
 
 import CustomText from "./CustomText";
+import { ICON_SIZE } from "../helpers/config/config";
 
 if (
   Platform.OS === "android" &&
@@ -17,8 +18,6 @@ if (
 ) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
-
-const ICON_SIZE = 30;
 
 const ChevronIcon = (props) => (
   <Icon

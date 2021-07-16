@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { View, Animated } from "react-native";
 import { Layout, StyleService, Button } from "@ui-kitten/components";
 import PagerView from "react-native-pager-view";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import CustomText from "../../components/CustomText";
 import Pagination from "../../components/pager/Pagination";
@@ -24,7 +25,17 @@ const ResultsIntroductionModal = ({ onClose }: { onClose?: () => void }) => {
 
   const dispatch = useAppDispatch();
 
-  useEffect(() => {}, [dispatch]);
+  useEffect(() => {
+    AsyncStorage.getItem("settings").then((res) => {
+      let settings = JSON.parse(res);
+      console.log(settings);
+      if (!settings) {
+        settings = {};
+      }
+      settings.read = true;
+      AsyncStorage.setItem("settings", JSON.stringify(settings));
+    });
+  }, [dispatch]);
 
   return (
     <Layout style={styles.layout}>

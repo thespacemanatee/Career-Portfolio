@@ -14,6 +14,7 @@ import { StyleService, Card, Icon, Button } from "@ui-kitten/components";
 import { addLifeTask, removeLifeTask } from "../app/features/tasks/tasksSlice";
 import CustomText from "./CustomText";
 import { TaskType } from "../types";
+import { ICON_SIZE } from "../helpers/config/config";
 
 if (
   Platform.OS === "android" &&
@@ -21,8 +22,6 @@ if (
 ) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
-
-const ICON_SIZE = 30;
 
 const ChevronIcon = (props: any) => (
   <Icon

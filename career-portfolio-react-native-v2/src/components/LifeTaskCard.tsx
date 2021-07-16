@@ -13,6 +13,7 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 
 import { removeLifeTask } from "../app/features/tasks/tasksSlice";
 import CustomText from "./CustomText";
+import { ICON_SIZE } from "../helpers/config/config";
 
 if (
   Platform.OS === "android" &&
@@ -20,8 +21,6 @@ if (
 ) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
-
-const ICON_SIZE = 30;
 
 const TrashIcon = (props) => (
   <Icon fill="red" {...props} name="trash" style={styles.icon} />

@@ -35,12 +35,16 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
         <CustomText
           style={[styles.description, { color: theme["color-basic-600"] }]}
         >
-          {description || " "}
+          {description}
         </CustomText>
       ) : null}
-      <CustomText style={[styles.error, { color: theme["color-danger-700"] }]}>
-        {errorText || " "}
-      </CustomText>
+      {errorText && (
+        <CustomText
+          style={[styles.error, { color: theme["color-danger-700"] }]}
+        >
+          {errorText}
+        </CustomText>
+      )}
     </View>
   );
 };
@@ -49,7 +53,6 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 12,
     paddingTop: 8,
-    position: Platform.OS !== "web" ? "absolute" : "relative",
     bottom: 0,
   },
   error: {

@@ -4,7 +4,6 @@ import {
   Button,
   Icon,
   Input,
-  Layout,
   StyleService,
   TopNavigation,
   TopNavigationAction,
@@ -80,38 +79,36 @@ const AddByOccupationScreen = ({ navigation }) => {
         alignment="center"
         accessoryLeft={BackAction}
       />
-      <Layout style={styles.layout}>
-        <Formik initialValues={{ occupation: "" }} onSubmit={handleSearch}>
-          {({ handleChange, handleBlur, handleSubmit, values }) => (
-            <>
-              <Input
-                label="Search Occupations"
-                returnKeyType="next"
-                size="large"
-                placeholder="Enter query occupation here"
-                value={values.occupation}
-                onChangeText={handleChange("occupation")}
-                onBlur={handleBlur("occupation")}
-              />
-              <Button
-                style={styles.button}
-                onPress={() => handleSubmit()}
-                appearance="outline"
-              >
-                SEARCH
-              </Button>
-            </>
-          )}
-        </Formik>
-        <SearchList data={results} onSelect={handleSelectResult} />
-        <FlatList
-          renderItem={renderTasks}
-          data={tasks}
-          keyExtractor={(item) => String(item.taskId)}
-          contentContainerStyle={styles.contentContainer}
-          ListEmptyComponent={renderEmptyComponent}
-        />
-      </Layout>
+      <Formik initialValues={{ occupation: "" }} onSubmit={handleSearch}>
+        {({ handleChange, handleBlur, handleSubmit, values }) => (
+          <>
+            <Input
+              label="Search Occupations"
+              returnKeyType="next"
+              size="large"
+              placeholder="Enter query occupation here"
+              value={values.occupation}
+              onChangeText={handleChange("occupation")}
+              onBlur={handleBlur("occupation")}
+            />
+            <Button
+              style={styles.button}
+              onPress={() => handleSubmit()}
+              appearance="outline"
+            >
+              SEARCH
+            </Button>
+          </>
+        )}
+      </Formik>
+      <SearchList data={results} onSelect={handleSelectResult} />
+      <FlatList
+        renderItem={renderTasks}
+        data={tasks}
+        keyExtractor={(item) => String(item.taskId)}
+        contentContainerStyle={styles.contentContainer}
+        ListEmptyComponent={renderEmptyComponent}
+      />
     </View>
   );
 };
@@ -121,10 +118,7 @@ export default AddByOccupationScreen;
 const styles = StyleService.create({
   screen: {
     flex: 1,
-  },
-  layout: {
-    flex: 1,
-    padding: 10,
+    backgroundColor: "white",
   },
   button: {
     marginVertical: 10,

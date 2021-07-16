@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { View, FlatList, Alert, Keyboard, Pressable } from "react-native";
-import { StyleService, Button, Spinner, useTheme } from "@ui-kitten/components";
+import { StyleService, Button, useTheme } from "@ui-kitten/components";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -16,7 +16,6 @@ import { addSelection } from "../app/features/form/formSlice";
 import { setAllTasks } from "../app/features/tasks/tasksSlice";
 import { getTasksByOccupation, handleErrorResponse } from "../helpers/utils";
 import CustomText from "../components/CustomText";
-import alert from "../components/CustomAlert";
 import OccupationsLoading from "../components/loading/OccupationsLoading";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import SelectedOccupationCard from "../components/SelectedOccupationCard";
@@ -86,7 +85,7 @@ const OccupationsScreen = ({ navigation }) => {
       }
       navigation.navigate("CoreTasks");
     } else {
-      alert("Error", "Please choose an occupation!");
+      Alert.alert("Error", "Please choose an occupation!");
     }
   };
 
@@ -97,13 +96,9 @@ const OccupationsScreen = ({ navigation }) => {
   const handleSubmitForm = async (values: Values) => {
     const { occupation } = values;
     setUserInput(occupation);
-    if (!occupation) {
-      Alert.alert("Error", "Please input an occupation!");
-      return;
-    }
     try {
       setLoading(true);
-      const url = `${ONET_ENDPOINT}${occupation}&start=1&end=100`;
+      const url = `${ONET_ENDPOINT}${occupation}&start=1&end=50`;
       const res = await axios.get(url, {
         headers: {
           Authorization: `Basic ${Buffer.from(

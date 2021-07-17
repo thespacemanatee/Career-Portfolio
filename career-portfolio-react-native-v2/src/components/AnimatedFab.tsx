@@ -77,7 +77,9 @@ const AnimatedFab: React.FC<AnimatedFabProps> = ({
     >
       <Icon style={styles.icon} fill="white" name={icon} />
       <Animated.View style={animatedTextStyles}>
-        <CustomText style={styles.label}>{label}</CustomText>
+        <CustomText fontFamily="bold" style={styles.label}>
+          {label}
+        </CustomText>
       </Animated.View>
     </AnimatedTouchableOpacity>
   );
@@ -101,7 +103,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     height: BUTTON_SIZE_COLLAPSED,
-    paddingHorizontal: BUTTON_SIZE_COLLAPSED / 4,
+    paddingLeft: BUTTON_SIZE_COLLAPSED / 4,
+    paddingRight: BUTTON_SIZE_COLLAPSED / 3,
   },
   icon: {
     width: BUTTON_SIZE_COLLAPSED / 2,

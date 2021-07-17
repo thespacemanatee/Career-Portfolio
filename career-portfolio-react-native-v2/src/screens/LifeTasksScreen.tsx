@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { View, FlatList } from "react-native";
+import { View, FlatList, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
   StyleService,
@@ -13,16 +13,21 @@ import {
   tasksSelector,
   resetLifeTasks,
 } from "../app/features/tasks/tasksSlice";
-import alert from "../components/CustomAlert";
 import CustomText from "../components/CustomText";
 import LifeTaskCard from "../components/LifeTaskCard";
 import ListEmptyComponent from "../components/ListEmptyComponent";
 import SectionTitle from "../components/SectionTitle";
-import { submissionProgressRef } from "../navigation/NavigationHelper";
+import {
+  navigationRef,
+  submissionProgressRef,
+} from "../navigation/NavigationHelper";
+import { TaskType } from "../types";
 
-const LifeTasksScreen = ({ navigation }) => {
+const LifeTasksScreen = ({ route, navigation }) => {
   const tasks = useSelector(tasksSelector.selectAll);
   const [lifeTasks, setLifeTasks] = useState([]);
+
+  const { id } = route.params || {};
 
   const dispatch = useDispatch();
 
@@ -30,20 +35,21 @@ const LifeTasksScreen = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
+      navigationRef.current = navigation;
       submissionProgressRef.current = 2;
-    }, [])
+    }, [navigation])
   );
 
   useEffect(() => {
-    setLifeTasks(tasks.filter((e) => e.task_type === "life"));
+    setLifeTasks(tasks.filter((e) => e.task_type === TaskType.LIFE));
   }, [tasks]);
 
   const handleNavigation = () => {
-    navigation.navigate("Rankings");
+    navigation.navigate("Rankings", { id });
   };
 
   const handleResetLifeTasks = () => {
-    alert("Are you sure?", "This will reset your life tasks!", [
+    Alert.alert("Are you sure?", "This will reset your life tasks!", [
       {
         text: "Confirm",
         style: "destructive",
@@ -127,6 +133,7 @@ export default LifeTasksScreen;
 const styles = StyleService.create({
   screen: {
     flex: 1,
+    padding: 16,
   },
   subtitle: {
     fontSize: 14,

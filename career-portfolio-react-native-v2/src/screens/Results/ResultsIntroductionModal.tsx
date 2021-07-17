@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { View, Animated } from "react-native";
 import { Layout, StyleService, Button } from "@ui-kitten/components";
 import PagerView from "react-native-pager-view";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import CustomText from "../../components/CustomText";
 import Pagination from "../../components/pager/Pagination";
@@ -10,7 +11,6 @@ import Ticker from "../../components/pager/Ticker";
 import TaskBarChartDemo from "../../components/TaskBarChartDemo";
 import Item from "../../components/pager/Item";
 import { useAppDispatch } from "../../app/hooks";
-import { markAsRead } from "../../app/features/results/resultsSlice";
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
@@ -26,7 +26,14 @@ const ResultsIntroductionModal = ({ onClose }: { onClose?: () => void }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(markAsRead());
+    AsyncStorage.getItem("settings").then((res) => {
+      let settings = JSON.parse(res);
+      if (!settings) {
+        settings = {};
+      }
+      settings.read = true;
+      AsyncStorage.setItem("settings", JSON.stringify(settings));
+    });
   }, [dispatch]);
 
   return (

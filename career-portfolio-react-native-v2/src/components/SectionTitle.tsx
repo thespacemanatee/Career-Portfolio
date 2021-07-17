@@ -1,19 +1,23 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ViewProps } from "react-native";
 import CustomText from "./CustomText";
 
-interface SectionTitleProps {
+interface SectionTitleProps extends ViewProps {
   title: string;
 }
 
-const SectionTitle: React.FC<SectionTitleProps> = ({ title, children }) => {
+const SectionTitle: React.FC<SectionTitleProps> = ({
+  title,
+  children,
+  style,
+}) => {
   return (
-    <>
+    <View style={style}>
       <CustomText style={styles.title} fontFamily="bold">
         {title}
       </CustomText>
       <View style={styles.subtitleContainer}>{children}</View>
-    </>
+    </View>
   );
 };
 

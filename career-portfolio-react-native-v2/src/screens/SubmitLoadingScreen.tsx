@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
-import { Alert, Dimensions, StyleSheet, View } from "react-native";
+import { Alert, Dimensions, StyleSheet } from "react-native";
 import { CommonActions } from "@react-navigation/native";
 import { Layout } from "@ui-kitten/components";
 
 import { LottieView } from "..";
-import { saveResults } from "../app/features/results/resultsSlice";
+import {
+  saveResults,
+  setRecentlyOpenedId,
+} from "../app/features/results/resultsSlice";
 import { useAppDispatch } from "../app/hooks";
 import CustomText from "../components/CustomText";
 import { submissionProgressRef } from "../navigation/NavigationHelper";
@@ -22,8 +25,9 @@ const SubmitLoadingScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     if (result) {
-      saveUserInput(payload, id).then(() => {
+      saveUserInput(payload, id).then((saveId) => {
         dispatch(saveResults(result));
+        dispatch(setRecentlyOpenedId(saveId));
         navigation.dispatch(
           CommonActions.reset({
             index: 1,
@@ -48,25 +52,24 @@ const SubmitLoadingScreen = ({ navigation, route }) => {
         "Error",
         "Unable to contact the server. Please try again later!"
       );
+      dispatch(setRecentlyOpenedId(null));
       navigation.goBack();
     }
-  }, [dispatch, error, id, navigation, payload, result]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, error, navigation, payload, result]);
 
   return (
     <Layout style={styles.screen}>
-      <View style={{ height: height / 4 }}>
-        <LottieView
-          // eslint-disable-next-line global-require
-          source={require("../../assets/submit-loading.json")}
-          autoPlay
-          loop
-        />
-      </View>
-      <View style={styles.loadingText}>
-        <CustomText fontFamily="bold" style={styles.loadingText}>
-          You are on your way...
-        </CustomText>
-      </View>
+      <LottieView
+        // eslint-disable-next-line global-require
+        source={require("../../assets/submit-loading.json")}
+        autoPlay
+        loop
+        style={{ height: height / 4 }}
+      />
+      <CustomText fontFamily="bold" style={styles.loadingText}>
+        You are on your way...
+      </CustomText>
     </Layout>
   );
 };
@@ -77,9 +80,9 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     justifyContent: "center",
+    alignItems: "center",
   },
   loadingText: {
-    alignItems: "center",
     fontSize: 20,
   },
 });

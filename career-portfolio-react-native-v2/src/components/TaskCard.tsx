@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import {
   LayoutAnimation,
@@ -18,6 +19,7 @@ import {
 } from "../app/features/tasks/tasksSlice";
 import CustomText from "./CustomText";
 import { TaskType } from "../types";
+import { ICON_SIZE } from "../helpers/config/config";
 
 if (
   Platform.OS === "android" &&
@@ -25,8 +27,6 @@ if (
 ) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
-
-const ICON_SIZE = 30;
 
 const TrashIcon = (props: any) => (
   <Icon fill="red" {...props} name="trash" style={styles.icon} />
@@ -51,28 +51,20 @@ const TaskCard = ({ taskObject }) => {
   const [spinValue] = useState(new Animated.Value(0));
   const leftSwipeable = useRef(null);
 
-  const { task, taskId, taskType, deleted } = taskObject;
+  const { task, taskId, task_type, deleted } = taskObject;
 
   const dispatch = useDispatch();
 
   const handleCheckChange = (nextChecked) => {
     setChecked(nextChecked);
-    let type: TaskType;
-    if (nextChecked === true) {
-      type = TaskType.CORE;
-    } else {
-      type = TaskType.SUPPLEMENTARY;
-    }
+    const type: TaskType = nextChecked ? TaskType.CORE : TaskType.SUPPLEMENTARY;
     dispatch(updateTaskType({ id: taskId, changes: { task_type: type } }));
   };
 
   useEffect(() => {
-    if (taskType === TaskType.CORE) {
-      setChecked(true);
-    } else {
-      setChecked(false);
-    }
-  }, [taskType]);
+    setChecked(task_type === TaskType.CORE);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const rotate = spinValue.interpolate({
     inputRange: [0, 1],

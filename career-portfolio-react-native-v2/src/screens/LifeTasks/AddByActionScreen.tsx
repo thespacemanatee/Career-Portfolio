@@ -4,7 +4,6 @@ import {
   Button,
   Icon,
   Input,
-  Layout,
   StyleService,
   TopNavigation,
   TopNavigationAction,
@@ -79,38 +78,36 @@ const AddByActionScreen = ({ navigation }) => {
         alignment="center"
         accessoryLeft={BackAction}
       />
-      <Layout style={styles.layout}>
-        <Formik initialValues={{ action: "" }} onSubmit={handleSearch}>
-          {({ handleChange, handleBlur, handleSubmit, values }) => (
-            <>
-              <Input
-                label="Search Actions"
-                returnKeyType="next"
-                size="large"
-                placeholder="Enter query action here"
-                value={values.action}
-                onChangeText={handleChange("action")}
-                onBlur={handleBlur("action")}
-              />
-              <Button
-                style={styles.button}
-                onPress={() => handleSubmit()}
-                appearance="outline"
-              >
-                SEARCH
-              </Button>
-            </>
-          )}
-        </Formik>
-        <SearchList data={results} onSelect={handleSelectResult} />
-        <FlatList
-          renderItem={renderTasks}
-          data={tasks}
-          keyExtractor={(item) => String(item.taskId)}
-          contentContainerStyle={styles.contentContainer}
-          ListEmptyComponent={renderEmptyComponent}
-        />
-      </Layout>
+      <Formik initialValues={{ action: "" }} onSubmit={handleSearch}>
+        {({ handleChange, handleBlur, handleSubmit, values }) => (
+          <>
+            <Input
+              label="Search Actions"
+              returnKeyType="next"
+              size="large"
+              placeholder="Enter query action here"
+              value={values.action}
+              onChangeText={handleChange("action")}
+              onBlur={handleBlur("action")}
+            />
+            <Button
+              style={styles.button}
+              onPress={() => handleSubmit()}
+              appearance="outline"
+            >
+              SEARCH
+            </Button>
+          </>
+        )}
+      </Formik>
+      <SearchList data={results} onSelect={handleSelectResult} />
+      <FlatList
+        renderItem={renderTasks}
+        data={tasks}
+        keyExtractor={(item) => String(item.taskId)}
+        contentContainerStyle={styles.contentContainer}
+        ListEmptyComponent={renderEmptyComponent}
+      />
     </View>
   );
 };
@@ -120,10 +117,7 @@ export default AddByActionScreen;
 const styles = StyleService.create({
   screen: {
     flex: 1,
-  },
-  layout: {
-    flex: 1,
-    padding: 10,
+    backgroundColor: "white",
   },
   button: {
     marginVertical: 10,

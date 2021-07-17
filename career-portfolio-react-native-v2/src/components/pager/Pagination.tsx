@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, View, Animated } from "react-native";
 import { ResultsViewPagerConfig } from "../../types";
 
-const DOT_SIZE = 40;
+export const DOT_SIZE = 40;
 
 const Pagination = ({
   scrollOffsetAnimatedValue,

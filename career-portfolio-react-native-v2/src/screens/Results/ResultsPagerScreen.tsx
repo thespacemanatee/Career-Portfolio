@@ -1,23 +1,20 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   StyleSheet,
   View,
   Animated,
   useWindowDimensions,
   FlatList,
+  TouchableOpacity,
 } from "react-native";
-import {
-  Icon,
-  TopNavigationAction,
-  Modal,
-  Card,
-  Layout,
-} from "@ui-kitten/components";
+import { Icon, Modal, Card } from "@ui-kitten/components";
 import PagerView from "react-native-pager-view";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { useAppSelector } from "../../app/hooks";
 import Item from "../../components/pager/Item";
-import Pagination from "../../components/pager/Pagination";
+import Pagination, { DOT_SIZE } from "../../components/pager/Pagination";
 import Ticker from "../../components/pager/Ticker";
 import {
   PagerViewOnPageScrollEventData,
@@ -31,30 +28,22 @@ import {
 import ResultsIntroductionModal from "./ResultsIntroductionModal";
 import ResultCard from "../../components/ResultCard";
 import { tasksSelector } from "../../app/features/tasks/tasksSlice";
-import { navigationRef } from "../../navigation/NavigationHelper";
+import {
+  navigationRef,
+  submissionProgressRef,
+} from "../../navigation/NavigationHelper";
+import { ICON_SIZE, pagerConfig } from "../../helpers/config/config";
+import AnimatedFab from "../../components/AnimatedFab";
+import useHandleScroll from "../../helpers/hooks/useHandleScroll";
 
 const HelpIcon = (props: any) => (
-  <Icon {...props} name="question-mark-circle-outline" />
+  <Icon
+    {...props}
+    name="question-mark-circle"
+    style={styles.helpIcon}
+    fill="black"
+  />
 );
-
-const config: ResultsViewPagerConfig[] = [
-  {
-    type: ResultsCategory.FAMILIARITY,
-    color: "#9dcdfa",
-  },
-  {
-    type: ResultsCategory.PREFERENCE,
-    color: "#db9efa",
-  },
-  {
-    type: ResultsCategory.PERSONALITY,
-    color: "#999",
-  },
-  {
-    type: ResultsCategory.BEST_FIT,
-    color: "#a1e3a1",
-  },
-];
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
@@ -66,38 +55,51 @@ const ResultsPagerScreen = ({ navigation }) => {
   const [visible, setVisible] = useState(false);
   const [pagePosition, setPagePosition] = useState(0);
 
+  const { handleScroll, showButton } = useHandleScroll();
+
   const { width, height } = useWindowDimensions();
 
-  useEffect(() => {
-    navigationRef.current = navigation;
-  }, [navigation]);
+  useFocusEffect(
+    useCallback(() => {
+      navigationRef.current = navigation;
+      submissionProgressRef.current = 0;
+    }, [navigation])
+  );
 
   useEffect(() => {
-    const unsubscribe = setTimeout(() => {
-      setVisible(!results.opened);
-    }, 1000);
+    let unsubscribe;
+    AsyncStorage.getItem("settings")
+      .then((res) => {
+        const settings = JSON.parse(res);
+        unsubscribe = setTimeout(() => {
+          setVisible(!settings?.read);
+        }, 1000);
+      })
+      .catch(() => {
+        unsubscribe = setTimeout(() => {
+          setVisible(true);
+        }, 1000);
+      });
     return () => {
       clearTimeout(unsubscribe);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const HelpAction = () => (
-    <TopNavigationAction
-      icon={HelpIcon}
-      onPress={() => {
-        setVisible(true);
-      }}
-    />
-  );
-
   const handleCloseHelp = () => {
     setVisible(false);
   };
 
+  const handleEditTasks = () => {
+    navigation.navigate("CreateSubmissionStack", {
+      screen: "CoreTasks",
+      params: { id: results.recentlyOpenedId },
+    });
+  };
+
   const handleSelectCategory = (type: string, occupation: string) => {
     navigation.navigate("ResultsDetails", {
-      title: Object.values(config)[pagePosition].type,
+      title: Object.values(pagerConfig)[pagePosition].type,
       type,
       occupation,
     });
@@ -147,6 +149,7 @@ const ResultsPagerScreen = ({ navigation }) => {
       <View collapsable={false} key={String(index)}>
         <Item scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}>
           <FlatList
+            onScroll={handleScroll}
             renderItem={renderResults}
             data={temp.slice(0, 10)}
             contentContainerStyle={styles.contentContainer}
@@ -158,7 +161,7 @@ const ResultsPagerScreen = ({ navigation }) => {
   };
 
   return (
-    <Layout style={styles.screen}>
+    <View style={styles.screen}>
       <Modal
         visible={visible}
         backdropStyle={styles.backdrop}
@@ -174,11 +177,20 @@ const ResultsPagerScreen = ({ navigation }) => {
           <ResultsIntroductionModal onClose={handleCloseHelp} />
         </Card>
       </Modal>
-      <Ticker
-        scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}
-        positionAnimatedValue={positionAnimatedValue}
-        config={config}
-      />
+      <View style={styles.headerContainer}>
+        <Ticker
+          scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}
+          positionAnimatedValue={positionAnimatedValue}
+          config={pagerConfig}
+        />
+        <TouchableOpacity
+          onPress={() => {
+            setVisible(true);
+          }}
+        >
+          <HelpIcon />
+        </TouchableOpacity>
+      </View>
       <AnimatedPagerView
         initialPage={0}
         style={styles.pagerView}
@@ -200,16 +212,23 @@ const ResultsPagerScreen = ({ navigation }) => {
           }
         )}
       >
-        {config.map((item, index) => renderPage(item, index))}
+        {pagerConfig.map((item, index) => renderPage(item, index))}
       </AnimatedPagerView>
       <View style={styles.pageIndicator}>
         <Pagination
           scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}
           positionAnimatedValue={positionAnimatedValue}
-          config={config}
+          config={pagerConfig}
         />
       </View>
-    </Layout>
+      <AnimatedFab
+        icon="edit"
+        label="Edit"
+        onPress={handleEditTasks}
+        style={styles.fab}
+        showLabel={showButton}
+      />
+    </View>
   );
 };
 
@@ -218,6 +237,12 @@ export default ResultsPagerScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    padding: 16,
+    backgroundColor: "white",
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   pagerView: {
     flex: 1,
@@ -228,9 +253,19 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flexGrow: 1,
-    padding: 15,
+    padding: 6,
   },
   backdrop: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  helpIcon: {
+    width: ICON_SIZE,
+    height: ICON_SIZE,
+  },
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: DOT_SIZE,
   },
 });

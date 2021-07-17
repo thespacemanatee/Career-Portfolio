@@ -5,18 +5,26 @@ import { ScrollView } from "react-native-gesture-handler";
 
 import ScreenTitle from "../components/ScreenTitle";
 import useFetchSubmissions from "../helpers/hooks/useFetchSubmissions";
-import { ResultsLocalStorageItem } from "../types";
+import { ResultsLocalStorage, ResultsLocalStorageItem } from "../types";
 import ResultsOverviewCard from "../components/ResultsOverviewCard";
-import { useAppDispatch } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { setAllTasks } from "../app/features/tasks/tasksSlice";
 import { LottieView } from "..";
 import AnimatedFab from "../components/AnimatedFab";
 import useHandleScroll from "../helpers/hooks/useHandleScroll";
+import CustomText from "../components/CustomText";
+import SectionTitle from "../components/SectionTitle";
 
-const PastResultsScreen = ({ navigation }) => {
-  const [entries, setEntries] = useState<ResultsLocalStorageItem[]>(null);
+const DashboardScreen = ({ navigation }) => {
+  const recentlyOpenedId = useAppSelector(
+    (state) => state.results.recentlyOpenedId
+  );
+  const [previousSubmissions, setPreviousSubmissions] =
+    useState<ResultsLocalStorage>(null);
+  const [recentlyOpenedItem, setRecentlyOpenedItem] =
+    useState<ResultsLocalStorageItem>(null);
 
-  const { height } = Dimensions.get("window");
+  const { width } = Dimensions.get("window");
 
   const { result, resetSubmissions } = useFetchSubmissions();
 
@@ -25,15 +33,19 @@ const PastResultsScreen = ({ navigation }) => {
   const dispatch = useAppDispatch();
 
   const handleCreateSubmission = () => {
-    navigation.navigate("CreateSubmissionStack");
+    navigation.navigate("NewSubmissionStack");
   };
 
   const handleNavigateResults = (id: string) => {
-    dispatch(setAllTasks(entries[id].payload.task_list));
-    navigation.navigate("ResultsStack", {
-      screen: "SubmitLoading",
-      params: { payload: entries[id].payload, id },
-    });
+    if (id === recentlyOpenedId) {
+      navigation.navigate("ResultsStack", { screen: "ResultsPager" });
+    } else {
+      dispatch(setAllTasks(previousSubmissions[id].payload.task_list));
+      navigation.navigate("ResultsStack", {
+        screen: "SubmitLoading",
+        params: { payload: previousSubmissions[id].payload, id },
+      });
+    }
   };
 
   const handleResetSubmissions = () => {
@@ -50,14 +62,26 @@ const PastResultsScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    setEntries(result);
-  }, [result]);
+    if (!result) {
+      setPreviousSubmissions(null);
+      setRecentlyOpenedItem(null);
+    } else {
+      const recent = { ...result };
+      if (recentlyOpenedId) {
+        setRecentlyOpenedItem(result[recentlyOpenedId]);
+        delete recent[recentlyOpenedId];
+      } else {
+        setRecentlyOpenedItem(null);
+      }
+      setPreviousSubmissions(Object.keys(recent).length > 0 ? recent : null);
+    }
+  }, [recentlyOpenedId, result]);
 
   return (
     <Layout style={styles.screen}>
       <View style={styles.header}>
         <ScreenTitle title="Hello there 👋" />
-        {entries && (
+        {result && (
           <Button
             onPress={handleResetSubmissions}
             appearance="ghost"
@@ -67,34 +91,58 @@ const PastResultsScreen = ({ navigation }) => {
           </Button>
         )}
       </View>
-      {!entries && (
+      {!result && (
         <View style={styles.emptyComponent}>
           <LottieView
             // eslint-disable-next-line global-require
             source={require("../../assets/empty_history.json")}
             autoPlay
             loop
-            style={{ height: height / 3 }}
+            style={[styles.lottieView, { width: width / 1.5 }]}
           />
+          <CustomText style={styles.emptyText}>
+            You have no submissions.{"\n"}Start adding one!
+          </CustomText>
         </View>
       )}
-      {entries && (
-        <ScrollView onScroll={handleScroll}>
-          {Object.keys(entries).map((id, index) => {
-            return (
-              <View key={id} style={styles.cardContainer}>
-                <ResultsOverviewCard
-                  index={index}
-                  id={id}
-                  date={entries[id].date}
-                  onetTitle={entries[id].payload.onet_title}
-                  onPress={handleNavigateResults}
-                />
-              </View>
-            );
-          })}
-        </ScrollView>
-      )}
+      <ScrollView
+        onScroll={handleScroll}
+        scrollEventThrottle={1}
+        style={styles.scrollView}
+      >
+        {recentlyOpenedItem && (
+          <View style={styles.cardContainer}>
+            <SectionTitle title="Recently Opened" />
+            <ResultsOverviewCard
+              index={0}
+              id={recentlyOpenedId}
+              date={recentlyOpenedItem.date}
+              editedDate={recentlyOpenedItem.editedDate}
+              onetTitle={recentlyOpenedItem.payload.onet_title}
+              onPress={handleNavigateResults}
+            />
+          </View>
+        )}
+        {previousSubmissions && (
+          <View>
+            <SectionTitle title="Previous Submissions" />
+            {Object.keys(previousSubmissions).map((id, index) => {
+              return (
+                <View key={id} style={styles.cardContainer}>
+                  <ResultsOverviewCard
+                    index={index + 1}
+                    id={id}
+                    date={previousSubmissions[id].date}
+                    editedDate={previousSubmissions[id].editedDate}
+                    onetTitle={previousSubmissions[id].payload.onet_title}
+                    onPress={handleNavigateResults}
+                  />
+                </View>
+              );
+            })}
+          </View>
+        )}
+      </ScrollView>
       <AnimatedFab
         icon="plus"
         label="Survey"
@@ -106,7 +154,7 @@ const PastResultsScreen = ({ navigation }) => {
   );
 };
 
-export default PastResultsScreen;
+export default DashboardScreen;
 
 const styles = StyleSheet.create({
   screen: {
@@ -120,10 +168,19 @@ const styles = StyleSheet.create({
   cardContainer: {
     marginBottom: 16,
   },
+  scrollView: {
+    flexGrow: 0,
+  },
+  lottieView: {
+    marginBottom: 12,
+  },
   emptyComponent: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  emptyText: {
+    textAlign: "center",
   },
   fab: {
     position: "absolute",

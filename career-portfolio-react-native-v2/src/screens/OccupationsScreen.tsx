@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { View, FlatList, Alert } from "react-native";
-import { StyleService, Button, Spinner, useTheme } from "@ui-kitten/components";
+import { View, FlatList, Alert, Keyboard, Pressable } from "react-native";
+import { StyleService, Button, useTheme } from "@ui-kitten/components";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -16,7 +16,6 @@ import { addSelection } from "../app/features/form/formSlice";
 import { setAllTasks } from "../app/features/tasks/tasksSlice";
 import { getTasksByOccupation, handleErrorResponse } from "../helpers/utils";
 import CustomText from "../components/CustomText";
-import alert from "../components/CustomAlert";
 import OccupationsLoading from "../components/loading/OccupationsLoading";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import SelectedOccupationCard from "../components/SelectedOccupationCard";
@@ -37,31 +36,29 @@ const OccupationsScreen = ({ navigation }) => {
   const form = useAppSelector((state) => state.form);
   const [loading, setLoading] = useState(false);
   const [occupations, setOccupations] = useState<string[]>();
-  const [chosenOccupation, setChosenOccupation] = useState();
-  const [userInput, setUserInput] = useState<string>();
-
-  useEffect(() => {
-    navigationRef.current = navigation;
-  }, [navigation]);
+  const [chosenOccupation, setChosenOccupation] = useState("");
+  const [userInput, setUserInput] = useState<string>("");
+  const [query, setQuery] = useState<Values>();
 
   useFocusEffect(
     useCallback(() => {
+      navigationRef.current = navigation;
       submissionProgressRef.current = 0;
-    }, [])
+    }, [navigation])
   );
+
+  useEffect(() => {
+    const timeOutId = setTimeout(() => {
+      if (query?.occupation.length > 0) {
+        handleSubmitForm(query);
+      }
+    }, 200);
+    return () => clearTimeout(timeOutId);
+  }, [query]);
 
   const dispatch = useAppDispatch();
 
   const theme = useTheme();
-
-  const LoadingIndicator = (props) => {
-    const { style } = props;
-    return (
-      <View style={[style, styles.indicator]}>
-        <Spinner size="small" />
-      </View>
-    );
-  };
 
   const handleNavigation = () => {
     if (chosenOccupation) {
@@ -83,9 +80,9 @@ const OccupationsScreen = ({ navigation }) => {
         dispatch(addSelection(payload));
         dispatch(setAllTasks(data));
       }
-      navigation.navigate("CoreTasks");
+      navigation.navigate("CreateSubmissionStack");
     } else {
-      alert("Error", "Please choose an occupation!");
+      Alert.alert("Error", "Please choose an occupation!");
     }
   };
 
@@ -96,13 +93,9 @@ const OccupationsScreen = ({ navigation }) => {
   const handleSubmitForm = async (values: Values) => {
     const { occupation } = values;
     setUserInput(occupation);
-    if (!occupation) {
-      Alert.alert("Error", "Please input an occupation!");
-      return;
-    }
     try {
       setLoading(true);
-      const url = `${ONET_ENDPOINT}${occupation}&start=1&end=100`;
+      const url = `${ONET_ENDPOINT}${occupation}&start=1&end=50`;
       const res = await axios.get(url, {
         headers: {
           Authorization: `Basic ${Buffer.from(
@@ -137,11 +130,13 @@ const OccupationsScreen = ({ navigation }) => {
     loading ? (
       <OccupationsLoading />
     ) : (
-      <ListEmptyComponent label="NO OCCUPATIONS FOUND" />
+      userInput.length > 0 && (
+        <ListEmptyComponent label="NO OCCUPATIONS FOUND" />
+      )
     );
 
   return (
-    <View style={styles.screen}>
+    <Pressable style={styles.screen} onPress={() => Keyboard.dismiss()}>
       <SectionTitle title="What is your occupation?">
         <CustomText style={styles.subtitle} fontFamily="semiBold">
           Please enter your{" "}
@@ -159,24 +154,21 @@ const OccupationsScreen = ({ navigation }) => {
         onSubmit={handleSubmitForm}
         validationSchema={SearchSchema}
       >
-        {({ handleChange, handleBlur, handleSubmit, errors, values }) => (
+        {({ handleChange, handleBlur, errors, values }) => (
           <>
             <CustomTextInput
               returnKeyType="next"
               size="large"
               placeholder="Enter your occupation here"
               value={values.occupation}
-              onChangeText={handleChange("occupation")}
+              onChangeText={(text) => {
+                handleChange("occupation")(text);
+                setQuery({ occupation: text });
+              }}
               onBlur={handleBlur("occupation")}
               errorText={errors.occupation}
+              loading={loading}
             />
-            <Button
-              onPress={() => handleSubmit()}
-              appearance="outline"
-              accessoryRight={loading ? LoadingIndicator : null}
-            >
-              SEARCH
-            </Button>
             <FlatList
               style={styles.flatList}
               data={occupations}
@@ -189,7 +181,7 @@ const OccupationsScreen = ({ navigation }) => {
           </>
         )}
       </Formik>
-    </View>
+    </Pressable>
   );
 };
 
@@ -198,6 +190,7 @@ export default OccupationsScreen;
 const styles = StyleService.create({
   screen: {
     flex: 1,
+    padding: 16,
   },
   subtitle: {
     fontSize: 14,
@@ -206,14 +199,10 @@ const styles = StyleService.create({
     marginBottom: 12,
   },
   flatList: {
-    marginVertical: 5,
+    marginVertical: 12,
   },
   contentContainer: {
     flexGrow: 1,
-  },
-  indicator: {
-    position: "absolute",
-    right: 0,
   },
   cardContainer: {
     padding: 6,

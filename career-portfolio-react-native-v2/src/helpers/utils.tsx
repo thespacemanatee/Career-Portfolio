@@ -3,13 +3,14 @@ import { v4 as uuidv4 } from "uuid";
 
 import alert from "../components/CustomAlert";
 import * as data from "../data/career_data.json";
-import { ResultsLocalStorageItem, ResultsPayload } from "../types";
+import { ResultsLocalStorage, ResultsPayload } from "../types";
 
 const dataArray = Object.values(data);
 
 export const saveUserInput = async (payload: ResultsPayload, id: string) => {
+  const saveId = id || uuidv4();
   try {
-    let savedEntries: ResultsLocalStorageItem = JSON.parse(
+    let savedEntries: ResultsLocalStorage = JSON.parse(
       await AsyncStorage.getItem("savedEntries")
     );
 
@@ -17,11 +18,10 @@ export const saveUserInput = async (payload: ResultsPayload, id: string) => {
       savedEntries = {};
     }
 
-    const uuid = id || uuidv4();
-    const toSave: ResultsLocalStorageItem = {
-      [uuid]: {
-        date: new Date(),
+    const toSave: ResultsLocalStorage = {
+      [saveId]: {
         payload,
+        ...(id ? { editedDate: new Date() } : { date: new Date() }),
       },
     };
 
@@ -31,6 +31,7 @@ export const saveUserInput = async (payload: ResultsPayload, id: string) => {
   } catch (err) {
     console.error("Error saving user input data", err);
   }
+  return saveId;
 };
 
 /**

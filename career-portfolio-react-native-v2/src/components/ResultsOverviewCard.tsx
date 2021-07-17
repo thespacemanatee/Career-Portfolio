@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import { useTheme } from "@ui-kitten/components";
+import { Icon, useTheme } from "@ui-kitten/components";
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -18,6 +18,7 @@ interface ResultsOverviewCardProps {
   index: number;
   id: string;
   date: Date;
+  editedDate: Date;
   onetTitle: string;
   onPress: (id: string) => void;
 }
@@ -26,6 +27,7 @@ const ResultsOverviewCard: React.FC<ResultsOverviewCardProps> = ({
   index,
   id,
   date,
+  editedDate,
   onetTitle,
   onPress,
 }) => {
@@ -59,17 +61,31 @@ const ResultsOverviewCard: React.FC<ResultsOverviewCardProps> = ({
           { backgroundColor: theme["color-basic-400"] },
         ]}
       >
-        <View>
-          <CustomText style={styles.smallText}>Selected Occupation</CustomText>
-          <CustomText fontFamily="bold" style={styles.onetTitle}>
-            {onetTitle}
-          </CustomText>
+        <View style={styles.contentContainer}>
+          <View>
+            <CustomText style={styles.smallText}>
+              Selected Occupation
+            </CustomText>
+            <CustomText
+              fontFamily="bold"
+              style={styles.onetTitle}
+              numberOfLines={2}
+            >
+              {onetTitle}
+            </CustomText>
+          </View>
+          {date && (
+            <CustomText style={styles.smallText}>
+              {new Date(date).toLocaleString()}
+            </CustomText>
+          )}
+          {editedDate && (
+            <CustomText style={styles.smallText}>
+              {`Edited: ${new Date(editedDate).toLocaleString()}`}
+            </CustomText>
+          )}
         </View>
-        <View style={styles.footer}>
-          <CustomText style={styles.smallText}>
-            {new Date(date).toLocaleString()}
-          </CustomText>
-        </View>
+        <Icon name="chevron-right" style={styles.icon} fill="black" />
       </TouchableOpacity>
     </Animated.View>
   );
@@ -79,10 +95,16 @@ export default ResultsOverviewCard;
 
 const styles = StyleSheet.create({
   container: {
-    height: 120,
+    flexDirection: "row",
+    alignItems: "center",
     borderRadius: 8,
+    height: 120,
     padding: 12,
+  },
+  contentContainer: {
+    flex: 1,
     justifyContent: "space-between",
+    height: "100%",
   },
   smallText: {
     fontSize: 12,
@@ -90,8 +112,8 @@ const styles = StyleSheet.create({
   onetTitle: {
     fontSize: 16,
   },
-  footer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  icon: {
+    height: 32,
+    width: 32,
   },
 });

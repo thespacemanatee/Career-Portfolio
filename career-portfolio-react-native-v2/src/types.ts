@@ -87,8 +87,7 @@ export type ResultsState = {
   count: ResultsCountData[];
   similar: ResultsSimilarData[];
   missing: ResultsMissingData[];
-  status?: string;
-  opened?: boolean;
+  recentlyOpenedId?: string;
 };
 
 // type ResultsLocalStorageItemObject = {
@@ -98,14 +97,29 @@ export type ResultsState = {
 //   irrelevant: ResultsSimilarData[][];
 // };
 
-export interface ResultsLocalStorageItem {
-  [id: string]: {
-    date: Date;
-    payload: ResultsPayload;
-  };
+interface NewResultsLocalStorageItem extends ResultsLocalStorageItemBase {
+  date: Date;
+  editedDate?: never;
+}
+
+interface EditedResultsLocalStorageItem extends ResultsLocalStorageItemBase {
+  date?: never;
+  editedDate: Date;
+}
+
+interface ResultsLocalStorageItemBase {
+  payload: ResultsPayload;
+}
+
+export type ResultsLocalStorageItem =
+  | NewResultsLocalStorageItem
+  | EditedResultsLocalStorageItem;
+
+export type ResultsLocalStorage = {
+  [id: string]: ResultsLocalStorageItem;
 
   // [ResultsCategory.FAMILIARITY]: ResultsLocalStorageItemObject;
   // [ResultsCategory.PREFERENCE]: ResultsLocalStorageItemObject;
   // [ResultsCategory.PERSONALITY]: ResultsLocalStorageItemObject;
   // [ResultsCategory.BEST_FIT]: ResultsLocalStorageItemObject;
-}
+};

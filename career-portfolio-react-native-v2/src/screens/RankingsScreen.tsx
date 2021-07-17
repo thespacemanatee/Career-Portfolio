@@ -13,11 +13,13 @@ import ListEmptyComponent from "../components/ListEmptyComponent";
 import SectionTitle from "../components/SectionTitle";
 import { submissionProgressRef } from "../navigation/NavigationHelper";
 
-const RankingsScreen = ({ navigation }) => {
+const RankingsScreen = ({ route, navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
   const form = useAppSelector((state) => state.form);
   const [combinedTasks, setCombinedTasks] = useState([]);
   const [deletedTasks, setDeletedTasks] = useState([]);
+
+  const { id } = route.params || {};
 
   const dispatch = useAppDispatch();
 
@@ -45,6 +47,7 @@ const RankingsScreen = ({ navigation }) => {
     submissionProgressRef.current += 1;
     navigation.navigate("SubmitLoading", {
       payload,
+      id,
     });
   };
 
@@ -95,6 +98,7 @@ export default RankingsScreen;
 const styles = StyleService.create({
   screen: {
     flex: 1,
+    padding: 16,
   },
   subtitle: {
     fontSize: 14,

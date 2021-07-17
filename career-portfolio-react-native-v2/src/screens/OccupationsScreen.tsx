@@ -83,7 +83,7 @@ const OccupationsScreen = ({ navigation }) => {
         dispatch(addSelection(payload));
         dispatch(setAllTasks(data));
       }
-      navigation.navigate("CoreTasks");
+      navigation.navigate("CreateSubmissionStack");
     } else {
       Alert.alert("Error", "Please choose an occupation!");
     }
@@ -193,6 +193,7 @@ export default OccupationsScreen;
 const styles = StyleService.create({
   screen: {
     flex: 1,
+    padding: 16,
   },
   subtitle: {
     fontSize: 14,

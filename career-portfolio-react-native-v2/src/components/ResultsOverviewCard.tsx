@@ -18,6 +18,7 @@ interface ResultsOverviewCardProps {
   index: number;
   id: string;
   date: Date;
+  editedDate: Date;
   onetTitle: string;
   onPress: (id: string) => void;
 }
@@ -26,6 +27,7 @@ const ResultsOverviewCard: React.FC<ResultsOverviewCardProps> = ({
   index,
   id,
   date,
+  editedDate,
   onetTitle,
   onPress,
 }) => {
@@ -72,9 +74,16 @@ const ResultsOverviewCard: React.FC<ResultsOverviewCardProps> = ({
               {onetTitle}
             </CustomText>
           </View>
-          <CustomText style={styles.smallText}>
-            {new Date(date).toLocaleString()}
-          </CustomText>
+          {date && (
+            <CustomText style={styles.smallText}>
+              {new Date(date).toLocaleString()}
+            </CustomText>
+          )}
+          {editedDate && (
+            <CustomText style={styles.smallText}>
+              {`Edited: ${new Date(editedDate).toLocaleString()}`}
+            </CustomText>
+          )}
         </View>
         <Icon name="chevron-right" style={styles.icon} fill="black" />
       </TouchableOpacity>

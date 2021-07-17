@@ -8,7 +8,8 @@ import { ResultsLocalStorage, ResultsPayload } from "../types";
 const dataArray = Object.values(data);
 
 export const saveUserInput = async (payload: ResultsPayload, id: string) => {
-  id = id || uuidv4();
+  const saveId = id || uuidv4();
+  console.log(saveId);
   try {
     let savedEntries: ResultsLocalStorage = JSON.parse(
       await AsyncStorage.getItem("savedEntries")
@@ -19,9 +20,9 @@ export const saveUserInput = async (payload: ResultsPayload, id: string) => {
     }
 
     const toSave: ResultsLocalStorage = {
-      [id]: {
-        date: new Date(),
+      [saveId]: {
         payload,
+        ...(id ? { editedDate: new Date() } : { date: new Date() }),
       },
     };
 
@@ -31,7 +32,7 @@ export const saveUserInput = async (payload: ResultsPayload, id: string) => {
   } catch (err) {
     console.error("Error saving user input data", err);
   }
-  return id;
+  return saveId;
 };
 
 /**

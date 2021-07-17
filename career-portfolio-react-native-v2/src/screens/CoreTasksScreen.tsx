@@ -11,9 +11,11 @@ import ListEmptyComponent from "../components/ListEmptyComponent";
 import SectionTitle from "../components/SectionTitle";
 import { submissionProgressRef } from "../navigation/NavigationHelper";
 
-const CoreTasksScreen = ({ navigation }) => {
+const CoreTasksScreen = ({ route, navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
   const [coreTasks, setCoreTasks] = useState([]);
+
+  const { id } = route.params || {};
 
   const theme = useTheme();
 
@@ -28,7 +30,10 @@ const CoreTasksScreen = ({ navigation }) => {
   }, [tasks]);
 
   const handleNavigation = () => {
-    navigation.navigate("LifeTasksStack");
+    navigation.navigate("LifeTasksStack", {
+      screen: "LifeTasks",
+      params: { id },
+    });
   };
 
   const renderTasks = (itemData) => {
@@ -69,6 +74,7 @@ export default CoreTasksScreen;
 const styles = StyleService.create({
   screen: {
     flex: 1,
+    padding: 16,
   },
   subtitle: {
     fontSize: 14,

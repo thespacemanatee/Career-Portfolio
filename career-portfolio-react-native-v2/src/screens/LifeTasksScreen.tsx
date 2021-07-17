@@ -20,9 +20,11 @@ import SectionTitle from "../components/SectionTitle";
 import { submissionProgressRef } from "../navigation/NavigationHelper";
 import { TaskType } from "../types";
 
-const LifeTasksScreen = ({ navigation }) => {
+const LifeTasksScreen = ({ route, navigation }) => {
   const tasks = useSelector(tasksSelector.selectAll);
   const [lifeTasks, setLifeTasks] = useState([]);
+
+  const { id } = route.params || {};
 
   const dispatch = useDispatch();
 
@@ -39,7 +41,7 @@ const LifeTasksScreen = ({ navigation }) => {
   }, [tasks]);
 
   const handleNavigation = () => {
-    navigation.navigate("Rankings");
+    navigation.navigate("Rankings", { id });
   };
 
   const handleResetLifeTasks = () => {
@@ -127,6 +129,7 @@ export default LifeTasksScreen;
 const styles = StyleService.create({
   screen: {
     flex: 1,
+    padding: 16,
   },
   subtitle: {
     fontSize: 14,

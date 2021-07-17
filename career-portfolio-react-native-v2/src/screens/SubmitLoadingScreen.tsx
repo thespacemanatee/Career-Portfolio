@@ -6,7 +6,7 @@ import { Layout } from "@ui-kitten/components";
 import { LottieView } from "..";
 import {
   saveResults,
-  setRecentlyOpened,
+  setRecentlyOpenedId,
 } from "../app/features/results/resultsSlice";
 import { useAppDispatch } from "../app/hooks";
 import CustomText from "../components/CustomText";
@@ -24,10 +24,11 @@ const SubmitLoadingScreen = ({ navigation, route }) => {
   const { result, error } = useFetchResults(payload);
 
   useEffect(() => {
+    console.log(id);
     if (result) {
       saveUserInput(payload, id).then((saveId) => {
         dispatch(saveResults(result));
-        dispatch(setRecentlyOpened(saveId));
+        dispatch(setRecentlyOpenedId(saveId));
         navigation.dispatch(
           CommonActions.reset({
             index: 1,
@@ -52,10 +53,11 @@ const SubmitLoadingScreen = ({ navigation, route }) => {
         "Error",
         "Unable to contact the server. Please try again later!"
       );
-      dispatch(setRecentlyOpened(null));
+      dispatch(setRecentlyOpenedId(null));
       navigation.goBack();
     }
-  }, [dispatch, error, id, navigation, payload, result]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, error, navigation, payload, result]);
 
   return (
     <Layout style={styles.screen}>

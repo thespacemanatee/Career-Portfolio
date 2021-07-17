@@ -12,8 +12,8 @@ const resultsSlice = createSlice({
   name: "results",
   initialState,
   reducers: {
-    setRecentlyOpened: (state, action: PayloadAction<string>) => {
-      state.recentlyOpened = action.payload;
+    setRecentlyOpenedId: (state, action: PayloadAction<string>) => {
+      state.recentlyOpenedId = action.payload;
     },
     saveResults: (state, action: PayloadAction<ResultsState>) => {
       let { count, similar, missing } = action.payload;
@@ -59,6 +59,6 @@ const resultsSlice = createSlice({
   },
 });
 
-export const { setRecentlyOpened, saveResults } = resultsSlice.actions;
+export const { setRecentlyOpenedId, saveResults } = resultsSlice.actions;
 
 export default resultsSlice.reducer;

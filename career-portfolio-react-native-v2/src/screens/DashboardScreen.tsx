@@ -16,15 +16,15 @@ import CustomText from "../components/CustomText";
 import SectionTitle from "../components/SectionTitle";
 
 const DashboardScreen = ({ navigation }) => {
-  const recentlyOpened = useAppSelector(
-    (state) => state.results.recentlyOpened
+  const recentlyOpenedId = useAppSelector(
+    (state) => state.results.recentlyOpenedId
   );
   const [previousSubmissions, setPreviousSubmissions] =
     useState<ResultsLocalStorage>(null);
   const [recentlyOpenedItem, setRecentlyOpenedItem] =
     useState<ResultsLocalStorageItem>(null);
 
-  const { height } = Dimensions.get("window");
+  const { width } = Dimensions.get("window");
 
   const { result, resetSubmissions } = useFetchSubmissions();
 
@@ -33,11 +33,11 @@ const DashboardScreen = ({ navigation }) => {
   const dispatch = useAppDispatch();
 
   const handleCreateSubmission = () => {
-    navigation.navigate("CreateSubmissionStack");
+    navigation.navigate("NewSubmissionStack");
   };
 
   const handleNavigateResults = (id: string) => {
-    if (id === recentlyOpened) {
+    if (id === recentlyOpenedId) {
       navigation.navigate("ResultsStack", { screen: "ResultsPager" });
     } else {
       dispatch(setAllTasks(previousSubmissions[id].payload.task_list));
@@ -62,16 +62,20 @@ const DashboardScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    let recent = { ...result };
-    if (result && recentlyOpened) {
-      setRecentlyOpenedItem(result[recentlyOpened]);
-      delete recent[recentlyOpened];
+    if (!result) {
+      setPreviousSubmissions(null);
+      setRecentlyOpenedItem(null);
+    } else {
+      const recent = { ...result };
+      if (recentlyOpenedId) {
+        setRecentlyOpenedItem(result[recentlyOpenedId]);
+        delete recent[recentlyOpenedId];
+      } else {
+        setRecentlyOpenedItem(null);
+      }
+      setPreviousSubmissions(Object.keys(recent).length > 0 ? recent : null);
     }
-    if (!(Object.keys(recent).length > 0)) {
-      recent = null;
-    }
-    setPreviousSubmissions(recent);
-  }, [recentlyOpened, result]);
+  }, [recentlyOpenedId, result]);
 
   return (
     <Layout style={styles.screen}>
@@ -94,21 +98,26 @@ const DashboardScreen = ({ navigation }) => {
             source={require("../../assets/empty_history.json")}
             autoPlay
             loop
-            style={{ height: height / 3 }}
+            style={[styles.lottieView, { width: width / 1.5 }]}
           />
           <CustomText style={styles.emptyText}>
             You have no submissions.{"\n"}Start adding one!
           </CustomText>
         </View>
       )}
-      <ScrollView onScroll={handleScroll} style={styles.scrollView}>
+      <ScrollView
+        onScroll={handleScroll}
+        scrollEventThrottle={1}
+        style={styles.scrollView}
+      >
         {recentlyOpenedItem && (
           <View style={styles.cardContainer}>
             <SectionTitle title="Recently Opened" />
             <ResultsOverviewCard
               index={0}
-              id={recentlyOpened}
+              id={recentlyOpenedId}
               date={recentlyOpenedItem.date}
+              editedDate={recentlyOpenedItem.editedDate}
               onetTitle={recentlyOpenedItem.payload.onet_title}
               onPress={handleNavigateResults}
             />
@@ -124,6 +133,7 @@ const DashboardScreen = ({ navigation }) => {
                     index={index + 1}
                     id={id}
                     date={previousSubmissions[id].date}
+                    editedDate={previousSubmissions[id].editedDate}
                     onetTitle={previousSubmissions[id].payload.onet_title}
                     onPress={handleNavigateResults}
                   />
@@ -160,6 +170,9 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flexGrow: 0,
+  },
+  lottieView: {
+    marginBottom: 12,
   },
   emptyComponent: {
     flex: 1,

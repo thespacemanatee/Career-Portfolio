@@ -9,7 +9,6 @@ const dataArray = Object.values(data);
 
 export const saveUserInput = async (payload: ResultsPayload, id: string) => {
   const saveId = id || uuidv4();
-  console.log(saveId);
   try {
     let savedEntries: ResultsLocalStorage = JSON.parse(
       await AsyncStorage.getItem("savedEntries")

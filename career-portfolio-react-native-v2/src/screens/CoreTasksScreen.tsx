@@ -9,7 +9,10 @@ import TaskCard from "../components/TaskCard";
 import { useAppSelector } from "../app/hooks";
 import ListEmptyComponent from "../components/ListEmptyComponent";
 import SectionTitle from "../components/SectionTitle";
-import { submissionProgressRef } from "../navigation/NavigationHelper";
+import {
+  navigationRef,
+  submissionProgressRef,
+} from "../navigation/NavigationHelper";
 
 const CoreTasksScreen = ({ route, navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
@@ -21,8 +24,9 @@ const CoreTasksScreen = ({ route, navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
+      navigationRef.current = navigation;
       submissionProgressRef.current = 1;
-    }, [])
+    }, [navigation])
   );
 
   useEffect(() => {

@@ -59,14 +59,11 @@ const ResultsPagerScreen = ({ navigation }) => {
 
   const { width, height } = useWindowDimensions();
 
-  useEffect(() => {
-    navigationRef.current = navigation;
-  }, [navigation]);
-
   useFocusEffect(
     useCallback(() => {
+      navigationRef.current = navigation;
       submissionProgressRef.current = 0;
-    }, [])
+    }, [navigation])
   );
 
   useEffect(() => {

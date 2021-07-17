@@ -40,14 +40,11 @@ const OccupationsScreen = ({ navigation }) => {
   const [userInput, setUserInput] = useState<string>("");
   const [query, setQuery] = useState<Values>();
 
-  useEffect(() => {
-    navigationRef.current = navigation;
-  }, [navigation]);
-
   useFocusEffect(
     useCallback(() => {
+      navigationRef.current = navigation;
       submissionProgressRef.current = 0;
-    }, [])
+    }, [navigation])
   );
 
   useEffect(() => {

@@ -24,7 +24,6 @@ const SubmitLoadingScreen = ({ navigation, route }) => {
   const { result, error } = useFetchResults(payload);
 
   useEffect(() => {
-    console.log(id);
     if (result) {
       saveUserInput(payload, id).then((saveId) => {
         dispatch(saveResults(result));

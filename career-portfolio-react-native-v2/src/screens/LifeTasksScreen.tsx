@@ -17,7 +17,10 @@ import CustomText from "../components/CustomText";
 import LifeTaskCard from "../components/LifeTaskCard";
 import ListEmptyComponent from "../components/ListEmptyComponent";
 import SectionTitle from "../components/SectionTitle";
-import { submissionProgressRef } from "../navigation/NavigationHelper";
+import {
+  navigationRef,
+  submissionProgressRef,
+} from "../navigation/NavigationHelper";
 import { TaskType } from "../types";
 
 const LifeTasksScreen = ({ route, navigation }) => {
@@ -32,8 +35,9 @@ const LifeTasksScreen = ({ route, navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
+      navigationRef.current = navigation;
       submissionProgressRef.current = 2;
-    }, [])
+    }, [navigation])
   );
 
   useEffect(() => {

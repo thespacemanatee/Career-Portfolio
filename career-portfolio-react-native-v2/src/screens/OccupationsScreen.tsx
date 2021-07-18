@@ -27,6 +27,7 @@ import {
 } from "../navigation/NavigationHelper";
 import ListEmptyComponent from "../components/ListEmptyComponent";
 import SectionTitle from "../components/SectionTitle";
+import { TaskObject } from "../types";
 
 interface Values {
   occupation: string;
@@ -68,15 +69,17 @@ const OccupationsScreen = ({ navigation }) => {
           onetTitle: chosenOccupation,
           titleId: Date.now(),
         };
-        const data = getTasksByOccupation(chosenOccupation).map((e) => {
-          return {
-            task: e.Task,
-            taskId: e["Task ID"],
-            IWA_Title: e["IWA Title"],
-            task_type: "supplementary",
-            deleted: false,
-          };
-        });
+        const data: TaskObject[] = getTasksByOccupation(chosenOccupation).map(
+          (e) => {
+            return {
+              task: e.Task,
+              taskId: e["Task ID"],
+              IWA_Title: e["IWA Title"],
+              task_type: "supplementary",
+              deleted: false,
+            };
+          }
+        );
         dispatch(addSelection(payload));
         dispatch(setAllTasks(data));
       }

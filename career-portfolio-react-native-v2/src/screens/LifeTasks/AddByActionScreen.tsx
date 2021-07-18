@@ -48,7 +48,7 @@ const AddByActionScreen = ({ navigation }) => {
 
   const handleSelectResult = (selection) => {
     if (selection) {
-      const data = getTasksByAction(selection).map((e) => {
+      const data: TaskObject[] = getTasksByAction(selection).map((e) => {
         return {
           task: e.Task,
           taskId: e["Task ID"],

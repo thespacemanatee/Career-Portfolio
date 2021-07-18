@@ -5,7 +5,22 @@ import alert from "../components/CustomAlert";
 import * as data from "../data/career_data.json";
 import { ResultsLocalStorage, ResultsPayload } from "../types";
 
-const dataArray = Object.values(data);
+type CareerDataTask = {
+  index: number;
+  "O*NET-SOC Code": string;
+  Title: string;
+  "Task ID": number;
+  Task: string;
+  "Task Type": string;
+  "DWA ID": string;
+  "DWA Title": string;
+  "IWA ID": string;
+  "IWA Title": string;
+  "Element ID": string;
+  "Element Name": string;
+};
+
+const dataArray: CareerDataTask[] = Object.values(data);
 
 export const saveUserInput = async (
   payload: ResultsPayload,
@@ -131,24 +146,26 @@ export const saveUserInput = async (
 // };
 
 export const getTasksByAction = (action: string) => {
-  let tempArray = dataArray.filter((e) => {
+  let tasks = dataArray.filter((e) => {
     const words = `${e.Task}`.split(/[ ,]+/).map((verb) => verb.toLowerCase());
     return words.includes(action.toLowerCase());
   });
 
-  tempArray = tempArray.filter(
-    (task, index, self) => self.findIndex((e) => e.Task === task.Task) === index
+  tasks = tasks.filter(
+    (task, index, self) =>
+      task["IWA Title"] && self.findIndex((e) => e.Task === task.Task) === index
   );
-  return tempArray;
+  return tasks;
 };
 
-export const getTasksByOccupation = (occupation) => {
-  let tempArray = dataArray.filter((e) => e.Title === occupation);
+export const getTasksByOccupation = (occupation: string) => {
+  let tasks = dataArray.filter((e) => e.Title === occupation);
 
-  tempArray = tempArray.filter(
-    (task, index, self) => self.findIndex((e) => e.Task === task.Task) === index
+  tasks = tasks.filter(
+    (task, index, self) =>
+      task["IWA Title"] && self.findIndex((e) => e.Task === task.Task) === index
   );
-  return tempArray;
+  return tasks;
 };
 
 export const getActionVerbsArray = () => {

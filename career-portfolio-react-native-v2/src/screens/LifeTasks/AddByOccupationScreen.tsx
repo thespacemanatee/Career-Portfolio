@@ -14,7 +14,7 @@ import { tasksSelector } from "../../app/features/tasks/tasksSlice";
 import { getTasksByOccupation } from "../../helpers/utils";
 import SearchList from "../../components/SearchResultsModal";
 import TaskSearchResultCard from "../../components/TaskSearchResultCard";
-import { TaskType } from "../../types";
+import { TaskObject, TaskType } from "../../types";
 import { useAppSelector } from "../../app/hooks";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
 
@@ -48,7 +48,7 @@ const AddByOccupationScreen = ({ navigation }) => {
 
   const handleSelectResult = (selection) => {
     if (selection) {
-      const data = getTasksByOccupation(selection).map((e) => {
+      const data: TaskObject[] = getTasksByOccupation(selection).map((e) => {
         return {
           task: e.Task,
           taskId: e["Task ID"],

@@ -2,10 +2,21 @@ import { useCallback, useEffect, useState } from "react";
 import { RESULTS_ENDPOINT } from "react-native-dotenv";
 import axios from "axios";
 
-import { ResultsPayload, ResultsState } from "../../types";
+import {
+  ResultsCountData,
+  ResultsMissingData,
+  ResultsPayload,
+  ResultsSimilarData,
+} from "../../types";
+
+export type UseFetchResultsResponse = {
+  count: ResultsCountData[];
+  similar: ResultsSimilarData[];
+  missing: ResultsMissingData[];
+};
 
 const useFetchResults = (payload?: ResultsPayload) => {
-  const [result, setResults] = useState<ResultsState>(null);
+  const [result, setResults] = useState<UseFetchResultsResponse>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [unmounted, setUnmounted] = useState(false);
@@ -13,7 +24,7 @@ const useFetchResults = (payload?: ResultsPayload) => {
 
   const fetchResults = useCallback(
     async (data: ResultsPayload) => {
-      let responseData: ResultsState;
+      let responseData: UseFetchResultsResponse;
       if (data) {
         setLoading(true);
         try {

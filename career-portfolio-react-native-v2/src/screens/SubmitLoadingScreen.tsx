@@ -15,7 +15,7 @@ import useFetchResults from "../helpers/hooks/useFetchResults";
 import { saveUserInput } from "../helpers/utils";
 
 const SubmitLoadingScreen = ({ navigation, route }) => {
-  const { payload, id } = route.params;
+  const { payload, id, editing } = route.params;
 
   const { height } = Dimensions.get("window");
 
@@ -25,7 +25,7 @@ const SubmitLoadingScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     if (result) {
-      saveUserInput(payload, id).then((saveId) => {
+      saveUserInput(payload, id, editing).then((saveId) => {
         dispatch(saveResults(result));
         dispatch(setRecentlyOpenedId(saveId));
         navigation.dispatch(

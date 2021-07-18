@@ -22,7 +22,7 @@ const RankingsScreen = ({ route, navigation }) => {
   const [combinedTasks, setCombinedTasks] = useState([]);
   const [deletedTasks, setDeletedTasks] = useState([]);
 
-  const { id } = route.params || {};
+  const { id, editing } = route.params || {};
 
   const dispatch = useAppDispatch();
 
@@ -47,11 +47,13 @@ const RankingsScreen = ({ route, navigation }) => {
     const payload: ResultsPayload = {
       ...form,
       task_list: tasksArray,
+      date: new Date().getTime(),
     };
     submissionProgressRef.current += 1;
     navigation.navigate("SubmitLoading", {
       payload,
       id,
+      editing,
     });
   };
 

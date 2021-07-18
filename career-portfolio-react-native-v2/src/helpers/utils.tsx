@@ -7,7 +7,11 @@ import { ResultsLocalStorage, ResultsPayload } from "../types";
 
 const dataArray = Object.values(data);
 
-export const saveUserInput = async (payload: ResultsPayload, id: string) => {
+export const saveUserInput = async (
+  payload: ResultsPayload,
+  id: string,
+  editing: boolean
+) => {
   const saveId = id || uuidv4();
   try {
     let savedEntries: ResultsLocalStorage = JSON.parse(
@@ -21,7 +25,7 @@ export const saveUserInput = async (payload: ResultsPayload, id: string) => {
     const toSave: ResultsLocalStorage = {
       [saveId]: {
         payload,
-        ...(id ? { editedDate: new Date() } : { date: new Date() }),
+        ...(editing && { editedDate: new Date().getTime() }),
       },
     };
 

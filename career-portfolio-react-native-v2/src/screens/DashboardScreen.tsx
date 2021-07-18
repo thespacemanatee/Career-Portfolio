@@ -150,7 +150,7 @@ const DashboardScreen = ({ navigation }) => {
             <ResultsOverviewCard
               index={0}
               id={recentlyOpenedId}
-              date={recentlyOpenedItem.date}
+              date={recentlyOpenedItem.payload.date}
               editedDate={recentlyOpenedItem.editedDate}
               onetTitle={recentlyOpenedItem.payload.onet_title}
               onPress={handleNavigateResults}
@@ -168,7 +168,7 @@ const DashboardScreen = ({ navigation }) => {
                   <ResultsOverviewCard
                     index={index + 1}
                     id={id}
-                    date={previousSubmissions[id].date}
+                    date={previousSubmissions[id].payload.date}
                     editedDate={previousSubmissions[id].editedDate}
                     onetTitle={previousSubmissions[id].payload.onet_title}
                     onPress={handleNavigateResults}

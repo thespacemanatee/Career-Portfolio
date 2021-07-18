@@ -27,7 +27,7 @@ const LifeTasksScreen = ({ route, navigation }) => {
   const tasks = useSelector(tasksSelector.selectAll);
   const [lifeTasks, setLifeTasks] = useState([]);
 
-  const { id } = route.params || {};
+  const { id, editing } = route.params || {};
 
   const dispatch = useDispatch();
 
@@ -45,7 +45,7 @@ const LifeTasksScreen = ({ route, navigation }) => {
   }, [tasks]);
 
   const handleNavigation = () => {
-    navigation.navigate("Rankings", { id });
+    navigation.navigate("Rankings", { id, editing });
   };
 
   const handleResetLifeTasks = () => {

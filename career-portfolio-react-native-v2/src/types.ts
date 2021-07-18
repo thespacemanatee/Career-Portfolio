@@ -68,6 +68,7 @@ export interface ResultsPayload {
   onet_title: string;
   title_id: string;
   task_list: TaskObject[];
+  date: number;
 }
 
 export enum ResultsType {
@@ -87,39 +88,18 @@ export type ResultsState = {
   count: ResultsCountData[];
   similar: ResultsSimilarData[];
   missing: ResultsMissingData[];
+  [ResultsCategory.FAMILIARITY]: ResultsCountData[];
+  [ResultsCategory.PREFERENCE]: ResultsCountData[];
+  [ResultsCategory.PERSONALITY]: ResultsCountData[];
+  [ResultsCategory.BEST_FIT]: ResultsCountData[];
   recentlyOpenedId?: string;
 };
 
-// type ResultsLocalStorageItemObject = {
-//   count: ResultsCountData[];
-//   missing: ResultsBaseData[][];
-//   similar: ResultsBaseData[][];
-//   irrelevant: ResultsSimilarData[][];
-// };
-
-interface NewResultsLocalStorageItem extends ResultsLocalStorageItemBase {
-  date: Date;
-  editedDate?: never;
-}
-
-interface EditedResultsLocalStorageItem extends ResultsLocalStorageItemBase {
-  date?: never;
-  editedDate: Date;
-}
-
-interface ResultsLocalStorageItemBase {
+interface ResultsLocalStorageItem {
   payload: ResultsPayload;
+  editedDate?: number;
 }
-
-export type ResultsLocalStorageItem =
-  | NewResultsLocalStorageItem
-  | EditedResultsLocalStorageItem;
 
 export type ResultsLocalStorage = {
   [id: string]: ResultsLocalStorageItem;
-
-  // [ResultsCategory.FAMILIARITY]: ResultsLocalStorageItemObject;
-  // [ResultsCategory.PREFERENCE]: ResultsLocalStorageItemObject;
-  // [ResultsCategory.PERSONALITY]: ResultsLocalStorageItemObject;
-  // [ResultsCategory.BEST_FIT]: ResultsLocalStorageItemObject;
 };

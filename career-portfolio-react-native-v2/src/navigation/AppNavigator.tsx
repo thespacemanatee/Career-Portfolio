@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import Animated, {
+import {
   Extrapolate,
   interpolate,
   useAnimatedStyle,
@@ -68,7 +68,9 @@ const AppNavigator = () => {
     };
   });
 
-  const NewSubmissionStackNavigator = () => {
+  const SubmissionStackNavigator = ({ route }) => {
+    const { editing } = route.params?.params || {};
+
     return (
       <View style={styles.screen}>
         <ThemedBackButton
@@ -77,25 +79,12 @@ const AppNavigator = () => {
         />
         <View style={styles.submissionProgressHeader}>
           <SubmissionProgressionHeader
-            headerTitle="Make a Submission"
+            headerTitle={editing ? "Edit a Submission" : "Make a Submission"}
             progress={submissionProgress}
           />
         </View>
         <Navigator screenOptions={fadeSlideConfig}>
           <Screen name="Occupations" component={OccupationsScreen} />
-          <Screen
-            name="CreateSubmissionStack"
-            component={CreateSubmissionStackNavigator}
-          />
-        </Navigator>
-      </View>
-    );
-  };
-
-  const CreateSubmissionStackNavigator = () => {
-    return (
-      <View style={styles.screen}>
-        <Navigator screenOptions={fadeSlideConfig}>
           <Screen name="CoreTasks" component={CoreTasksScreen} />
           <Screen name="LifeTasksStack" component={LifeTasksStackNavigator} />
           <Screen name="Rankings" component={RankingsScreen} />
@@ -113,46 +102,20 @@ const AppNavigator = () => {
         <Screen name="AddByAction" component={AddByActionScreen} />
         <Screen
           name="CreateSubmissionStack"
-          component={CreateSubmissionStackNavigator}
+          component={SubmissionStackNavigator}
         />
       </Navigator>
     );
   };
 
   const ResultsStackNavigator = () => {
-    const animatedStyle = useAnimatedStyle(() => {
-      return {
-        height: interpolate(
-          submissionProgress.value,
-          [0, 1 / NUMBER_OF_SUBMISSION_SCREENS],
-          [0, PROGRESS_HEADER_HEIGHT],
-          Extrapolate.CLAMP
-        ),
-      };
-    });
-
     return (
       <View style={styles.screen}>
-        <ThemedBackButton
-          navigation={navigationRef.current}
-          style={[backAnimatedStyle, styles.backButton]}
-        />
-        <Animated.View style={animatedStyle}>
-          <View style={styles.submissionProgressHeader}>
-            <SubmissionProgressionHeader
-              headerTitle="Edit a Submission"
-              progress={submissionProgress}
-            />
-          </View>
-        </Animated.View>
         <Navigator screenOptions={slideConfig}>
           <Screen name="SubmitLoading" component={SubmitLoadingScreen} />
           <Screen name="ResultsPager" component={ResultsPagerScreen} />
           <Screen name="ResultsDetails" component={ResultsDetailsScreen} />
-          <Screen
-            name="CreateSubmissionStack"
-            component={CreateSubmissionStackNavigator}
-          />
+          <Screen name="SubmissionStack" component={SubmissionStackNavigator} />
         </Navigator>
       </View>
     );
@@ -168,10 +131,7 @@ const AppNavigator = () => {
       <SafeAreaView style={styles.screen}>
         <Navigator screenOptions={slideConfig}>
           <Screen name="Dashboard" component={DashboardScreen} />
-          <Screen
-            name="NewSubmissionStack"
-            component={NewSubmissionStackNavigator}
-          />
+          <Screen name="SubmissionStack" component={SubmissionStackNavigator} />
           <Screen name="ResultsStack" component={ResultsStackNavigator} />
         </Navigator>
       </SafeAreaView>

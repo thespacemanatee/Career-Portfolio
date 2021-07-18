@@ -90,7 +90,7 @@ const ResultsPagerScreen = ({ navigation }) => {
   };
 
   const handleEditTasks = () => {
-    navigation.navigate("CreateSubmissionStack", {
+    navigation.navigate("SubmissionStack", {
       screen: "CoreTasks",
       params: { id: results.recentlyOpenedId, editing: true },
     });

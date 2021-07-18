@@ -41,7 +41,7 @@ const DashboardScreen = ({ navigation }) => {
   const dispatch = useAppDispatch();
 
   const handleCreateSubmission = () => {
-    navigation.navigate("NewSubmissionStack");
+    navigation.navigate("SubmissionStack");
   };
 
   const handleNavigateResults = (id: string) => {

@@ -21,6 +21,7 @@ import AnimatedFab from "../components/AnimatedFab";
 import useHandleScroll from "../helpers/hooks/useHandleScroll";
 import CustomText from "../components/CustomText";
 import SectionTitle from "../components/SectionTitle";
+import { navigationRef } from "../navigation/NavigationHelper";
 
 const DashboardScreen = ({ navigation }) => {
   const recentlyOpenedId = useAppSelector(
@@ -39,6 +40,12 @@ const DashboardScreen = ({ navigation }) => {
   const { handleScroll, showButton } = useHandleScroll();
 
   const dispatch = useAppDispatch();
+
+  useFocusEffect(
+    useCallback(() => {
+      navigationRef.current = navigation;
+    }, [navigation])
+  );
 
   const handleCreateSubmission = () => {
     navigation.navigate("SubmissionStack");

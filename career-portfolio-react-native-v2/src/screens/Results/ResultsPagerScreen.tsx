@@ -27,13 +27,11 @@ import {
 import ResultsIntroductionModal from "./ResultsIntroductionModal";
 import ResultCard from "../../components/ResultCard";
 import { tasksSelector } from "../../app/features/tasks/tasksSlice";
-import {
-  navigationRef,
-  submissionProgressRef,
-} from "../../navigation/NavigationHelper";
+import { navigationRef } from "../../navigation/NavigationHelper";
 import { ICON_SIZE, pagerConfig } from "../../helpers/config/config";
 import AnimatedFab from "../../components/AnimatedFab";
 import useHandleScroll from "../../helpers/hooks/useHandleScroll";
+import ThemedBackButton from "../../components/ThemedBackButton";
 
 const HelpIcon = (props: any) => (
   <Icon
@@ -61,7 +59,6 @@ const ResultsPagerScreen = ({ navigation }) => {
   useFocusEffect(
     useCallback(() => {
       navigationRef.current = navigation;
-      submissionProgressRef.current = 0;
     }, [navigation])
   );
 
@@ -151,6 +148,7 @@ const ResultsPagerScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
+      <ThemedBackButton navigation={navigation} style={styles.backButton} />
       <Modal
         visible={visible}
         backdropStyle={styles.backdrop}
@@ -228,6 +226,9 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: "white",
+  },
+  backButton: {
+    marginBottom: 16,
   },
   headerContainer: {
     flexDirection: "row",

@@ -64,13 +64,13 @@ const resultsSlice = createSlice({
         .sort((a, b) => b.similarTasks - a.similarTasks)
         .slice(0, 10);
       state[ResultsCategory.PREFERENCE] = [...count]
-        .sort((a, b) => b.similarTasks - a.similarTasks)
+        .sort((a, b) => b.preferenceScore - a.preferenceScore)
         .slice(0, 10);
       state[ResultsCategory.PERSONALITY] = [...count]
-        .sort((a, b) => b.similarTasks - a.similarTasks)
+        .sort((a, b) => b.riasecScore - a.riasecScore)
         .slice(0, 10);
       state[ResultsCategory.BEST_FIT] = [...count]
-        .sort((a, b) => b.similarTasks - a.similarTasks)
+        .sort((a, b) => b.similarityScore - a.similarityScore)
         .slice(0, 10);
     },
   },

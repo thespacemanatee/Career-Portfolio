@@ -1,7 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Alert, Dimensions, StyleSheet, View } from "react-native";
 import { Button, Layout } from "@ui-kitten/components";
 import { ScrollView } from "react-native-gesture-handler";
+import Animated, {
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
+import { useFocusEffect } from "@react-navigation/native";
 
 import ScreenTitle from "../components/ScreenTitle";
 import useFetchSubmissions from "../helpers/hooks/useFetchSubmissions";
@@ -23,6 +30,7 @@ const DashboardScreen = ({ navigation }) => {
     useState<ResultsLocalStorage>(null);
   const [recentlyOpenedItem, setRecentlyOpenedItem] =
     useState<ResultsLocalStorageItem>(null);
+  const progress = useSharedValue(0);
 
   const { width } = Dimensions.get("window");
 
@@ -77,6 +85,30 @@ const DashboardScreen = ({ navigation }) => {
     }
   }, [recentlyOpenedId, result]);
 
+  useFocusEffect(
+    useCallback(() => {
+      progress.value = withTiming(1, { duration: 500 });
+    }, [progress])
+  );
+
+  const recentAnimatedStyle = useAnimatedStyle(() => {
+    const translateY = interpolate(progress.value, [0, 1], [-25, 0]);
+    const opacity = interpolate(progress.value, [0, 1], [0, 1]);
+    return {
+      transform: [{ translateY }],
+      opacity,
+    };
+  });
+
+  const previousAnimatedStyle = useAnimatedStyle(() => {
+    const translateY = interpolate(progress.value, [0, 1], [-25, 0]);
+    const opacity = interpolate(progress.value, [0, 1], [0, 1]);
+    return {
+      transform: [{ translateY }],
+      opacity,
+    };
+  });
+
   return (
     <Layout style={styles.screen}>
       <View style={styles.header}>
@@ -112,7 +144,9 @@ const DashboardScreen = ({ navigation }) => {
       >
         {recentlyOpenedItem && (
           <View style={styles.cardContainer}>
-            <SectionTitle title="Recently Opened" />
+            <Animated.View style={recentAnimatedStyle}>
+              <SectionTitle title="Recently Opened" />
+            </Animated.View>
             <ResultsOverviewCard
               index={0}
               id={recentlyOpenedId}
@@ -125,7 +159,9 @@ const DashboardScreen = ({ navigation }) => {
         )}
         {previousSubmissions && (
           <View>
-            <SectionTitle title="Previous Submissions" />
+            <Animated.View style={previousAnimatedStyle}>
+              <SectionTitle title="Previous Submissions" />
+            </Animated.View>
             {Object.keys(previousSubmissions).map((id, index) => {
               return (
                 <View key={id} style={styles.cardContainer}>

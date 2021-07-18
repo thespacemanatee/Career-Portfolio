@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { View, TouchableOpacity } from "react-native";
 import { StyleService, Tooltip } from "@ui-kitten/components";
-import Colors from "../helpers/color";
+import Colors from "../helpers/config/color";
 
 interface TaskBarChartDemoProps {
   notRelevant: number;

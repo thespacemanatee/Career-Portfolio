@@ -83,7 +83,7 @@ const OccupationsScreen = ({ navigation }) => {
         dispatch(addSelection(payload));
         dispatch(setAllTasks(data));
       }
-      navigation.navigate("CreateSubmissionStack");
+      navigation.navigate("CoreTasks");
     } else {
       Alert.alert("Error", "Please choose an occupation!");
     }

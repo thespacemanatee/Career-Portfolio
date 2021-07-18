@@ -100,10 +100,6 @@ const AppNavigator = () => {
         <Screen name="LifeTasks" component={LifeTasksScreen} />
         <Screen name="AddByOccupation" component={AddByOccupationScreen} />
         <Screen name="AddByAction" component={AddByActionScreen} />
-        <Screen
-          name="CreateSubmissionStack"
-          component={SubmissionStackNavigator}
-        />
       </Navigator>
     );
   };

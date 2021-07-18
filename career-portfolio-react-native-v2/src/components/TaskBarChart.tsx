@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { View, TouchableOpacity } from "react-native";
 import { StyleService } from "@ui-kitten/components";
 import { ResultsType } from "../types";
-import Colors from "../helpers/color";
+import Colors from "../helpers/config/color";
 
 interface TaskBarChartProps {
   notRelevant: number;

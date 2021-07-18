@@ -18,7 +18,7 @@ const CoreTasksScreen = ({ route, navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
   const [coreTasks, setCoreTasks] = useState([]);
 
-  const { id } = route.params || {};
+  const { id, editing } = route.params || {};
 
   const theme = useTheme();
 
@@ -36,7 +36,7 @@ const CoreTasksScreen = ({ route, navigation }) => {
   const handleNavigation = () => {
     navigation.navigate("LifeTasksStack", {
       screen: "LifeTasks",
-      params: { id },
+      params: { id, editing },
     });
   };
 

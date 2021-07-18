@@ -1,11 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { UseFetchResultsResponse } from "../../../helpers/hooks/useFetchResults";
 
-import type { ResultsState } from "../../../types";
+import { ResultsCategory, ResultsState } from "../../../types";
 
 const initialState: ResultsState = {
   count: null,
   similar: null,
   missing: null,
+  [ResultsCategory.FAMILIARITY]: null,
+  [ResultsCategory.PREFERENCE]: null,
+  [ResultsCategory.PERSONALITY]: null,
+  [ResultsCategory.BEST_FIT]: null,
 };
 
 const resultsSlice = createSlice({
@@ -15,7 +20,7 @@ const resultsSlice = createSlice({
     setRecentlyOpenedId: (state, action: PayloadAction<string>) => {
       state.recentlyOpenedId = action.payload;
     },
-    saveResults: (state, action: PayloadAction<ResultsState>) => {
+    saveResults: (state, action: PayloadAction<UseFetchResultsResponse>) => {
       let { count, similar, missing } = action.payload;
       count = count.slice(1).map((e) => {
         return {
@@ -55,6 +60,18 @@ const resultsSlice = createSlice({
       state.count = count;
       state.similar = similar;
       state.missing = missing;
+      state[ResultsCategory.FAMILIARITY] = [...count]
+        .sort((a, b) => b.similarTasks - a.similarTasks)
+        .slice(0, 10);
+      state[ResultsCategory.PREFERENCE] = [...count]
+        .sort((a, b) => b.similarTasks - a.similarTasks)
+        .slice(0, 10);
+      state[ResultsCategory.PERSONALITY] = [...count]
+        .sort((a, b) => b.similarTasks - a.similarTasks)
+        .slice(0, 10);
+      state[ResultsCategory.BEST_FIT] = [...count]
+        .sort((a, b) => b.similarTasks - a.similarTasks)
+        .slice(0, 10);
     },
   },
 });

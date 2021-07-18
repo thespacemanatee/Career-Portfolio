@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Platform, TextInputProps } from "react-native";
+import { View, StyleSheet, TextInputProps } from "react-native";
 import { Input, Spinner, useTheme } from "@ui-kitten/components";
 
 import CustomText from "./CustomText";

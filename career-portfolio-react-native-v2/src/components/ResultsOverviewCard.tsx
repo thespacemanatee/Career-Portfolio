@@ -17,8 +17,8 @@ const WIDTH = Dimensions.get("window").width;
 interface ResultsOverviewCardProps {
   index: number;
   id: string;
-  date: Date;
-  editedDate: Date;
+  date: number;
+  editedDate: number;
   onetTitle: string;
   onPress: (id: string) => void;
 }
@@ -74,7 +74,7 @@ const ResultsOverviewCard: React.FC<ResultsOverviewCardProps> = ({
               {onetTitle}
             </CustomText>
           </View>
-          {date && (
+          {date && !editedDate && (
             <CustomText style={styles.smallText}>
               {new Date(date).toLocaleString()}
             </CustomText>

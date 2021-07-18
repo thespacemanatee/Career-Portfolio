@@ -20,7 +20,6 @@ import {
   PagerViewOnPageScrollEventData,
   ResultsCountData,
   ResultsViewPagerConfig,
-  ResultsCategory,
   TaskObject,
   ResultsSimilarData,
   ResultsMissingData,
@@ -93,7 +92,7 @@ const ResultsPagerScreen = ({ navigation }) => {
   const handleEditTasks = () => {
     navigation.navigate("CreateSubmissionStack", {
       screen: "CoreTasks",
-      params: { id: results.recentlyOpenedId },
+      params: { id: results.recentlyOpenedId, editing: true },
     });
   };
 
@@ -135,23 +134,13 @@ const ResultsPagerScreen = ({ navigation }) => {
   };
 
   const renderPage = (item: ResultsViewPagerConfig, index: number) => {
-    const temp = [...results.count];
-    if (item.type === ResultsCategory.FAMILIARITY) {
-      temp.sort((a, b) => b.similarTasks - a.similarTasks);
-    } else if (item.type === ResultsCategory.PREFERENCE) {
-      temp.sort((a, b) => b.preferenceScore - a.preferenceScore);
-    } else if (item.type === ResultsCategory.PERSONALITY) {
-      temp.sort((a, b) => b.riasecScore - a.riasecScore);
-    } else if (item.type === ResultsCategory.BEST_FIT) {
-      temp.sort((a, b) => b.similarityScore - a.similarityScore);
-    }
     return (
       <View collapsable={false} key={String(index)}>
         <Item scrollOffsetAnimatedValue={scrollOffsetAnimatedValue}>
           <FlatList
             onScroll={handleScroll}
             renderItem={renderResults}
-            data={temp.slice(0, 10)}
+            data={results[item.type]}
             contentContainerStyle={styles.contentContainer}
             keyExtractor={(e, i) => String(i)}
           />

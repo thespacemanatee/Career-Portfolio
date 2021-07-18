@@ -47,6 +47,7 @@ const ChevronIcon = (props: any) => (
 
 const TaskCard = ({ taskObject }) => {
   const [expanded, setExpanded] = useState(false);
+  const [truncated, setTruncated] = useState(false);
   const [checked, setChecked] = useState(false);
   const [spinValue] = useState(new Animated.Value(0));
   const leftSwipeable = useRef(null);
@@ -80,13 +81,21 @@ const TaskCard = ({ taskObject }) => {
     }).start();
   };
 
+  const handleExpand = () => {
+    LayoutAnimation.configureNext(
+      LayoutAnimation.create(100, "linear", "opacity")
+    );
+    setExpanded(!expanded);
+    spin();
+  };
+
   const rightSwipe = useCallback(() => {
+    leftSwipeable.current.close();
     if (!deleted) {
       dispatch(removeTask({ id: taskId, changes: { deleted: true } }));
     } else {
       dispatch(addTask({ id: taskId, changes: { deleted: false } }));
     }
-    leftSwipeable.current.close();
   }, [deleted, dispatch, taskId]);
 
   const leftComponent = useCallback(() => {
@@ -105,15 +114,7 @@ const TaskCard = ({ taskObject }) => {
         onSwipeableOpen={rightSwipe}
         friction={2}
       >
-        <Card
-          onPress={() => {
-            LayoutAnimation.configureNext(
-              LayoutAnimation.create(100, "linear", "opacity")
-            );
-            setExpanded(!expanded);
-            spin();
-          }}
-        >
+        <Card onPress={handleExpand}>
           <View style={styles.contentContainer}>
             <View style={styles.checkboxContainer}>
               <CheckBox
@@ -127,15 +128,20 @@ const TaskCard = ({ taskObject }) => {
                 // eslint-disable-next-line react-native/no-inline-styles
                 style={{ textDecorationLine: deleted ? "line-through" : null }}
                 numberOfLines={expanded ? null : 2}
+                onTextLayout={({ nativeEvent: { lines } }) => {
+                  setTruncated(lines.length > 2);
+                }}
               >
                 {task}
               </CustomText>
             </View>
-            <Animated.View
-              style={[styles.iconContainer, { transform: [{ rotate }] }]}
-            >
-              <ChevronIcon />
-            </Animated.View>
+            {truncated && (
+              <Animated.View
+                style={[styles.iconContainer, { transform: [{ rotate }] }]}
+              >
+                <ChevronIcon />
+              </Animated.View>
+            )}
           </View>
         </Card>
       </Swipeable>

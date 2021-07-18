@@ -21,14 +21,12 @@ interface CustomTextProps extends TextProps {
 const CustomText: React.FC<CustomTextProps> = ({
   children,
   fontFamily,
-  numberOfLines,
   style,
-  onLayout,
+  ...props
 }) => {
   return (
     <Animated.Text
-      onLayout={onLayout}
-      numberOfLines={numberOfLines}
+      {...props}
       style={[style, { fontFamily: fontWeights[fontFamily || "semiBold"] }]}
     >
       {children}

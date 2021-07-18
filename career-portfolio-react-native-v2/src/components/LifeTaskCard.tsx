@@ -37,6 +37,7 @@ const ChevronIcon = (props) => (
 
 const LifeTasksCard = ({ taskObject }) => {
   const [expanded, setExpanded] = useState(false);
+  const [truncated, setTruncated] = useState(false);
   const [spinValue] = useState(new Animated.Value(0));
   const leftSwipeable = useRef(null);
 
@@ -56,6 +57,14 @@ const LifeTasksCard = ({ taskObject }) => {
       easing: Easing.linear,
       useNativeDriver: true,
     }).start();
+  };
+
+  const handleExpand = () => {
+    LayoutAnimation.configureNext(
+      LayoutAnimation.create(100, "linear", "opacity")
+    );
+    setExpanded(!expanded);
+    spin();
   };
 
   const rightSwipe = useCallback(() => {
@@ -78,26 +87,25 @@ const LifeTasksCard = ({ taskObject }) => {
         onSwipeableOpen={rightSwipe}
         friction={2}
       >
-        <Card
-          onPress={() => {
-            LayoutAnimation.configureNext(
-              LayoutAnimation.create(100, "linear", "opacity")
-            );
-            setExpanded(!expanded);
-            spin();
-          }}
-        >
+        <Card onPress={handleExpand}>
           <View style={styles.contentContainer}>
             <View style={styles.taskContainer}>
-              <CustomText numberOfLines={expanded ? null : 2}>
+              <CustomText
+                numberOfLines={expanded ? null : 2}
+                onTextLayout={({ nativeEvent: { lines } }) => {
+                  setTruncated(lines.length > 2);
+                }}
+              >
                 {task}
               </CustomText>
             </View>
-            <Animated.View
-              style={[styles.iconContainer, { transform: [{ rotate }] }]}
-            >
-              <ChevronIcon />
-            </Animated.View>
+            {truncated && (
+              <Animated.View
+                style={[styles.iconContainer, { transform: [{ rotate }] }]}
+              >
+                <ChevronIcon />
+              </Animated.View>
+            )}
           </View>
         </Card>
       </Swipeable>

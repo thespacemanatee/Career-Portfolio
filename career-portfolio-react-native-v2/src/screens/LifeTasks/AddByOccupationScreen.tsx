@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { View, FlatList, Platform } from "react-native";
+import { View, FlatList } from "react-native";
 import {
   Button,
-  Icon,
   Input,
   StyleService,
   TopNavigation,
-  TopNavigationAction,
 } from "@ui-kitten/components";
 import { Formik } from "formik";
 
@@ -17,8 +15,7 @@ import TaskSearchResultCard from "../../components/TaskSearchResultCard";
 import { TaskObject, TaskType } from "../../types";
 import { useAppSelector } from "../../app/hooks";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
-
-const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
+import ThemedBackButton from "../../components/ThemedBackButton";
 
 const filter = (item, query) =>
   item?.toLowerCase().includes(query?.toLowerCase());
@@ -30,16 +27,7 @@ const AddByOccupationScreen = ({ navigation }) => {
   const [results, setResults] = useState([]);
 
   const BackAction = () => (
-    <TopNavigationAction
-      icon={BackIcon}
-      onPress={() => {
-        if (Platform.OS === "web") {
-          window.history.back();
-        } else {
-          navigation.goBack();
-        }
-      }}
-    />
+    <ThemedBackButton navigation={navigation} label="Done" />
   );
 
   const handleSearch = (query) => {
@@ -75,9 +63,9 @@ const AddByOccupationScreen = ({ navigation }) => {
   return (
     <View style={styles.screen}>
       <TopNavigation
-        title="Add task by occupation"
+        title="Add Task by Occupation"
         alignment="center"
-        accessoryLeft={BackAction}
+        accessoryRight={BackAction}
       />
       <Formik initialValues={{ occupation: "" }} onSubmit={handleSearch}>
         {({ handleChange, handleBlur, handleSubmit, values }) => (
@@ -118,6 +106,7 @@ export default AddByOccupationScreen;
 const styles = StyleService.create({
   screen: {
     flex: 1,
+    padding: 16,
     backgroundColor: "white",
   },
   button: {

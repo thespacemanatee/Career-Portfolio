@@ -95,10 +95,10 @@ export type ResultsState = {
   recentlyOpenedId?: string;
 };
 
-interface ResultsLocalStorageItem {
+export type ResultsLocalStorageItem = {
   payload: ResultsPayload;
   editedDate?: number;
-}
+};
 
 export type ResultsLocalStorage = {
   [id: string]: ResultsLocalStorageItem;

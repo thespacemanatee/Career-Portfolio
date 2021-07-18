@@ -23,7 +23,11 @@ import ResultsDetailsScreen from "../screens/Results/ResultsDetailsScreen";
 import SubmitLoadingScreen from "../screens/SubmitLoadingScreen";
 import SubmissionProgressionHeader from "../components/SubmissionProgressionHeader";
 import DashboardScreen from "../screens/DashboardScreen";
-import { isReadyRef, submissionProgressRef } from "./NavigationHelper";
+import {
+  isReadyRef,
+  navigationRef,
+  submissionProgressRef,
+} from "./NavigationHelper";
 import { PROGRESS_HEADER_HEIGHT } from "../helpers/config/config";
 import ThemedBackButton from "../components/ThemedBackButton";
 import {
@@ -67,7 +71,10 @@ const AppNavigator = () => {
   const NewSubmissionStackNavigator = () => {
     return (
       <View style={styles.screen}>
-        <ThemedBackButton style={[backAnimatedStyle, styles.backButton]} />
+        <ThemedBackButton
+          navigation={navigationRef.current}
+          style={[backAnimatedStyle, styles.backButton]}
+        />
         <View style={styles.submissionProgressHeader}>
           <SubmissionProgressionHeader
             headerTitle="Make a Submission"
@@ -126,7 +133,10 @@ const AppNavigator = () => {
 
     return (
       <View style={styles.screen}>
-        <ThemedBackButton style={[backAnimatedStyle, styles.backButton]} />
+        <ThemedBackButton
+          navigation={navigationRef.current}
+          style={[backAnimatedStyle, styles.backButton]}
+        />
         <Animated.View style={animatedStyle}>
           <View style={styles.submissionProgressHeader}>
             <SubmissionProgressionHeader

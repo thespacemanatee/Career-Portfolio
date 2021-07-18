@@ -52,7 +52,6 @@ const SubmitLoadingScreen = ({ navigation, route }) => {
         "Error",
         "Unable to contact the server. Please try again later!"
       );
-      dispatch(setRecentlyOpenedId(null));
       navigation.goBack();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

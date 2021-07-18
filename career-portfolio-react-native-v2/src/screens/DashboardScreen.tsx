@@ -87,7 +87,7 @@ const DashboardScreen = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-      progress.value = withTiming(1, { duration: 500 });
+      progress.value = withTiming(1, { duration: 750 });
     }, [progress])
   );
 

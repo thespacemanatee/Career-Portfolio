@@ -18,7 +18,7 @@ const ShadowCard: React.FC<ShadowCardProps> = ({
   return (
     <TouchableOpacity
       style={styles.shadowContainer}
-      activeOpacity={0.5}
+      activeOpacity={0.8}
       onPress={onPress}
       disabled={disabled}
     >

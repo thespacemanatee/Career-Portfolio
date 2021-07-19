@@ -53,7 +53,10 @@ const DashboardScreen = ({ navigation }) => {
 
   const handleNavigateResults = (id: string) => {
     if (id === recentlyOpenedId) {
-      navigation.navigate("ResultsStack", { screen: "ResultsPager" });
+      navigation.navigate("ResultsStack", {
+        screen: "ResultsModalStack",
+        params: { screen: "ResultsDashboard" },
+      });
     } else {
       dispatch(setAllTasks(previousSubmissions[id].payload.task_list));
       navigation.navigate("ResultsStack", {
@@ -147,6 +150,7 @@ const DashboardScreen = ({ navigation }) => {
       <ScrollView
         onScroll={handleScroll}
         scrollEventThrottle={1}
+        showsVerticalScrollIndicator={false}
         style={styles.scrollView}
       >
         {recentlyOpenedItem && (

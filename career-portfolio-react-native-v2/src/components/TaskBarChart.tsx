@@ -36,7 +36,7 @@ const TaskBarChart: React.FC<TaskBarChartProps> = ({
           { width: `${(notRelevant / totalTasks) * 100}%` },
         ]}
         onPress={() => {
-          handleSelectCategory(ResultsType.IRRELEVANT);
+          handleSelectCategory(ResultsType.NOT_RELEVANT);
         }}
       />
       <TouchableOpacity

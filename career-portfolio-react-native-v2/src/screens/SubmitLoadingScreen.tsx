@@ -37,7 +37,7 @@ const SubmitLoadingScreen = ({ navigation, route }) => {
                 name: "ResultsStack",
                 state: {
                   index: 1,
-                  routes: [{ name: "ResultsPager" }],
+                  routes: [{ name: "ResultsModalStack" }],
                 },
               },
             ],

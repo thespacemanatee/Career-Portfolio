@@ -13,7 +13,7 @@ export type PagerViewOnPageScrollEventData = {
   offset: number;
 };
 
-export type ResultsViewPagerConfig = {
+export type ResultsConfig = {
   type: ResultsCategory;
   color: string;
 };
@@ -72,7 +72,7 @@ export interface ResultsPayload {
 }
 
 export enum ResultsType {
-  IRRELEVANT = "Irrelevant",
+  NOT_RELEVANT = "Not Relevant",
   SIMILAR = "Similar",
   MISSING = "Missing",
 }

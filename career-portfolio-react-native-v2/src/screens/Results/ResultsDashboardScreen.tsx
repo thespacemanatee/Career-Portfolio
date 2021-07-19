@@ -12,13 +12,13 @@ import Animated, {
 
 import { tasksSelector } from "../../app/features/tasks/tasksSlice";
 import { useAppSelector } from "../../app/hooks";
-import useHandleScroll from "../../helpers/hooks/useHandleScroll";
 import { navigationRef } from "../../navigation/NavigationHelper";
 import CustomText from "../../components/CustomText";
 import { resultsConfig } from "../../helpers/config/config";
 import ResultCard from "../../components/result/ResultCard";
 import { getResultsTasks } from "../../helpers/utils";
 import Colors from "../../helpers/config/color";
+import AnimatedFab from "../../components/AnimatedFab";
 
 const HEADER_HEIGHT_EXPANDED = 60;
 const HEADER_HEIGHT_COLLAPSED = 60;
@@ -26,10 +26,9 @@ const HEADER_HEIGHT_COLLAPSED = 60;
 const ResultsDashboardScreen = ({ navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
   const results = useAppSelector((state) => state.results);
-  const [visible, setVisible] = useState(false);
   const translateY = useSharedValue(0);
-
-  const { handleScroll, showButton } = useHandleScroll();
+  const showButton = useSharedValue(true);
+  const [visible, setVisible] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -61,12 +60,21 @@ const ResultsDashboardScreen = ({ navigation }) => {
     setVisible(false);
   };
 
+  const handleEditTasks = () => {
+    navigation.navigate("SubmissionStack", {
+      screen: "CoreTasks",
+      params: { id: results.recentlyOpenedId, editing: true },
+    });
+  };
+
   const handleOpenDetails = (id: string, data) => {
     navigation.navigate("ResultsDetails", { id, data });
   };
 
   const scrollHandler = useAnimatedScrollHandler((event) => {
-    translateY.value = event.contentOffset.y;
+    const currentOffset = event.contentOffset.y;
+    showButton.value = !(currentOffset > 0 && currentOffset > translateY.value);
+    translateY.value = currentOffset;
   });
 
   const headerAnimatedStyle = useAnimatedStyle(() => {
@@ -144,6 +152,13 @@ const ResultsDashboardScreen = ({ navigation }) => {
           );
         })}
       </Animated.ScrollView>
+      <AnimatedFab
+        icon="edit"
+        label="Edit"
+        onPress={handleEditTasks}
+        style={styles.fab}
+        showLabel={showButton}
+      />
     </View>
   );
 };
@@ -174,5 +189,11 @@ const styles = StyleSheet.create({
   },
   categoryTitle: {
     fontSize: 32,
+  },
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 0,
   },
 });

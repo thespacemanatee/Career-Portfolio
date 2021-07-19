@@ -9,6 +9,7 @@ import {
 import Animated, {
   Extrapolate,
   interpolate,
+  useAnimatedReaction,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -24,7 +25,7 @@ const AnimatedTouchableOpacity =
 interface AnimatedFabProps {
   icon: string;
   label?: string;
-  showLabel?: boolean;
+  showLabel?: Animated.SharedValue<boolean> | boolean;
   style?: StyleProp<ViewStyle>;
   onPress: () => void;
 }
@@ -39,6 +40,21 @@ const AnimatedFab: React.FC<AnimatedFabProps> = ({
   const progress = useSharedValue(0);
 
   const theme = useTheme();
+
+  useAnimatedReaction(
+    () => {
+      return (showLabel as Animated.SharedValue<boolean>).value;
+    },
+    (result) => {
+      if ((showLabel as Animated.SharedValue<boolean>).value !== undefined) {
+        if (result) {
+          progress.value = withTiming(1, { duration: 100 });
+        } else {
+          progress.value = withTiming(0, { duration: 100 });
+        }
+      }
+    }
+  );
 
   const animatedFABStyles = useAnimatedStyle(() => {
     return {

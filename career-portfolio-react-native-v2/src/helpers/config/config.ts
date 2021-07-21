@@ -1,10 +1,8 @@
-import { ResultsCategory, ResultsViewPagerConfig } from "../../types";
-
-export const PROGRESS_HEADER_HEIGHT = 60;
+import { ResultsCategory, ResultsConfig } from "../../types";
 
 export const ICON_SIZE = 30;
 
-export const pagerConfig: ResultsViewPagerConfig[] = [
+export const resultsConfig: ResultsConfig[] = [
   {
     type: ResultsCategory.FAMILIARITY,
     color: "#9dcdfa",

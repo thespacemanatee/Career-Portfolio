@@ -3,7 +3,13 @@ import { v4 as uuidv4 } from "uuid";
 
 import alert from "../components/CustomAlert";
 import * as data from "../data/career_data.json";
-import { ResultsLocalStorage, ResultsPayload } from "../types";
+import {
+  ResultsCountData,
+  ResultsLocalStorage,
+  ResultsPayload,
+  ResultsState,
+  TaskObject,
+} from "../types";
 
 type CareerDataTask = {
   index: number;
@@ -51,6 +57,32 @@ export const saveUserInput = async (
     console.error("Error saving user input data", err);
   }
   return saveId;
+};
+
+export const getResultsTasks = (
+  item: ResultsCountData,
+  results: ResultsState,
+  tasks: TaskObject[]
+) => {
+  const similarTasks: string[] = results.similar
+    .filter((e) => e.title === item.title)
+    .map((e) => e.similarIWA);
+  const missingTasks: string[] = results.missing
+    .filter((e) => e.title === item.title)
+    .map((e) => e.missingIWA);
+  const notRelevantTasks: string[] = tasks
+    .filter((e) => results.similar.filter((d) => e.IWA_Title !== d.similarIWA))
+    .map((e) => e.IWA_Title);
+  return { similarTasks, missingTasks, notRelevantTasks };
+};
+
+export const sortByOccurrences = (array: any[]) => {
+  const map = array.reduce((p, c) => {
+    p[c] = (p[c] || 0) + 1;
+    return p;
+  }, {});
+
+  return Object.keys(map).sort((a, b) => map[b] - map[a]);
 };
 
 /**

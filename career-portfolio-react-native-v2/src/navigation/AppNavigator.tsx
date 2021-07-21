@@ -1,6 +1,9 @@
 import React from "react";
 import { View } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from "@react-navigation/stack";
 import {
   Extrapolate,
   interpolate,
@@ -18,8 +21,7 @@ import LifeTasksScreen from "../screens/LifeTasksScreen";
 import RankingsScreen from "../screens/RankingsScreen";
 import AddByActionScreen from "../screens/LifeTasks/AddByActionScreen";
 import AddByOccupationScreen from "../screens/LifeTasks/AddByOccupationScreen";
-import ResultsPagerScreen from "../screens/Results/ResultsPagerScreen";
-import ResultsDetailsScreen from "../screens/Results/ResultsDetailsScreen";
+import ResultsDashboardScreen from "../screens/Results/ResultsDashboardScreen";
 import SubmitLoadingScreen from "../screens/SubmitLoadingScreen";
 import SubmissionProgressionHeader from "../components/SubmissionProgressionHeader";
 import DashboardScreen from "../screens/DashboardScreen";
@@ -28,7 +30,6 @@ import {
   navigationRef,
   submissionProgressRef,
 } from "./NavigationHelper";
-import { PROGRESS_HEADER_HEIGHT } from "../helpers/config/config";
 import ThemedBackButton from "../components/ThemedBackButton";
 import {
   fadeSlideConfig,
@@ -36,6 +37,7 @@ import {
   slideConfig,
   NUMBER_OF_SUBMISSION_SCREENS,
 } from "./NavigationConfig";
+import ResultsDetailsScreen from "../screens/Results/ResultsDetailsScreen";
 
 const AppNavigator = () => {
   const submissionProgress = useSharedValue(0);
@@ -104,13 +106,32 @@ const AppNavigator = () => {
     );
   };
 
+  const ResultsModalStackNavigator = () => {
+    return (
+      <View style={styles.screen}>
+        <Navigator
+          screenOptions={{
+            headerShown: false,
+            gestureEnabled: true,
+            ...TransitionPresets.ModalPresentationIOS,
+          }}
+        >
+          <Screen name="ResultsDashboard" component={ResultsDashboardScreen} />
+          <Screen name="ResultsDetails" component={ResultsDetailsScreen} />
+        </Navigator>
+      </View>
+    );
+  };
+
   const ResultsStackNavigator = () => {
     return (
       <View style={styles.screen}>
         <Navigator screenOptions={slideConfig}>
           <Screen name="SubmitLoading" component={SubmitLoadingScreen} />
-          <Screen name="ResultsPager" component={ResultsPagerScreen} />
-          <Screen name="ResultsDetails" component={ResultsDetailsScreen} />
+          <Screen
+            name="ResultsModalStack"
+            component={ResultsModalStackNavigator}
+          />
           <Screen name="SubmissionStack" component={SubmissionStackNavigator} />
         </Navigator>
       </View>
@@ -144,7 +165,6 @@ const styles = StyleService.create({
   },
   submissionProgressHeader: {
     marginHorizontal: 16,
-    height: PROGRESS_HEADER_HEIGHT,
   },
   backButton: {
     margin: 16,

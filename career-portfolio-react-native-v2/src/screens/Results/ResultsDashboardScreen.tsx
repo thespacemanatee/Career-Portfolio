@@ -12,7 +12,10 @@ import Animated, {
 
 import { tasksSelector } from "../../app/features/tasks/tasksSlice";
 import { useAppSelector } from "../../app/hooks";
-import { navigationRef } from "../../navigation/NavigationHelper";
+import {
+  navigationRef,
+  submissionProgressRef,
+} from "../../navigation/NavigationHelper";
 import CustomText from "../../components/CustomText";
 import { resultsConfig } from "../../helpers/config/config";
 import ResultCard from "../../components/result/ResultCard";
@@ -34,6 +37,7 @@ const ResultsDashboardScreen = ({ navigation }) => {
   useFocusEffect(
     useCallback(() => {
       navigationRef.current = navigation;
+      submissionProgressRef.current = 0;
     }, [navigation])
   );
 

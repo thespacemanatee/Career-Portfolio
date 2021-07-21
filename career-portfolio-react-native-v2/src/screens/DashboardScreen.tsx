@@ -53,6 +53,7 @@ const DashboardScreen = ({ navigation }) => {
 
   const handleNavigateResults = (id: string) => {
     if (id === recentlyOpenedId) {
+      dispatch(setAllTasks(result[recentlyOpenedId].payload.task_list));
       navigation.navigate("ResultsStack", {
         screen: "ResultsModalStack",
         params: { screen: "ResultsDashboard" },

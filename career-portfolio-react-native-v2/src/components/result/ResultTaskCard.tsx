@@ -41,7 +41,7 @@ const ResultTaskCard: React.FC<ResultTaskCardProps> = ({ index, task }) => {
       style={[
         styles.taskContainer,
         animatedStyle,
-        { backgroundColor: theme["color-basic-500"] },
+        { backgroundColor: theme["color-basic-400"] },
       ]}
     >
       <CustomText>{task}</CustomText>

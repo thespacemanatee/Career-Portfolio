@@ -22,6 +22,7 @@ import AnimatedFab from "../../components/AnimatedFab";
 
 const HEADER_HEIGHT_EXPANDED = 60;
 const HEADER_HEIGHT_COLLAPSED = 60;
+const CATEGORY_HEIGHT = 510;
 
 const ResultsDashboardScreen = ({ navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
@@ -67,8 +68,8 @@ const ResultsDashboardScreen = ({ navigation }) => {
     });
   };
 
-  const handleOpenDetails = (id: string, data) => {
-    navigation.navigate("ResultsDetails", { id, data });
+  const handleOpenDetails = (data) => {
+    navigation.navigate("ResultsDetails", { data });
   };
 
   const scrollHandler = useAnimatedScrollHandler((event) => {
@@ -112,10 +113,13 @@ const ResultsDashboardScreen = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
+        snapToOffsets={[HEADER_HEIGHT_COLLAPSED]}
+        snapToStart={false}
+        snapToEnd={false}
       >
-        {resultsConfig.map((category, categoryIndex) => {
+        {resultsConfig.map((category) => {
           return (
-            <View key={category.type}>
+            <View key={category.type} style={styles.categoryContainer}>
               <View style={styles.categoryTitleContainer}>
                 <CustomText
                   fontFamily="bold"
@@ -129,7 +133,7 @@ const ResultsDashboardScreen = ({ navigation }) => {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.nestedScrollViewContent}
               >
-                {results[category.type].map((occupation, cardIndex) => {
+                {results[category.type].map((occupation, index) => {
                   const { similarTasks, missingTasks, notRelevantTasks } =
                     getResultsTasks(occupation, results, tasks);
 
@@ -140,8 +144,9 @@ const ResultsDashboardScreen = ({ navigation }) => {
                   ];
                   return (
                     <ResultCard
-                      id={`card-${categoryIndex}-${cardIndex}`}
                       key={occupation.title}
+                      rank={index + 1}
+                      occupation={occupation.title}
                       data={data}
                       onPress={handleOpenDetails}
                     />
@@ -183,6 +188,9 @@ const styles = StyleSheet.create({
   },
   nestedScrollViewContent: {
     paddingLeft: 16,
+  },
+  categoryContainer: {
+    height: CATEGORY_HEIGHT,
   },
   categoryTitleContainer: {
     margin: 16,

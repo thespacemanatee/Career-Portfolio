@@ -30,7 +30,6 @@ import {
   navigationRef,
   submissionProgressRef,
 } from "./NavigationHelper";
-import { PROGRESS_HEADER_HEIGHT } from "../helpers/config/config";
 import ThemedBackButton from "../components/ThemedBackButton";
 import {
   fadeSlideConfig,
@@ -166,7 +165,6 @@ const styles = StyleService.create({
   },
   submissionProgressHeader: {
     marginHorizontal: 16,
-    height: PROGRESS_HEADER_HEIGHT,
   },
   backButton: {
     margin: 16,

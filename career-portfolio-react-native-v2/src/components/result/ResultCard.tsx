@@ -5,23 +5,30 @@ import { PieChart } from "react-native-svg-charts";
 
 import Colors from "../../helpers/config/color";
 import CustomText from "../CustomText";
+import RankIcon from "./RankIcon";
 import ShadowCard from "../ShadowCard";
 
 interface ResultCardProps {
-  id: string;
+  occupation: string;
+  rank: number;
   data: {
     tasks: string[];
     color: Colors;
   }[];
-  onPress: (id, data) => void;
+  onPress: (data) => void;
 }
 
-const CARD_WIDTH = Dimensions.get("window").width / 1.4;
-const CARD_HEIGHT = Dimensions.get("window").height / 2;
+const CARD_WIDTH = Dimensions.get("window").width / 1.2;
+const CARD_HEIGHT = 400;
 
 const labelTexts = ["Similar", "Missing", "Unrelated"];
 
-const ResultCard: React.FC<ResultCardProps> = ({ id, data, onPress }) => {
+const ResultCard: React.FC<ResultCardProps> = ({
+  occupation,
+  rank,
+  data,
+  onPress,
+}) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(null);
 
   const theme = useTheme();
@@ -46,26 +53,36 @@ const ResultCard: React.FC<ResultCardProps> = ({ id, data, onPress }) => {
   return (
     <View style={styles.cardContainer}>
       <ShadowCard
-        style={styles.card}
+        style={styles.cardContent}
         onPress={() => {
-          onPress(id, data);
+          onPress(data);
         }}
       >
-        <PieChart
-          data={pieData}
-          style={styles.pieChart}
-          innerRadius="70%"
-          outerRadius="90%"
+        <View>
+          <RankIcon rank={rank} />
+          <PieChart
+            data={pieData}
+            style={styles.pieChart}
+            innerRadius="70%"
+            outerRadius="90%"
+          >
+            {selectedIndex !== null && (
+              <View style={styles.pieChartChild}>
+                <CustomText style={styles.pieText}>
+                  {data[selectedIndex].tasks.length}
+                </CustomText>
+                <CustomText>{`${labelTexts[selectedIndex]} Tasks`}</CustomText>
+              </View>
+            )}
+          </PieChart>
+        </View>
+        <CustomText
+          numberOfLines={3}
+          fontFamily="bold"
+          style={styles.occupationText}
         >
-          {selectedIndex !== null && (
-            <View style={styles.pieChartChild}>
-              <CustomText style={styles.progressText}>
-                {data[selectedIndex].tasks.length}
-              </CustomText>
-              <CustomText>{`${labelTexts[selectedIndex]} Tasks`}</CustomText>
-            </View>
-          )}
-        </PieChart>
+          {occupation}
+        </CustomText>
       </ShadowCard>
     </View>
   );
@@ -78,11 +95,12 @@ const styles = StyleSheet.create({
     marginRight: 16,
     marginVertical: 16,
   },
-  card: {
+  cardContent: {
     height: CARD_HEIGHT,
     width: CARD_WIDTH,
     borderRadius: 16,
     padding: 16,
+    justifyContent: "space-between",
   },
   pieChart: {
     height: 200,
@@ -91,7 +109,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  progressText: {
+  pieText: {
     fontSize: 32,
+  },
+  occupationText: {
+    fontSize: 24,
   },
 });

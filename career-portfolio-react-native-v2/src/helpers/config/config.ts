@@ -1,7 +1,5 @@
 import { ResultsCategory, ResultsConfig } from "../../types";
 
-export const PROGRESS_HEADER_HEIGHT = 60;
-
 export const ICON_SIZE = 30;
 
 export const resultsConfig: ResultsConfig[] = [

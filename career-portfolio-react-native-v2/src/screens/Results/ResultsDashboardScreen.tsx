@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     ...StyleSheet.absoluteFillObject,
-    left: 14,
+    left: 16,
     marginTop: 16,
   },
   scrollView: {

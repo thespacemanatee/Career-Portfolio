@@ -5,6 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "owner": "lkycic-futureofwork",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -13,9 +14,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -28,5 +27,8 @@
     "web": {
       "favicon": "./assets/favicon.png"
     }
-  }
+  },
+  "title": "Career Portfolio Application",
+  "description": "A modern cross-platform mobile application that helps you decide and transition to new and exciting careers based on your work and life experiences.",
+  "primaryColor": "#3366FF"
 }

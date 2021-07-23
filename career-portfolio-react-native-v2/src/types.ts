@@ -19,6 +19,7 @@ export type ResultsConfig = {
   type: ResultsCategory;
   description: string;
   color: string;
+  gradientColors: string[];
 };
 
 export type TaskObject = {

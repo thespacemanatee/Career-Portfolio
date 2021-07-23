@@ -41,6 +41,6 @@ const styles = StyleSheet.create({
     width: DOT_SIZE,
     height: DOT_SIZE,
     borderRadius: DOT_SIZE / 2,
-    marginRight: 6,
+    marginRight: 12,
   },
 });

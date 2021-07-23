@@ -22,7 +22,7 @@ const ResultTaskCard: React.FC<ResultTaskCardProps> = ({ index, task }) => {
   const progress = useSharedValue(0);
 
   useEffect(() => {
-    progress.value = withDelay(index * 50, withSpring(1));
+    progress.value = withDelay(index * 25, withSpring(1));
   }, [index, progress]);
 
   const theme = useTheme();

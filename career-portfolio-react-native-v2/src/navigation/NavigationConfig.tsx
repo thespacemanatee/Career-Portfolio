@@ -31,6 +31,14 @@ export const tabConfig = ({ route }) => ({
 export const modalConfig: () => StackNavigationOptions = () => ({
   headerShown: false,
   gestureEnabled: true,
+  cardShadowEnabled: true,
+  cardOverlayEnabled: true,
+  ...TransitionPresets.ModalPresentationIOS,
+});
+
+export const transparentModalConfig: () => StackNavigationOptions = () => ({
+  headerShown: false,
+  gestureEnabled: true,
   cardShadowEnabled: false,
   cardOverlayEnabled: false,
   cardStyle: {

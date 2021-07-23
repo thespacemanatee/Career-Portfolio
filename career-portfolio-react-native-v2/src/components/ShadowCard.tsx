@@ -44,5 +44,6 @@ const styles = StyleService.create({
   shadow: {
     borderRadius: 8,
     backgroundColor: "white",
+    overflow: "hidden",
   },
 });

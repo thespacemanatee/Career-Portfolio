@@ -17,18 +17,19 @@ const ResultsDetailsScreen = ({ route, navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <ThemedBackButton navigation={navigation} />
+      <ThemedBackButton navigation={navigation} style={styles.backButton} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.pieChartContainer}>
           <ResultsPieChart data={data} size={200} onPressArc={handlePressArc} />
         </View>
         {selectedIndex !== null &&
           sortByOccurrences(data[selectedIndex].tasks).map((task, idx) => (
-            <ResultTaskCard
+            <View
               key={`${task}-${Math.random()}`}
-              index={idx}
-              task={task}
-            />
+              style={styles.resultTaskCard}
+            >
+              <ResultTaskCard index={idx} task={task} />
+            </View>
           ))}
       </ScrollView>
     </View>
@@ -40,10 +41,15 @@ export default ResultsDetailsScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    padding: 16,
+  },
+  backButton: {
+    margin: 16,
   },
   pieChartContainer: {
     alignItems: "center",
     marginVertical: 16,
+  },
+  resultTaskCard: {
+    paddingHorizontal: 16,
   },
 });

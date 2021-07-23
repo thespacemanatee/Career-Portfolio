@@ -71,8 +71,12 @@ export const getResultsTasks = (
     .filter((e) => e.title === item.title)
     .map((e) => e.missingIWA);
   const notRelevantTasks: string[] = tasks
-    .filter((e) => results.similar.filter((d) => e.IWA_Title !== d.similarIWA))
-    .map((e) => e.IWA_Title);
+    .filter(
+      (e) =>
+        !similarTasks.some((d) => e.task === d) &&
+        !missingTasks.some((d) => e.task === d)
+    )
+    .map((e) => e.task);
   return { similarTasks, missingTasks, notRelevantTasks };
 };
 

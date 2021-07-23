@@ -22,10 +22,11 @@ import ResultCard from "../../components/result/ResultCard";
 import { getResultsTasks } from "../../helpers/utils";
 import Colors from "../../helpers/config/color";
 import AnimatedFab from "../../components/AnimatedFab";
+import { ResultsPieChartData } from "../../types";
 
 const HEADER_HEIGHT_EXPANDED = 60;
 const HEADER_HEIGHT_COLLAPSED = 60;
-const CATEGORY_HEIGHT = 510;
+const CATEGORY_HEIGHT = 410;
 
 const ResultsDashboardScreen = ({ navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
@@ -118,7 +119,6 @@ const ResultsDashboardScreen = ({ navigation }) => {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
         snapToOffsets={[HEADER_HEIGHT_COLLAPSED]}
-        snapToStart={false}
         snapToEnd={false}
       >
         {resultsConfig.map((category) => {
@@ -141,7 +141,7 @@ const ResultsDashboardScreen = ({ navigation }) => {
                   const { similarTasks, missingTasks, notRelevantTasks } =
                     getResultsTasks(occupation, results, tasks);
 
-                  const data = [
+                  const data: ResultsPieChartData[] = [
                     { tasks: similarTasks, color: Colors.SIMILAR },
                     { tasks: missingTasks, color: Colors.MISSING },
                     { tasks: notRelevantTasks, color: Colors.NOT_RELEVANT },

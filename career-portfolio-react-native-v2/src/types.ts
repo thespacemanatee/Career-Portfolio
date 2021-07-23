@@ -1,3 +1,5 @@
+import Colors from "./helpers/config/color";
+
 /* eslint-disable camelcase */
 export type FontWeight =
   | "bold"
@@ -83,6 +85,11 @@ export enum ResultsCategory {
   PERSONALITY = "PERSONALITY",
   BEST_FIT = "BEST FIT",
 }
+
+export type ResultsPieChartData = {
+  tasks: string[];
+  color: Colors;
+};
 
 export type ResultsState = {
   count: ResultsCountData[];

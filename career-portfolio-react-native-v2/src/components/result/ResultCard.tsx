@@ -22,6 +22,7 @@ interface ResultCardProps {
   scores: ResultsScores;
   onPress: (
     data: ResultsPieChartData[],
+    occupation: string,
     { preferenceScore, riasecScore, similarityScore }: ResultsScores
   ) => void;
 }
@@ -43,7 +44,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
       <ShadowCard
         style={styles.card}
         onPress={() => {
-          onPress(data, scores);
+          onPress(data, occupation, scores);
         }}
       >
         <LinearGradient colors={gradientColors} style={styles.linearGradient}>

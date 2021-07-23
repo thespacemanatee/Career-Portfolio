@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions, StyleSheet, ViewProps } from "react-native";
 import { useTheme } from "@ui-kitten/components";
 import Animated, {
   interpolate,
@@ -11,14 +11,18 @@ import Animated, {
 
 import CustomText from "../CustomText";
 
-interface ResultTaskCardProps {
+interface ResultTaskCardProps extends ViewProps {
   index: number;
   task: string;
 }
 
 const CARD_WIDTH = Dimensions.get("window").width;
 
-const ResultTaskCard: React.FC<ResultTaskCardProps> = ({ index, task }) => {
+const ResultTaskCard: React.FC<ResultTaskCardProps> = ({
+  index,
+  task,
+  style,
+}) => {
   const progress = useSharedValue(0);
 
   useEffect(() => {
@@ -40,6 +44,7 @@ const ResultTaskCard: React.FC<ResultTaskCardProps> = ({ index, task }) => {
     <Animated.View
       style={[
         styles.taskContainer,
+        style,
         animatedStyle,
         { backgroundColor: theme["color-basic-400"] },
       ]}
@@ -53,7 +58,6 @@ export default ResultTaskCard;
 
 const styles = StyleSheet.create({
   taskContainer: {
-    marginBottom: 12,
     padding: 16,
     borderRadius: 8,
   },

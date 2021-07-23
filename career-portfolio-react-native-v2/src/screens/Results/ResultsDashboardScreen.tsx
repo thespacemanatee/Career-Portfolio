@@ -76,9 +76,10 @@ const ResultsDashboardScreen = ({ navigation }) => {
 
   const handleOpenDetails = (
     data: ResultsPieChartData[],
+    occupation: string,
     scores: ResultsScores
   ) => {
-    navigation.navigate("ResultsDetails", { data, scores });
+    navigation.navigate("ResultsDetails", { data, occupation, scores });
   };
 
   const scrollHandler = useAnimatedScrollHandler((event) => {

@@ -3,13 +3,14 @@ import { StyleSheet, View, ScrollView } from "react-native";
 
 import ResultsPieChart from "../../components/result/pieChart/ResultsPieChart";
 import ResultTaskCard from "../../components/result/ResultTaskCard";
+import SelectedOccupationCard from "../../components/SelectedOccupationCard";
 import ThemedBackButton from "../../components/ThemedBackButton";
 import { sortByOccurrences } from "../../helpers/utils";
 
 const ResultsDetailsScreen = ({ route, navigation }) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
-  const { data, scores } = route.params;
+  const { data, occupation, scores } = route.params;
 
   const handlePressArc = (index: number) => {
     setSelectedIndex(index);
@@ -22,14 +23,18 @@ const ResultsDetailsScreen = ({ route, navigation }) => {
         <View style={styles.pieChartContainer}>
           <ResultsPieChart data={data} size={200} onPressArc={handlePressArc} />
         </View>
+        <SelectedOccupationCard
+          occupation={occupation}
+          style={styles.selectedOccupationCard}
+        />
         {selectedIndex !== null &&
           sortByOccurrences(data[selectedIndex].tasks).map((task, idx) => (
-            <View
+            <ResultTaskCard
+              index={idx}
+              task={task}
               key={`${task}-${Math.random()}`}
               style={styles.resultTaskCard}
-            >
-              <ResultTaskCard index={idx} task={task} />
-            </View>
+            />
           ))}
       </ScrollView>
     </View>
@@ -45,11 +50,15 @@ const styles = StyleSheet.create({
   backButton: {
     margin: 16,
   },
+  selectedOccupationCard: {
+    margin: 16,
+  },
   pieChartContainer: {
     alignItems: "center",
     marginVertical: 16,
   },
   resultTaskCard: {
-    paddingHorizontal: 16,
+    marginBottom: 16,
+    marginHorizontal: 16,
   },
 });

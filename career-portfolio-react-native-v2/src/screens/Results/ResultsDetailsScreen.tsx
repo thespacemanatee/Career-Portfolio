@@ -9,7 +9,7 @@ import { sortByOccurrences } from "../../helpers/utils";
 const ResultsDetailsScreen = ({ route, navigation }) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
-  const { data } = route.params;
+  const { data, scores } = route.params;
 
   const handlePressArc = (index: number) => {
     setSelectedIndex(index);

@@ -17,6 +17,7 @@ export type PagerViewOnPageScrollEventData = {
 
 export type ResultsConfig = {
   type: ResultsCategory;
+  description: string;
   color: string;
 };
 
@@ -89,6 +90,13 @@ export enum ResultsCategory {
 export type ResultsPieChartData = {
   tasks: string[];
   color: Colors;
+};
+
+export type ResultsScores = {
+  similarTasksScore: number;
+  preferenceScore: number;
+  riasecScore: number;
+  similarityScore: number;
 };
 
 export type ResultsState = {

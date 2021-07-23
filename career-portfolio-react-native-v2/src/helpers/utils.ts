@@ -60,15 +60,15 @@ export const saveUserInput = async (
 };
 
 export const getResultsTasks = (
-  item: ResultsCountData,
+  occupation: ResultsCountData,
   results: ResultsState,
   tasks: TaskObject[]
 ) => {
   const similarTasks: string[] = results.similar
-    .filter((e) => e.title === item.title)
+    .filter((e) => e.title === occupation.title)
     .map((e) => e.similarIWA);
   const missingTasks: string[] = results.missing
-    .filter((e) => e.title === item.title)
+    .filter((e) => e.title === occupation.title)
     .map((e) => e.missingIWA);
   const notRelevantTasks: string[] = tasks
     .filter(

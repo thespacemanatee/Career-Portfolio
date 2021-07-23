@@ -22,11 +22,11 @@ import ResultCard from "../../components/result/ResultCard";
 import { getResultsTasks } from "../../helpers/utils";
 import Colors from "../../helpers/config/color";
 import AnimatedFab from "../../components/AnimatedFab";
-import { ResultsPieChartData } from "../../types";
+import { ResultsPieChartData, ResultsScores } from "../../types";
 
 const HEADER_HEIGHT_EXPANDED = 60;
 const HEADER_HEIGHT_COLLAPSED = 60;
-const CATEGORY_HEIGHT = 410;
+const CATEGORY_HEIGHT = 500;
 
 const ResultsDashboardScreen = ({ navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
@@ -73,8 +73,11 @@ const ResultsDashboardScreen = ({ navigation }) => {
     });
   };
 
-  const handleOpenDetails = (data) => {
-    navigation.navigate("ResultsDetails", { data });
+  const handleOpenDetails = (
+    data: ResultsPieChartData[],
+    scores: ResultsScores
+  ) => {
+    navigation.navigate("ResultsDetails", { data, scores });
   };
 
   const scrollHandler = useAnimatedScrollHandler((event) => {
@@ -131,6 +134,7 @@ const ResultsDashboardScreen = ({ navigation }) => {
                 >
                   {category.type}
                 </CustomText>
+                <CustomText>{category.description}</CustomText>
               </View>
               <ScrollView
                 horizontal
@@ -146,12 +150,20 @@ const ResultsDashboardScreen = ({ navigation }) => {
                     { tasks: missingTasks, color: Colors.MISSING },
                     { tasks: notRelevantTasks, color: Colors.NOT_RELEVANT },
                   ];
+                  const scores: ResultsScores = {
+                    similarTasksScore: occupation.similarTasks / tasks.length,
+                    preferenceScore: occupation.preferenceScore,
+                    riasecScore: occupation.riasecScore,
+                    similarityScore: occupation.similarityScore,
+                  };
                   return (
                     <ResultCard
                       key={occupation.title}
+                      type={category.type}
                       rank={index + 1}
                       occupation={occupation.title}
                       data={data}
+                      scores={scores}
                       onPress={handleOpenDetails}
                     />
                   );

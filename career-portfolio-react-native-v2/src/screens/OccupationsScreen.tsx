@@ -150,7 +150,10 @@ const OccupationsScreen = ({ navigation }) => {
         </CustomText>
       </SectionTitle>
       <View style={styles.selectedOccupation}>
-        <SelectedOccupationCard occupation={chosenOccupation} />
+        <SelectedOccupationCard
+          occupation={chosenOccupation}
+          numberOfLines={2}
+        />
       </View>
       <Formik
         initialValues={{ occupation: "" }}

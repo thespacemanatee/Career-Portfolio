@@ -6,10 +6,12 @@ import CustomText from "./CustomText";
 
 interface SelectedOccupationCardProps extends ViewProps {
   occupation: string;
+  numberOfLines?: number;
 }
 
 const SelectedOccupationCard: React.FC<SelectedOccupationCardProps> = ({
   occupation,
+  numberOfLines,
   style,
 }) => {
   const theme = useTheme();
@@ -27,7 +29,7 @@ const SelectedOccupationCard: React.FC<SelectedOccupationCardProps> = ({
       <CustomText
         fontFamily="extraBold"
         style={styles.subtitleText}
-        numberOfLines={2}
+        numberOfLines={numberOfLines}
       >
         {occupation}
       </CustomText>

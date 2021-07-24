@@ -60,19 +60,23 @@ export const saveUserInput = async (
 };
 
 export const getResultsTasks = (
-  item: ResultsCountData,
+  occupation: ResultsCountData,
   results: ResultsState,
   tasks: TaskObject[]
 ) => {
   const similarTasks: string[] = results.similar
-    .filter((e) => e.title === item.title)
+    .filter((e) => e.title === occupation.title)
     .map((e) => e.similarIWA);
   const missingTasks: string[] = results.missing
-    .filter((e) => e.title === item.title)
+    .filter((e) => e.title === occupation.title)
     .map((e) => e.missingIWA);
   const notRelevantTasks: string[] = tasks
-    .filter((e) => results.similar.filter((d) => e.IWA_Title !== d.similarIWA))
-    .map((e) => e.IWA_Title);
+    .filter(
+      (e) =>
+        !similarTasks.some((d) => e.task === d) &&
+        !missingTasks.some((d) => e.task === d)
+    )
+    .map((e) => e.task);
   return { similarTasks, missingTasks, notRelevantTasks };
 };
 

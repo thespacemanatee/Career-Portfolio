@@ -33,9 +33,10 @@ import {
 import ThemedBackButton from "../components/ThemedBackButton";
 import {
   fadeSlideConfig,
-  modalConfig,
+  transparentModalConfig,
   slideConfig,
   NUMBER_OF_SUBMISSION_SCREENS,
+  modalConfig,
 } from "./NavigationConfig";
 import ResultsDetailsScreen from "../screens/Results/ResultsDetailsScreen";
 
@@ -98,7 +99,7 @@ const AppNavigator = () => {
 
   const LifeTasksStackNavigator = () => {
     return (
-      <Navigator screenOptions={modalConfig}>
+      <Navigator screenOptions={transparentModalConfig}>
         <Screen name="LifeTasks" component={LifeTasksScreen} />
         <Screen name="AddByOccupation" component={AddByOccupationScreen} />
         <Screen name="AddByAction" component={AddByActionScreen} />
@@ -109,13 +110,7 @@ const AppNavigator = () => {
   const ResultsModalStackNavigator = () => {
     return (
       <View style={styles.screen}>
-        <Navigator
-          screenOptions={{
-            headerShown: false,
-            gestureEnabled: true,
-            ...TransitionPresets.ModalPresentationIOS,
-          }}
-        >
+        <Navigator screenOptions={modalConfig}>
           <Screen name="ResultsDashboard" component={ResultsDashboardScreen} />
           <Screen name="ResultsDetails" component={ResultsDetailsScreen} />
         </Navigator>

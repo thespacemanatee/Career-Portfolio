@@ -1,14 +1,27 @@
 import React from "react";
 import { useTheme } from "@ui-kitten/components";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ViewProps } from "react-native";
 
 import CustomText from "./CustomText";
 
-const SelectedOccupationCard = ({ occupation }) => {
+interface SelectedOccupationCardProps extends ViewProps {
+  occupation: string;
+  numberOfLines?: number;
+}
+
+const SelectedOccupationCard: React.FC<SelectedOccupationCardProps> = ({
+  occupation,
+  numberOfLines,
+  style,
+}) => {
   const theme = useTheme();
   return (
     <View
-      style={[styles.container, { backgroundColor: theme["color-basic-600"] }]}
+      style={[
+        styles.container,
+        style,
+        { backgroundColor: theme["color-basic-600"] },
+      ]}
     >
       <CustomText fontFamily="bold" style={styles.titleText}>
         Current Selection
@@ -16,7 +29,7 @@ const SelectedOccupationCard = ({ occupation }) => {
       <CustomText
         fontFamily="extraBold"
         style={styles.subtitleText}
-        numberOfLines={2}
+        numberOfLines={numberOfLines}
       >
         {occupation}
       </CustomText>

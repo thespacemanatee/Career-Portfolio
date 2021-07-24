@@ -1,88 +1,88 @@
-import { useTheme } from "@ui-kitten/components";
-import React, { useMemo, useState } from "react";
+import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import { PieChart } from "react-native-svg-charts";
+import { LinearGradient } from "expo-linear-gradient";
 
-import Colors from "../../helpers/config/color";
 import CustomText from "../CustomText";
 import RankIcon from "./RankIcon";
 import ShadowCard from "../ShadowCard";
+import {
+  ResultsCategory,
+  ResultsPieChartData,
+  ResultsScores,
+} from "../../types";
+import ResultsPieChart from "./pieChart/ResultsPieChart";
+import PieChartLegend from "./pieChart/PieChartLegend";
 
 interface ResultCardProps {
   occupation: string;
+  type: ResultsCategory;
+  gradientColors: string[];
   rank: number;
-  data: {
-    tasks: string[];
-    color: Colors;
-  }[];
-  onPress: (data) => void;
+  data: ResultsPieChartData[];
+  scores: ResultsScores;
+  onPress: (
+    data: ResultsPieChartData[],
+    occupation: string,
+    { preferenceScore, riasecScore, similarityScore }: ResultsScores
+  ) => void;
 }
 
 const CARD_WIDTH = Dimensions.get("window").width / 1.2;
-const CARD_HEIGHT = 400;
-
-const labelTexts = ["Similar", "Missing", "Unrelated"];
+const CARD_HEIGHT = 350;
 
 const ResultCard: React.FC<ResultCardProps> = ({
   occupation,
+  type,
+  gradientColors,
   rank,
   data,
+  scores,
   onPress,
 }) => {
-  const [selectedIndex, setSelectedIndex] = useState<number>(null);
-
-  const theme = useTheme();
-
-  const pieData = useMemo(() => {
-    return data.map((object, index) => {
-      return {
-        value: object.tasks.length,
-        svg: {
-          fill:
-            selectedIndex === index ? theme["color-primary-500"] : object.color,
-          onPress: () => {
-            setSelectedIndex(index);
-          },
-        },
-        key: `${index}`,
-        arc: { outerRadius: selectedIndex === index ? "110%" : "100%" },
-      };
-    });
-  }, [data, selectedIndex, theme]);
-
   return (
     <View style={styles.cardContainer}>
       <ShadowCard
-        style={styles.cardContent}
+        style={styles.card}
         onPress={() => {
-          onPress(data);
+          onPress(data, occupation, scores);
         }}
       >
-        <View>
-          <RankIcon rank={rank} />
-          <PieChart
-            data={pieData}
-            style={styles.pieChart}
-            innerRadius="70%"
-            outerRadius="90%"
-          >
-            {selectedIndex !== null && (
-              <View style={styles.pieChartChild}>
-                <CustomText style={styles.pieText}>
-                  {data[selectedIndex].tasks.length}
-                </CustomText>
-                <CustomText>{`${labelTexts[selectedIndex]} Tasks`}</CustomText>
-              </View>
-            )}
-          </PieChart>
-        </View>
-        <CustomText
-          numberOfLines={3}
-          fontFamily="bold"
-          style={styles.occupationText}
+        <LinearGradient
+          colors={gradientColors}
+          start={{ x: 0, y: 0.7 }}
+          style={styles.linearGradient}
         >
-          {occupation}
-        </CustomText>
+          <RankIcon rank={rank} style={styles.rankIcon} />
+          <View style={styles.pieChartContainer}>
+            <ResultsPieChart data={data} size={125} />
+            <PieChartLegend data={data} />
+          </View>
+          <View>
+            {type === ResultsCategory.FAMILIARITY && (
+              <CustomText style={styles.scoreText}>{`Familiarity Score: ${(
+                scores.similarTasksScore * 100
+              ).toFixed(1)}%`}</CustomText>
+            )}
+            {type === ResultsCategory.PREFERENCE && (
+              <CustomText style={styles.scoreText}>{`Preference Score: ${(
+                scores.preferenceScore * 100
+              ).toFixed(1)}%`}</CustomText>
+            )}
+            {type === ResultsCategory.PERSONALITY && (
+              <CustomText style={styles.scoreText}>{`Personality Score: ${(
+                scores.riasecScore * 100
+              ).toFixed(1)}%`}</CustomText>
+            )}
+            {type === ResultsCategory.BEST_FIT && (
+              <CustomText style={styles.scoreText}>{`Best Fit Score: ${(
+                scores.similarityScore * 100
+              ).toFixed(1)}%`}</CustomText>
+            )}
+          </View>
+          <CustomText numberOfLines={2} style={styles.occupationText}>
+            {occupation}
+          </CustomText>
+        </LinearGradient>
       </ShadowCard>
     </View>
   );
@@ -95,22 +95,25 @@ const styles = StyleSheet.create({
     marginRight: 16,
     marginVertical: 16,
   },
-  cardContent: {
+  card: {
     height: CARD_HEIGHT,
     width: CARD_WIDTH,
-    borderRadius: 16,
-    padding: 16,
+  },
+  linearGradient: {
+    flex: 1,
     justifyContent: "space-between",
+    padding: 16,
   },
-  pieChart: {
-    height: 200,
+  rankIcon: {
+    position: "absolute",
+    left: 16,
+    top: 16,
   },
-  pieChartChild: {
-    justifyContent: "center",
+  pieChartContainer: {
     alignItems: "center",
   },
-  pieText: {
-    fontSize: 32,
+  scoreText: {
+    fontSize: 20,
   },
   occupationText: {
     fontSize: 24,

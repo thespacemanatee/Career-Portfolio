@@ -1,3 +1,5 @@
+import Colors from "./helpers/config/color";
+
 /* eslint-disable camelcase */
 export type FontWeight =
   | "bold"
@@ -15,7 +17,9 @@ export type PagerViewOnPageScrollEventData = {
 
 export type ResultsConfig = {
   type: ResultsCategory;
+  description: string;
   color: string;
+  gradientColors: string[];
 };
 
 export type TaskObject = {
@@ -83,6 +87,18 @@ export enum ResultsCategory {
   PERSONALITY = "PERSONALITY",
   BEST_FIT = "BEST FIT",
 }
+
+export type ResultsPieChartData = {
+  tasks: string[];
+  color: Colors;
+};
+
+export type ResultsScores = {
+  similarTasksScore: number;
+  preferenceScore: number;
+  riasecScore: number;
+  similarityScore: number;
+};
 
 export type ResultsState = {
   count: ResultsCountData[];

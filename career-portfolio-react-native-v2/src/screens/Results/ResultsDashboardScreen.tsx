@@ -22,10 +22,12 @@ import ResultCard from "../../components/result/ResultCard";
 import { getResultsTasks } from "../../helpers/utils";
 import Colors from "../../helpers/config/color";
 import AnimatedFab from "../../components/AnimatedFab";
+import { ResultsPieChartData, ResultsScores } from "../../types";
+import ThemedBackButton from "../../components/ThemedBackButton";
 
-const HEADER_HEIGHT_EXPANDED = 60;
-const HEADER_HEIGHT_COLLAPSED = 60;
-const CATEGORY_HEIGHT = 510;
+const HEADER_HEIGHT_EXPANDED = 80;
+const HEADER_HEIGHT_COLLAPSED = 30;
+const CATEGORY_HEIGHT = 500;
 
 const ResultsDashboardScreen = ({ navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
@@ -72,8 +74,12 @@ const ResultsDashboardScreen = ({ navigation }) => {
     });
   };
 
-  const handleOpenDetails = (data) => {
-    navigation.navigate("ResultsDetails", { data });
+  const handleOpenDetails = (
+    data: ResultsPieChartData[],
+    occupation: string,
+    scores: ResultsScores
+  ) => {
+    navigation.navigate("ResultsDetails", { data, occupation, scores });
   };
 
   const scrollHandler = useAnimatedScrollHandler((event) => {
@@ -87,7 +93,7 @@ const ResultsDashboardScreen = ({ navigation }) => {
       top: interpolate(
         translateY.value,
         [0, HEADER_HEIGHT_EXPANDED],
-        [HEADER_HEIGHT_EXPANDED, 0],
+        [HEADER_HEIGHT_EXPANDED, 26],
         Extrapolate.CLAMP
       ),
     };
@@ -106,6 +112,7 @@ const ResultsDashboardScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
+      <ThemedBackButton navigation={navigation} style={styles.backButton} />
       <Animated.View style={[styles.headerContainer, headerAnimatedStyle]}>
         <CustomText style={headerTextAnimatedStyle} fontFamily="extraBold">
           Results
@@ -117,8 +124,7 @@ const ResultsDashboardScreen = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
-        snapToOffsets={[HEADER_HEIGHT_COLLAPSED]}
-        snapToStart={false}
+        snapToOffsets={[HEADER_HEIGHT_EXPANDED]}
         snapToEnd={false}
       >
         {resultsConfig.map((category) => {
@@ -131,6 +137,7 @@ const ResultsDashboardScreen = ({ navigation }) => {
                 >
                   {category.type}
                 </CustomText>
+                <CustomText>{category.description}</CustomText>
               </View>
               <ScrollView
                 horizontal
@@ -141,17 +148,26 @@ const ResultsDashboardScreen = ({ navigation }) => {
                   const { similarTasks, missingTasks, notRelevantTasks } =
                     getResultsTasks(occupation, results, tasks);
 
-                  const data = [
+                  const data: ResultsPieChartData[] = [
                     { tasks: similarTasks, color: Colors.SIMILAR },
                     { tasks: missingTasks, color: Colors.MISSING },
                     { tasks: notRelevantTasks, color: Colors.NOT_RELEVANT },
                   ];
+                  const scores: ResultsScores = {
+                    similarTasksScore: occupation.similarTasks / tasks.length,
+                    preferenceScore: occupation.preferenceScore,
+                    riasecScore: occupation.riasecScore,
+                    similarityScore: occupation.similarityScore,
+                  };
                   return (
                     <ResultCard
                       key={occupation.title}
+                      type={category.type}
+                      gradientColors={category.gradientColors}
                       rank={index + 1}
                       occupation={occupation.title}
                       data={data}
+                      scores={scores}
                       onPress={handleOpenDetails}
                     />
                   );
@@ -178,6 +194,9 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: "white",
+  },
+  backButton: {
+    margin: 16,
   },
   headerContainer: {
     ...StyleSheet.absoluteFillObject,

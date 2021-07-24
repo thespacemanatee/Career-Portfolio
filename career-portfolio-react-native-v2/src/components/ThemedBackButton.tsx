@@ -1,8 +1,8 @@
 import { useTheme } from "@ui-kitten/components";
 import React from "react";
-import { TouchableOpacity, ViewProps } from "react-native";
+import { TouchableOpacity, ViewProps, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
-import { navigationRef } from "../navigation/NavigationHelper";
+
 import CustomText from "./CustomText";
 
 const AnimatedTouchableOpacity =
@@ -25,7 +25,10 @@ const ThemedBackButton: React.FC<ThemedBackButtonProps> = ({
   };
 
   return (
-    <AnimatedTouchableOpacity onPress={handleGoBack} style={style}>
+    <AnimatedTouchableOpacity
+      onPress={handleGoBack}
+      style={[styles.button, style]}
+    >
       <CustomText
         fontFamily="medium"
         style={{ color: theme["color-primary-500"] }}
@@ -37,3 +40,9 @@ const ThemedBackButton: React.FC<ThemedBackButtonProps> = ({
 };
 
 export default ThemedBackButton;
+
+const styles = StyleSheet.create({
+  button: {
+    alignSelf: "flex-start",
+  },
+});

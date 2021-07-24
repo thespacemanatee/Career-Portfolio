@@ -51,6 +51,5 @@ const styles = StyleSheet.create({
   },
   rankText: {
     fontSize: 24,
-    color: "white",
   },
 });

@@ -47,7 +47,11 @@ const ResultCard: React.FC<ResultCardProps> = ({
           onPress(data, occupation, scores);
         }}
       >
-        <LinearGradient colors={gradientColors} style={styles.linearGradient}>
+        <LinearGradient
+          colors={gradientColors}
+          start={{ x: 0, y: 0.7 }}
+          style={styles.linearGradient}
+        >
           <RankIcon rank={rank} style={styles.rankIcon} />
           <View style={styles.pieChartContainer}>
             <ResultsPieChart data={data} size={125} />

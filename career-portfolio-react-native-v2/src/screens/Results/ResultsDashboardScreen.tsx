@@ -124,7 +124,7 @@ const ResultsDashboardScreen = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
-        snapToOffsets={[HEADER_HEIGHT_COLLAPSED]}
+        snapToOffsets={[HEADER_HEIGHT_EXPANDED]}
         snapToEnd={false}
       >
         {resultsConfig.map((category) => {

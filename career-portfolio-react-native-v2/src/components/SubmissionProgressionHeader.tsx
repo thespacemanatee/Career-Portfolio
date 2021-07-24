@@ -39,15 +39,11 @@ const SubmissionProgressionHeader: React.FC<SubmissionProgressionHeaderProps> =
       <View>
         <ScreenTitle title={headerTitle} />
         <View style={styles.progressContainer}>
-          <View style={styles.progressTextContainer}>
-            <ReText
-              text={progressText}
-              style={[
-                styles.progressText,
-                { color: theme["color-primary-500"] },
-              ]}
-            />
-          </View>
+          <ReText
+            text={progressText}
+            style={[styles.progressText, { color: theme["color-primary-500"] }]}
+          />
+
           <View style={styles.progressBarContainer}>
             <View
               style={[
@@ -75,11 +71,9 @@ const styles = StyleSheet.create({
     height: 25,
     justifyContent: "flex-end",
   },
-  progressTextContainer: {
-    alignItems: "flex-end",
-  },
   progressText: {
     fontSize: 12,
+    alignSelf: "flex-end",
   },
   progressBarContainer: {
     height: 8,

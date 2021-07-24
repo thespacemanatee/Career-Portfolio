@@ -32,7 +32,7 @@ const CATEGORY_HEIGHT = 500;
 const ResultsDashboardScreen = ({ navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
   const results = useAppSelector((state) => state.results);
-  const translateY = useSharedValue(0);
+  const offsetY = useSharedValue(0);
   const showButton = useSharedValue(true);
   const [visible, setVisible] = useState(false);
 
@@ -84,14 +84,14 @@ const ResultsDashboardScreen = ({ navigation }) => {
 
   const scrollHandler = useAnimatedScrollHandler((event) => {
     const currentOffset = event.contentOffset.y;
-    showButton.value = !(currentOffset > 0 && currentOffset > translateY.value);
-    translateY.value = currentOffset;
+    showButton.value = !(currentOffset > 0 && currentOffset > offsetY.value);
+    offsetY.value = currentOffset;
   });
 
   const headerAnimatedStyle = useAnimatedStyle(() => {
     return {
       top: interpolate(
-        translateY.value,
+        offsetY.value,
         [0, HEADER_HEIGHT_EXPANDED],
         [HEADER_HEIGHT_EXPANDED, 26],
         Extrapolate.CLAMP
@@ -102,9 +102,9 @@ const ResultsDashboardScreen = ({ navigation }) => {
   const headerTextAnimatedStyle = useAnimatedStyle(() => {
     return {
       fontSize: interpolate(
-        translateY.value,
+        offsetY.value,
         [0, HEADER_HEIGHT_EXPANDED],
-        [40, 24],
+        [36, 24],
         Extrapolate.CLAMP
       ),
     };
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     margin: 16,
   },
   headerContainer: {
-    ...StyleSheet.absoluteFillObject,
+    position: "absolute",
     left: 16,
     marginTop: 16,
   },
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
     margin: 16,
   },
   categoryTitle: {
-    fontSize: 32,
+    fontSize: 28,
   },
   fab: {
     position: "absolute",

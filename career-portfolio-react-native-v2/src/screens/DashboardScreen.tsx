@@ -1,16 +1,16 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Alert, Dimensions, StyleSheet, View } from "react-native";
-import { Button, Layout } from "@ui-kitten/components";
-import { ScrollView } from "react-native-gesture-handler";
+import { Button } from "@ui-kitten/components";
 import Animated, {
+  Extrapolate,
   interpolate,
+  useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
 import { useFocusEffect } from "@react-navigation/native";
 
-import ScreenTitle from "../components/ScreenTitle";
 import useFetchSubmissions from "../helpers/hooks/useFetchSubmissions";
 import { ResultsLocalStorage, ResultsLocalStorageItem } from "../types";
 import ResultsOverviewCard from "../components/ResultsOverviewCard";
@@ -18,10 +18,12 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { setAllTasks } from "../app/features/tasks/tasksSlice";
 import { LottieView } from "..";
 import AnimatedFab from "../components/AnimatedFab";
-import useHandleScroll from "../helpers/hooks/useHandleScroll";
 import CustomText from "../components/CustomText";
 import SectionTitle from "../components/SectionTitle";
 import { navigationRef } from "../navigation/NavigationHelper";
+
+const HEADER_HEIGHT_EXPANDED = 80;
+const HEADER_HEIGHT_COLLAPSED = 30;
 
 const DashboardScreen = ({ navigation }) => {
   const recentlyOpenedId = useAppSelector(
@@ -32,12 +34,12 @@ const DashboardScreen = ({ navigation }) => {
   const [recentlyOpenedItem, setRecentlyOpenedItem] =
     useState<ResultsLocalStorageItem>(null);
   const progress = useSharedValue(0);
+  const offsetY = useSharedValue(0);
+  const showLabel = useSharedValue(true);
 
   const { width } = Dimensions.get("window");
 
   const { result, resetSubmissions } = useFetchSubmissions();
-
-  const { handleScroll, showButton } = useHandleScroll();
 
   const dispatch = useAppDispatch();
 
@@ -68,16 +70,20 @@ const DashboardScreen = ({ navigation }) => {
   };
 
   const handleResetSubmissions = () => {
-    Alert.alert("Are you sure?", "This action will delete all your entries.", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: async () => {
-          await resetSubmissions();
+    Alert.alert(
+      "Are you sure?",
+      "This action will delete all your submissions.",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: async () => {
+            await resetSubmissions();
+          },
         },
-      },
-    ]);
+      ]
+    );
   };
 
   useEffect(() => {
@@ -120,20 +126,64 @@ const DashboardScreen = ({ navigation }) => {
     };
   });
 
+  const clearAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      top: interpolate(
+        offsetY.value,
+        [0, HEADER_HEIGHT_EXPANDED],
+        [HEADER_HEIGHT_EXPANDED, 26],
+        Extrapolate.CLAMP
+      ),
+    };
+  });
+
+  const headerAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      top: interpolate(
+        offsetY.value,
+        [0, HEADER_HEIGHT_EXPANDED],
+        [HEADER_HEIGHT_EXPANDED, 26],
+        Extrapolate.CLAMP
+      ),
+    };
+  });
+
+  const headerTextAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      fontSize: interpolate(
+        offsetY.value,
+        [0, HEADER_HEIGHT_EXPANDED],
+        [36, 24],
+        Extrapolate.CLAMP
+      ),
+    };
+  });
+
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    const currentOffset = event.contentOffset.y;
+    showLabel.value = !(currentOffset > 0 && currentOffset > offsetY.value);
+    offsetY.value = currentOffset;
+  });
+
   return (
-    <Layout style={styles.screen}>
-      <View style={styles.header}>
-        <ScreenTitle title="Hello there 👋" />
-        {result && (
+    <View style={styles.screen}>
+      <View style={styles.topOffset} />
+      <Animated.View style={[styles.headerContainer, headerAnimatedStyle]}>
+        <CustomText fontFamily="bold" style={headerTextAnimatedStyle}>
+          Hello there 👋
+        </CustomText>
+      </Animated.View>
+      {result && (
+        <Animated.View style={[styles.clearAllButton, clearAnimatedStyle]}>
           <Button
             onPress={handleResetSubmissions}
             appearance="ghost"
             status="basic"
           >
-            CLEAR ALL
+            CLEAR
           </Button>
-        )}
-      </View>
+        </Animated.View>
+      )}
       {!result && (
         <View style={styles.emptyComponent}>
           <LottieView
@@ -148,30 +198,35 @@ const DashboardScreen = ({ navigation }) => {
           </CustomText>
         </View>
       )}
-      <ScrollView
-        onScroll={handleScroll}
+      <Animated.ScrollView
+        onScroll={scrollHandler}
         scrollEventThrottle={1}
         showsVerticalScrollIndicator={false}
         style={styles.scrollView}
+        contentContainerStyle={styles.scrollViewContent}
+        snapToOffsets={[HEADER_HEIGHT_EXPANDED]}
+        snapToEnd={false}
       >
         {recentlyOpenedItem && (
-          <View style={styles.cardContainer}>
-            <Animated.View style={recentAnimatedStyle}>
+          <View>
+            <Animated.View style={[recentAnimatedStyle, styles.sectionTitle]}>
               <SectionTitle title="Recently Opened" />
             </Animated.View>
-            <ResultsOverviewCard
-              index={0}
-              id={recentlyOpenedId}
-              date={recentlyOpenedItem.payload.date}
-              editedDate={recentlyOpenedItem.editedDate}
-              onetTitle={recentlyOpenedItem.payload.onet_title}
-              onPress={handleNavigateResults}
-            />
+            <View style={styles.cardContainer}>
+              <ResultsOverviewCard
+                index={0}
+                id={recentlyOpenedId}
+                date={recentlyOpenedItem.payload.date}
+                editedDate={recentlyOpenedItem.editedDate}
+                onetTitle={recentlyOpenedItem.payload.onet_title}
+                onPress={handleNavigateResults}
+              />
+            </View>
           </View>
         )}
         {previousSubmissions && (
           <View>
-            <Animated.View style={previousAnimatedStyle}>
+            <Animated.View style={[previousAnimatedStyle, styles.sectionTitle]}>
               <SectionTitle title="Previous Submissions" />
             </Animated.View>
             {Object.keys(previousSubmissions).map((id, index) => {
@@ -190,15 +245,15 @@ const DashboardScreen = ({ navigation }) => {
             })}
           </View>
         )}
-      </ScrollView>
+      </Animated.ScrollView>
       <AnimatedFab
         icon="plus"
         label="Survey"
         onPress={handleCreateSubmission}
         style={styles.fab}
-        showLabel={showButton}
+        showLabel={showLabel}
       />
-    </Layout>
+    </View>
   );
 };
 
@@ -207,20 +262,38 @@ export default DashboardScreen;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    padding: 16,
+    backgroundColor: "white",
   },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  topOffset: {
+    height: 56,
+  },
+  clearAllButton: {
+    position: "absolute",
+    right: 0,
+    marginTop: 16,
+    zIndex: 10,
+  },
+  headerContainer: {
+    position: "absolute",
+    left: 16,
+    marginTop: 16,
+  },
+  sectionTitle: {
+    paddingHorizontal: 16,
   },
   cardContainer: {
+    paddingHorizontal: 16,
     marginBottom: 16,
   },
   scrollView: {
     flexGrow: 0,
+    marginTop: HEADER_HEIGHT_COLLAPSED,
+  },
+  scrollViewContent: {
+    paddingTop: HEADER_HEIGHT_EXPANDED,
   },
   lottieView: {
-    marginBottom: 12,
+    marginBottom: 16,
   },
   emptyComponent: {
     flex: 1,

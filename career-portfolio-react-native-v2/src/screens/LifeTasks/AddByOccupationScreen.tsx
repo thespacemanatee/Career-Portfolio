@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import { View, FlatList } from "react-native";
-import {
-  Button,
-  Input,
-  StyleService,
-  TopNavigation,
-} from "@ui-kitten/components";
+import { Button, Input, StyleService } from "@ui-kitten/components";
 import { Formik } from "formik";
 
 import { tasksSelector } from "../../app/features/tasks/tasksSlice";
@@ -16,6 +11,7 @@ import { TaskObject, TaskType } from "../../types";
 import { useAppSelector } from "../../app/hooks";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
 import ThemedBackButton from "../../components/ThemedBackButton";
+import SectionTitle from "../../components/SectionTitle";
 
 const filter = (item, query) =>
   item?.toLowerCase().includes(query?.toLowerCase());
@@ -26,25 +22,23 @@ const AddByOccupationScreen = ({ navigation }) => {
   const [tasks, setTasks] = useState([]);
   const [results, setResults] = useState([]);
 
-  const BackAction = () => (
-    <ThemedBackButton navigation={navigation} label="Done" />
-  );
-
   const handleSearch = (query) => {
     setResults(occupations.filter((item) => filter(item, query.occupation)));
   };
 
   const handleSelectResult = (selection) => {
     if (selection) {
-      const data: TaskObject[] = getTasksByOccupation(selection).map((e) => {
-        return {
-          task: e.Task,
-          taskId: e["Task ID"],
-          IWA_Title: e["IWA Title"],
-          task_type: TaskType.LIFE,
-          deleted: false,
-        };
-      });
+      const data: TaskObject[] = getTasksByOccupation(selection)
+        .filter((e) => !allTasks.some((d) => e["Task ID"] === d.taskId))
+        .map((e) => {
+          return {
+            task: e.Task,
+            taskId: e["Task ID"],
+            IWA_Title: e["IWA Title"],
+            task_type: TaskType.LIFE,
+            deleted: false,
+          };
+        });
       setTasks(data);
     }
     setResults([]);
@@ -62,14 +56,18 @@ const AddByOccupationScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <TopNavigation
-        title="Add Task by Occupation"
-        alignment="center"
-        accessoryRight={BackAction}
+      <ThemedBackButton
+        navigation={navigation}
+        label="Done"
+        style={styles.doneButton}
+      />
+      <SectionTitle
+        title="Add Task By Occupation"
+        style={styles.sectionTitle}
       />
       <Formik initialValues={{ occupation: "" }} onSubmit={handleSearch}>
         {({ handleChange, handleBlur, handleSubmit, values }) => (
-          <>
+          <View style={styles.formikContainer}>
             <Input
               label="Search Occupations"
               returnKeyType="next"
@@ -86,7 +84,7 @@ const AddByOccupationScreen = ({ navigation }) => {
             >
               SEARCH
             </Button>
-          </>
+          </View>
         )}
       </Formik>
       <SearchList data={results} onSelect={handleSelectResult} />
@@ -106,13 +104,23 @@ export default AddByOccupationScreen;
 const styles = StyleService.create({
   screen: {
     flex: 1,
-    padding: 16,
     backgroundColor: "white",
+  },
+  doneButton: {
+    alignSelf: "flex-end",
+    margin: 16,
+  },
+  sectionTitle: {
+    paddingHorizontal: 16,
   },
   button: {
     marginVertical: 10,
   },
   contentContainer: {
     flexGrow: 1,
+    paddingHorizontal: 16,
+  },
+  formikContainer: {
+    paddingHorizontal: 16,
   },
 });

@@ -1,11 +1,6 @@
 import React, { useState } from "react";
-import { FlatList, View } from "react-native";
-import {
-  Button,
-  Input,
-  StyleService,
-  TopNavigation,
-} from "@ui-kitten/components";
+import { FlatList, StyleSheet, View } from "react-native";
+import { Button, Input } from "@ui-kitten/components";
 import { Formik } from "formik";
 
 import { tasksSelector } from "../../app/features/tasks/tasksSlice";
@@ -16,6 +11,7 @@ import { TaskObject, TaskType } from "../../types";
 import { useAppSelector } from "../../app/hooks";
 import ListEmptyComponent from "../../components/ListEmptyComponent";
 import ThemedBackButton from "../../components/ThemedBackButton";
+import SectionTitle from "../../components/SectionTitle";
 
 const filter = (item: string, query: string) =>
   item?.toLowerCase().includes(query?.toLowerCase());
@@ -26,25 +22,23 @@ const AddByActionScreen = ({ navigation }) => {
   const [tasks, setTasks] = useState([]);
   const [results, setResults] = useState([]);
 
-  const BackAction = () => (
-    <ThemedBackButton navigation={navigation} label="Done" />
-  );
-
   const handleSearch = ({ action }: { action: string }) => {
     setResults(verbs.filter((item) => filter(item, action)));
   };
 
   const handleSelectResult = (selection) => {
     if (selection) {
-      const data: TaskObject[] = getTasksByAction(selection).map((e) => {
-        return {
-          task: e.Task,
-          taskId: e["Task ID"],
-          IWA_Title: e["IWA Title"],
-          task_type: TaskType.LIFE,
-          deleted: false,
-        };
-      });
+      const data: TaskObject[] = getTasksByAction(selection)
+        .filter((e) => !allTasks.some((d) => e["Task ID"] === d.taskId))
+        .map((e) => {
+          return {
+            task: e.Task,
+            taskId: e["Task ID"],
+            IWA_Title: e["IWA Title"],
+            task_type: TaskType.LIFE,
+            deleted: false,
+          };
+        });
       setTasks(data);
     }
     setResults([]);
@@ -61,14 +55,15 @@ const AddByActionScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <TopNavigation
-        title="Add Task by Action"
-        alignment="center"
-        accessoryRight={BackAction}
+      <ThemedBackButton
+        navigation={navigation}
+        label="Done"
+        style={styles.doneButton}
       />
+      <SectionTitle title="Add Task By Action" style={styles.sectionTitle} />
       <Formik initialValues={{ action: "" }} onSubmit={handleSearch}>
         {({ handleChange, handleBlur, handleSubmit, values }) => (
-          <>
+          <View style={styles.formikContainer}>
             <Input
               label="Search Actions"
               returnKeyType="next"
@@ -85,7 +80,7 @@ const AddByActionScreen = ({ navigation }) => {
             >
               SEARCH
             </Button>
-          </>
+          </View>
         )}
       </Formik>
       <SearchList data={results} onSelect={handleSelectResult} />
@@ -102,16 +97,26 @@ const AddByActionScreen = ({ navigation }) => {
 
 export default AddByActionScreen;
 
-const styles = StyleService.create({
+const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    padding: 16,
     backgroundColor: "white",
+  },
+  doneButton: {
+    alignSelf: "flex-end",
+    margin: 16,
+  },
+  sectionTitle: {
+    paddingHorizontal: 16,
   },
   button: {
     marginVertical: 10,
   },
   contentContainer: {
     flexGrow: 1,
+    paddingHorizontal: 16,
+  },
+  formikContainer: {
+    paddingHorizontal: 16,
   },
 });

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-import { Button, Input } from "@ui-kitten/components";
+import { Button, Divider, Input } from "@ui-kitten/components";
 import { Formik } from "formik";
 
 import { tasksSelector } from "../../app/features/tasks/tasksSlice";
@@ -29,7 +29,12 @@ const AddByActionScreen = ({ navigation }) => {
   const handleSelectResult = (selection) => {
     if (selection) {
       const data: TaskObject[] = getTasksByAction(selection)
-        .filter((e) => !allTasks.some((d) => e["Task ID"] === d.taskId))
+        .filter(
+          (e) =>
+            !allTasks.some(
+              (d) => e["Task ID"] === d.taskId && d.task_type !== TaskType.LIFE
+            )
+        )
         .map((e) => {
           return {
             task: e.Task,
@@ -90,6 +95,7 @@ const AddByActionScreen = ({ navigation }) => {
         keyExtractor={(item) => String(item.taskId)}
         contentContainerStyle={styles.contentContainer}
         ListEmptyComponent={renderEmptyComponent}
+        ItemSeparatorComponent={() => <Divider />}
       />
     </View>
   );

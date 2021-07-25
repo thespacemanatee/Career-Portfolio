@@ -1,20 +1,21 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { View, FlatList, Alert, Keyboard, Pressable } from "react-native";
-import { StyleService, Button, useTheme } from "@ui-kitten/components";
+import { StyleService, useTheme } from "@ui-kitten/components";
+import { useFocusEffect } from "@react-navigation/native";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
-import { Buffer } from "buffer";
-import {
-  ONET_USERNAME,
-  ONET_PASSWORD,
-  ONET_ENDPOINT,
-} from "react-native-dotenv";
-import { useFocusEffect } from "@react-navigation/native";
+import Animated, {
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from "react-native-reanimated";
 
 import { addSelection } from "../app/features/form/formSlice";
 import { setAllTasks } from "../app/features/tasks/tasksSlice";
-import { getTasksByOccupation, handleErrorResponse } from "../helpers/utils";
+import {
+  fetchOnetData,
+  getTasksByOccupation,
+  handleErrorResponse,
+} from "../helpers/utils";
 import CustomText from "../components/CustomText";
 import OccupationsLoading from "../components/loading/OccupationsLoading";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
@@ -28,13 +29,18 @@ import {
 import ListEmptyComponent from "../components/ListEmptyComponent";
 import SectionTitle from "../components/SectionTitle";
 import { TaskObject } from "../types";
+import AnimatedFab from "../components/AnimatedFab";
 
 interface Values {
   occupation: string;
 }
 
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+
 const OccupationsScreen = ({ navigation }) => {
   const form = useAppSelector((state) => state.form);
+  const offsetY = useSharedValue(0);
+  const showButton = useSharedValue(true);
   const [loading, setLoading] = useState(false);
   const [occupations, setOccupations] = useState<string[]>();
   const [chosenOccupation, setChosenOccupation] = useState("");
@@ -70,15 +76,13 @@ const OccupationsScreen = ({ navigation }) => {
           titleId: Date.now(),
         };
         const data: TaskObject[] = getTasksByOccupation(chosenOccupation).map(
-          (e) => {
-            return {
-              task: e.Task,
-              taskId: e["Task ID"],
-              IWA_Title: e["IWA Title"],
-              task_type: "supplementary",
-              deleted: false,
-            };
-          }
+          (e) => ({
+            task: e.Task,
+            taskId: e["Task ID"],
+            IWA_Title: e["IWA Title"],
+            task_type: "supplementary",
+            deleted: false,
+          })
         );
         dispatch(addSelection(payload));
         dispatch(setAllTasks(data));
@@ -98,20 +102,8 @@ const OccupationsScreen = ({ navigation }) => {
     setUserInput(occupation);
     try {
       setLoading(true);
-      const url = `${ONET_ENDPOINT}${occupation}&start=1&end=50`;
-      const res = await axios.get(url, {
-        headers: {
-          Authorization: `Basic ${Buffer.from(
-            `${ONET_USERNAME}:${ONET_PASSWORD}`
-          ).toString("base64")}`,
-        },
-      });
-
-      const titles: string[] = [];
-      res.data.occupation?.forEach((item) => {
-        titles.push(item.title);
-      });
-      setOccupations(titles);
+      const res = await fetchOnetData(occupation);
+      setOccupations(res);
     } catch (err) {
       handleErrorResponse(err);
     } finally {
@@ -137,6 +129,12 @@ const OccupationsScreen = ({ navigation }) => {
         <ListEmptyComponent label="NO OCCUPATIONS FOUND" />
       )
     );
+
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    const currentOffset = event.contentOffset.y;
+    showButton.value = !(currentOffset > 0 && currentOffset > offsetY.value);
+    offsetY.value = currentOffset;
+  });
 
   return (
     <Pressable style={styles.screen} onPress={() => Keyboard.dismiss()}>
@@ -175,7 +173,8 @@ const OccupationsScreen = ({ navigation }) => {
               errorText={errors.occupation}
               loading={loading}
             />
-            <FlatList
+            <AnimatedFlatList
+              onScroll={scrollHandler}
               style={styles.flatList}
               data={occupations}
               renderItem={renderListItems}
@@ -183,10 +182,16 @@ const OccupationsScreen = ({ navigation }) => {
               ListEmptyComponent={renderEmptyComponent}
               contentContainerStyle={styles.contentContainer}
             />
-            <Button onPress={handleNavigation}>NEXT</Button>
           </>
         )}
       </Formik>
+      <AnimatedFab
+        icon="chevron-right"
+        label="Next"
+        onPress={handleNavigation}
+        style={styles.fab}
+        showLabel={showButton}
+      />
     </Pressable>
   );
 };
@@ -212,5 +217,11 @@ const styles = StyleService.create({
   },
   cardContainer: {
     padding: 6,
+  },
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 0,
   },
 });

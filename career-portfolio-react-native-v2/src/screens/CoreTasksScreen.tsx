@@ -1,7 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { View, FlatList } from "react-native";
-import { StyleService, Button, useTheme } from "@ui-kitten/components";
+import { Divider, StyleService, useTheme } from "@ui-kitten/components";
 import { useFocusEffect } from "@react-navigation/native";
+import Animated, {
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from "react-native-reanimated";
 
 import { tasksSelector } from "../app/features/tasks/tasksSlice";
 import CustomText from "../components/CustomText";
@@ -13,10 +17,16 @@ import {
   navigationRef,
   submissionProgressRef,
 } from "../navigation/NavigationHelper";
+import AnimatedFab from "../components/AnimatedFab";
+import { TaskObject } from "../types";
+
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 const CoreTasksScreen = ({ route, navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
-  const [coreTasks, setCoreTasks] = useState([]);
+  const offsetY = useSharedValue(0);
+  const showButton = useSharedValue(true);
+  const [coreTasks, setCoreTasks] = useState<TaskObject[]>();
 
   const { id, editing } = route.params || {};
 
@@ -48,9 +58,18 @@ const CoreTasksScreen = ({ route, navigation }) => {
     <ListEmptyComponent label="NO TASKS FOUND" />
   );
 
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    const currentOffset = event.contentOffset.y;
+    showButton.value = !(currentOffset > 0 && currentOffset > offsetY.value);
+    offsetY.value = currentOffset;
+  });
+
   return (
     <View style={styles.screen}>
-      <SectionTitle title="What does your work schedule look like?">
+      <SectionTitle
+        title="What does your work schedule look like?"
+        style={styles.sectionTitle}
+      >
         <CustomText style={styles.subtitle} fontFamily="semiBold">
           Select the tasks that are{" "}
           <CustomText style={{ color: theme["color-primary-500"] }}>
@@ -60,15 +79,23 @@ const CoreTasksScreen = ({ route, navigation }) => {
           done before.
         </CustomText>
       </SectionTitle>
-      <FlatList
+      <AnimatedFlatList
+        onScroll={scrollHandler}
         style={styles.flatList}
         renderItem={renderTasks}
         data={coreTasks}
-        keyExtractor={(item) => String(item.taskId)}
+        keyExtractor={(item: TaskObject) => String(item.taskId)}
         contentContainerStyle={styles.contentContainer}
         ListEmptyComponent={renderEmptyComponent}
+        ItemSeparatorComponent={() => <Divider />}
       />
-      <Button onPress={handleNavigation}>NEXT</Button>
+      <AnimatedFab
+        icon="chevron-right"
+        label="Next"
+        onPress={handleNavigation}
+        style={styles.fab}
+        showLabel={showButton}
+      />
     </View>
   );
 };
@@ -78,14 +105,13 @@ export default CoreTasksScreen;
 const styles = StyleService.create({
   screen: {
     flex: 1,
-    padding: 16,
+  },
+  sectionTitle: {
+    marginTop: 16,
+    paddingHorizontal: 16,
   },
   subtitle: {
     fontSize: 14,
-  },
-  selectedOccupation: {
-    padding: 20,
-    marginVertical: 5,
   },
   flatList: {
     marginVertical: 5,
@@ -93,7 +119,10 @@ const styles = StyleService.create({
   contentContainer: {
     flexGrow: 1,
   },
-  cardContainer: {
-    padding: 6,
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 0,
   },
 });

@@ -1,13 +1,25 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { View, FlatList, Alert } from "react-native";
+import {
+  View,
+  FlatList,
+  Alert,
+  LayoutAnimation,
+  Platform,
+  UIManager,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
   StyleService,
   Button,
   ButtonGroup,
   useTheme,
+  Divider,
 } from "@ui-kitten/components";
 import { useFocusEffect } from "@react-navigation/native";
+import Animated, {
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from "react-native-reanimated";
 
 import {
   tasksSelector,
@@ -21,11 +33,23 @@ import {
   navigationRef,
   submissionProgressRef,
 } from "../navigation/NavigationHelper";
-import { TaskType } from "../types";
+import { TaskObject, TaskType } from "../types";
+import AnimatedFab from "../components/AnimatedFab";
+
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 const LifeTasksScreen = ({ route, navigation }) => {
   const tasks = useSelector(tasksSelector.selectAll);
-  const [lifeTasks, setLifeTasks] = useState([]);
+  const offsetY = useSharedValue(0);
+  const showButton = useSharedValue(true);
+  const [lifeTasks, setLifeTasks] = useState<TaskObject[]>();
 
   const { id, editing } = route.params || {};
 
@@ -41,6 +65,7 @@ const LifeTasksScreen = ({ route, navigation }) => {
   );
 
   useEffect(() => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setLifeTasks(tasks.filter((e) => e.task_type === TaskType.LIFE));
   }, [tasks]);
 
@@ -70,9 +95,18 @@ const LifeTasksScreen = ({ route, navigation }) => {
 
   const renderEmptyComponent = () => <ListEmptyComponent label="NO TASKS" />;
 
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    const currentOffset = event.contentOffset.y;
+    showButton.value = !(currentOffset > 0 && currentOffset > offsetY.value);
+    offsetY.value = currentOffset;
+  });
+
   return (
     <View style={styles.screen}>
-      <SectionTitle title="What other tasks have you done in past jobs, or outside work?">
+      <SectionTitle
+        title="What other tasks have you done in past jobs, or outside work?"
+        style={styles.sectionTitle}
+      >
         <CustomText style={styles.subtitle} fontFamily="semiBold">
           A task is made up of an{" "}
           <CustomText style={{ color: theme["color-primary-500"] }}>
@@ -105,25 +139,33 @@ const LifeTasksScreen = ({ route, navigation }) => {
             Occupation
           </Button>
         </ButtonGroup>
-        {lifeTasks.length > 0 ? (
+        {lifeTasks?.length > 0 ? (
           <Button
             onPress={handleResetLifeTasks}
             appearance="ghost"
             status="basic"
           >
-            CLEAR ALL
+            CLEAR
           </Button>
         ) : null}
       </View>
-      <FlatList
+      <AnimatedFlatList
+        onScroll={scrollHandler}
         style={styles.flatList}
         renderItem={renderTasks}
         data={lifeTasks}
-        keyExtractor={(item) => String(item.taskId)}
+        keyExtractor={(item: TaskObject) => String(item.taskId)}
         contentContainerStyle={styles.contentContainer}
         ListEmptyComponent={renderEmptyComponent}
+        ItemSeparatorComponent={() => <Divider />}
       />
-      <Button onPress={handleNavigation}>NEXT</Button>
+      <AnimatedFab
+        icon="chevron-right"
+        label="Next"
+        onPress={handleNavigation}
+        style={styles.fab}
+        showLabel={showButton}
+      />
     </View>
   );
 };
@@ -133,22 +175,33 @@ export default LifeTasksScreen;
 const styles = StyleService.create({
   screen: {
     flex: 1,
-    padding: 16,
+  },
+  sectionTitle: {
+    marginTop: 16,
+    paddingHorizontal: 16,
   },
   subtitle: {
     fontSize: 14,
   },
   buttonGroupTitle: {
-    marginVertical: 5,
+    marginBottom: 6,
+    paddingHorizontal: 16,
   },
   controlContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    paddingHorizontal: 16,
   },
   flatList: {
     marginVertical: 5,
   },
   contentContainer: {
     flexGrow: 1,
+  },
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 0,
   },
 });

@@ -1,15 +1,8 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import {
-  LayoutAnimation,
-  Platform,
-  UIManager,
-  Animated,
-  Easing,
-  View,
-} from "react-native";
+import { View } from "react-native";
 import { useDispatch } from "react-redux";
-import { StyleService, Card, Icon, CheckBox } from "@ui-kitten/components";
+import { StyleService, Icon, CheckBox } from "@ui-kitten/components";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 
 import {
@@ -17,39 +10,20 @@ import {
   removeTask,
   updateTaskType,
 } from "../app/features/tasks/tasksSlice";
-import CustomText from "./CustomText";
 import { TaskType } from "../types";
 import { ICON_SIZE } from "../helpers/config/config";
-
-if (
-  Platform.OS === "android" &&
-  UIManager.setLayoutAnimationEnabledExperimental
-) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
+import BaseTaskCard from "./BaseTaskCard";
 
 const TrashIcon = (props: any) => (
-  <Icon fill="red" {...props} name="trash" style={styles.icon} />
+  <Icon fill="white" {...props} name="trash" style={styles.icon} />
 );
 
 const UndoIcon = (props: any) => (
-  <Icon fill="red" {...props} name="undo" style={styles.icon} />
-);
-
-const ChevronIcon = (props: any) => (
-  <Icon
-    fill="#8F9BB3"
-    style={styles.icon}
-    {...props}
-    name="chevron-down-outline"
-  />
+  <Icon fill="white" {...props} name="undo" style={styles.icon} />
 );
 
 const TaskCard = ({ taskObject }) => {
-  const [expanded, setExpanded] = useState(false);
-  const [truncated, setTruncated] = useState(false);
   const [checked, setChecked] = useState(false);
-  const [spinValue] = useState(new Animated.Value(0));
   const leftSwipeable = useRef(null);
 
   const { task, taskId, task_type, deleted } = taskObject;
@@ -66,28 +40,6 @@ const TaskCard = ({ taskObject }) => {
     setChecked(task_type === TaskType.CORE);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const rotate = spinValue.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["90deg", "180deg"],
-  });
-
-  const spin = () => {
-    Animated.timing(spinValue, {
-      toValue: expanded ? 0 : 1,
-      duration: 200,
-      easing: Easing.linear,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const handleExpand = () => {
-    LayoutAnimation.configureNext(
-      LayoutAnimation.create(100, "linear", "opacity")
-    );
-    setExpanded(!expanded);
-    spin();
-  };
 
   const rightSwipe = useCallback(() => {
     leftSwipeable.current.close();
@@ -114,36 +66,16 @@ const TaskCard = ({ taskObject }) => {
         onSwipeableOpen={rightSwipe}
         friction={2}
       >
-        <Card onPress={handleExpand}>
-          <View style={styles.contentContainer}>
-            <View style={styles.checkboxContainer}>
-              <CheckBox
-                disabled={deleted}
-                checked={checked}
-                onChange={handleCheckChange}
-              />
-            </View>
-            <View style={styles.taskContainer}>
-              <CustomText
-                // eslint-disable-next-line react-native/no-inline-styles
-                style={{ textDecorationLine: deleted ? "line-through" : null }}
-                numberOfLines={expanded ? null : 2}
-                onTextLayout={({ nativeEvent: { lines } }) => {
-                  setTruncated(lines.length > 2);
-                }}
-              >
-                {task}
-              </CustomText>
-            </View>
-            {truncated && (
-              <Animated.View
-                style={[styles.iconContainer, { transform: [{ rotate }] }]}
-              >
-                <ChevronIcon />
-              </Animated.View>
-            )}
+        <View style={styles.contentContainer}>
+          <View style={styles.checkboxContainer}>
+            <CheckBox
+              disabled={deleted}
+              checked={checked}
+              onChange={handleCheckChange}
+            />
           </View>
-        </Card>
+          <BaseTaskCard task={task} deleted={deleted} />
+        </View>
       </Swipeable>
     </View>
   );
@@ -154,25 +86,17 @@ export default TaskCard;
 const styles = StyleService.create({
   container: {
     flex: 1,
-    // backgroundColor: "red",
-    borderRadius: 5,
   },
   contentContainer: {
-    flex: 1,
     flexDirection: "row",
-    alignItems: "flex-start",
+    paddingLeft: 16,
+    backgroundColor: "white",
+    borderRadius: 8,
   },
   checkboxContainer: {
     flex: 0.1,
     height: "100%",
     justifyContent: "center",
-  },
-  taskContainer: {
-    flex: 0.8,
-  },
-  iconContainer: {
-    position: "absolute",
-    right: 0,
   },
   icon: {
     width: ICON_SIZE,
@@ -182,5 +106,6 @@ const styles = StyleService.create({
     justifyContent: "center",
     alignItems: "center",
     width: ICON_SIZE * 2,
+    backgroundColor: "red",
   },
 });

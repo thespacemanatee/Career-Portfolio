@@ -1,13 +1,13 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import React, { useCallback } from "react";
+import { Dimensions, ScrollView, StyleSheet, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import Animated, {
   Extrapolate,
   interpolate,
   useAnimatedScrollHandler,
   useAnimatedStyle,
   useSharedValue,
+  withTiming,
 } from "react-native-reanimated";
 
 import { tasksSelector } from "../../app/features/tasks/tasksSlice";
@@ -28,44 +28,22 @@ import ThemedBackButton from "../../components/ThemedBackButton";
 const HEADER_HEIGHT_EXPANDED = 80;
 const HEADER_HEIGHT_COLLAPSED = 30;
 const CATEGORY_HEIGHT = 500;
+const WIDTH = Dimensions.get("window").width;
 
 const ResultsDashboardScreen = ({ navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
   const results = useAppSelector((state) => state.results);
+  const progress = useSharedValue(0);
   const offsetY = useSharedValue(0);
   const showButton = useSharedValue(true);
-  const [visible, setVisible] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
       navigationRef.current = navigation;
       submissionProgressRef.current = 0;
-    }, [navigation])
+      progress.value = withTiming(1, { duration: 750 });
+    }, [navigation, progress])
   );
-
-  useEffect(() => {
-    let unsubscribe;
-    AsyncStorage.getItem("settings")
-      .then((res) => {
-        const settings = JSON.parse(res);
-        unsubscribe = setTimeout(() => {
-          setVisible(!settings?.read);
-        }, 1000);
-      })
-      .catch(() => {
-        unsubscribe = setTimeout(() => {
-          setVisible(true);
-        }, 1000);
-      });
-    return () => {
-      clearTimeout(unsubscribe);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleCloseHelp = () => {
-    setVisible(false);
-  };
 
   const handleEditTasks = () => {
     navigation.navigate("SubmissionStack", {
@@ -89,6 +67,8 @@ const ResultsDashboardScreen = ({ navigation }) => {
   });
 
   const headerAnimatedStyle = useAnimatedStyle(() => {
+    const translateY = interpolate(progress.value, [0, 1], [-25, 0]);
+    const opacity = interpolate(progress.value, [0, 1], [0, 1]);
     return {
       top: interpolate(
         offsetY.value,
@@ -96,6 +76,8 @@ const ResultsDashboardScreen = ({ navigation }) => {
         [HEADER_HEIGHT_EXPANDED, 26],
         Extrapolate.CLAMP
       ),
+      transform: [{ translateY }],
+      opacity,
     };
   });
 
@@ -107,6 +89,15 @@ const ResultsDashboardScreen = ({ navigation }) => {
         [36, 24],
         Extrapolate.CLAMP
       ),
+    };
+  });
+
+  const scrollViewAnimatedStyle = useAnimatedStyle(() => {
+    const translateX = interpolate(progress.value, [0, 1], [-WIDTH, 0]);
+    const opacity = interpolate(progress.value, [0, 1], [0, 1]);
+    return {
+      transform: [{ translateX }],
+      opacity,
     };
   });
 
@@ -122,7 +113,7 @@ const ResultsDashboardScreen = ({ navigation }) => {
         onScroll={scrollHandler}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}
-        style={styles.scrollView}
+        style={[styles.scrollView, scrollViewAnimatedStyle]}
         contentContainerStyle={styles.scrollViewContent}
         snapToOffsets={[HEADER_HEIGHT_EXPANDED]}
         snapToEnd={false}

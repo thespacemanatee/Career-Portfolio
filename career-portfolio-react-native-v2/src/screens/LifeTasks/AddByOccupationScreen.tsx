@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { View, FlatList } from "react-native";
-import { Button, Input, StyleService } from "@ui-kitten/components";
+import { Button, Divider, Input, StyleService } from "@ui-kitten/components";
 import { Formik } from "formik";
 
 import { tasksSelector } from "../../app/features/tasks/tasksSlice";
-import { getTasksByOccupation } from "../../helpers/utils";
+import {
+  fetchOnetData,
+  getTasksByOccupation,
+  handleErrorResponse,
+} from "../../helpers/utils";
 import SearchList from "../../components/SearchResultsModal";
 import TaskSearchResultCard from "../../components/TaskSearchResultCard";
 import { TaskObject, TaskType } from "../../types";
@@ -13,23 +17,29 @@ import ListEmptyComponent from "../../components/ListEmptyComponent";
 import ThemedBackButton from "../../components/ThemedBackButton";
 import SectionTitle from "../../components/SectionTitle";
 
-const filter = (item, query) =>
-  item?.toLowerCase().includes(query?.toLowerCase());
-
 const AddByOccupationScreen = ({ navigation }) => {
   const allTasks = useAppSelector(tasksSelector.selectAll);
-  const occupations = useAppSelector((state) => state.local.occupations);
   const [tasks, setTasks] = useState([]);
   const [results, setResults] = useState([]);
 
-  const handleSearch = (query) => {
-    setResults(occupations.filter((item) => filter(item, query.occupation)));
+  const handleSearch = async (query) => {
+    try {
+      const res = await fetchOnetData(query);
+      setResults(res);
+    } catch (err) {
+      handleErrorResponse(err);
+    }
   };
 
-  const handleSelectResult = (selection) => {
+  const handleSelectResult = (selection: string) => {
     if (selection) {
       const data: TaskObject[] = getTasksByOccupation(selection)
-        .filter((e) => !allTasks.some((d) => e["Task ID"] === d.taskId))
+        .filter(
+          (e) =>
+            !allTasks.some(
+              (d) => e["Task ID"] === d.taskId && d.task_type !== TaskType.LIFE
+            )
+        )
         .map((e) => {
           return {
             task: e.Task,
@@ -94,6 +104,7 @@ const AddByOccupationScreen = ({ navigation }) => {
         keyExtractor={(item) => String(item.taskId)}
         contentContainerStyle={styles.contentContainer}
         ListEmptyComponent={renderEmptyComponent}
+        ItemSeparatorComponent={() => <Divider />}
       />
     </View>
   );

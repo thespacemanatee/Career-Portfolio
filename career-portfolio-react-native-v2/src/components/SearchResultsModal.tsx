@@ -12,7 +12,7 @@ const SearchResultsModal = ({ data, onSelect }) => {
 
   const ResultsItem = React.memo(({ item }: { item: string }) => (
     <TouchableOpacity style={styles.item} onPress={() => onSelect(item)}>
-      <CustomText>{item}</CustomText>
+      <CustomText numberOfLines={1}>{item}</CustomText>
     </TouchableOpacity>
   ));
 

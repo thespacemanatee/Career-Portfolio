@@ -46,7 +46,8 @@ const DashboardScreen = ({ navigation }) => {
   useFocusEffect(
     useCallback(() => {
       navigationRef.current = navigation;
-    }, [navigation])
+      progress.value = withTiming(1, { duration: 750 });
+    }, [navigation, progress])
   );
 
   const handleCreateSubmission = () => {
@@ -102,12 +103,6 @@ const DashboardScreen = ({ navigation }) => {
     }
   }, [recentlyOpenedId, result]);
 
-  useFocusEffect(
-    useCallback(() => {
-      progress.value = withTiming(1, { duration: 750 });
-    }, [progress])
-  );
-
   const recentAnimatedStyle = useAnimatedStyle(() => {
     const translateY = interpolate(progress.value, [0, 1], [-25, 0]);
     const opacity = interpolate(progress.value, [0, 1], [0, 1]);
@@ -138,6 +133,8 @@ const DashboardScreen = ({ navigation }) => {
   });
 
   const headerAnimatedStyle = useAnimatedStyle(() => {
+    const translateY = interpolate(progress.value, [0, 1], [-25, 0]);
+    const opacity = interpolate(progress.value, [0, 1], [0, 1]);
     return {
       top: interpolate(
         offsetY.value,
@@ -145,6 +142,8 @@ const DashboardScreen = ({ navigation }) => {
         [HEADER_HEIGHT_EXPANDED, 26],
         Extrapolate.CLAMP
       ),
+      transform: [{ translateY }],
+      opacity,
     };
   });
 

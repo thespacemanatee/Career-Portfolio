@@ -7,7 +7,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withDelay,
-  withSpring,
+  withTiming,
 } from "react-native-reanimated";
 
 import CustomText from "./CustomText";
@@ -41,14 +41,19 @@ const ResultsOverviewCard: React.FC<ResultsOverviewCardProps> = ({
 
   useFocusEffect(
     useCallback(() => {
-      progress.value = withDelay(50 * index, withSpring(1));
+      progress.value = withDelay(
+        100 * index,
+        withTiming(1, { duration: 1000 })
+      );
     }, [index, progress])
   );
 
   const animatedStyle = useAnimatedStyle(() => {
     const translateX = interpolate(progress.value, [0, 1], [-WIDTH, 0]);
+    const opacity = interpolate(progress.value, [0, 1], [0, 1]);
     return {
       transform: [{ translateX }],
+      opacity,
     };
   });
 

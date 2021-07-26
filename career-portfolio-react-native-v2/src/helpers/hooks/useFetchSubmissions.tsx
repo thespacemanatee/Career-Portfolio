@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { ResultsLocalStorage } from "../../types";
+import { deleteUserInput } from "../utils";
 
 const useFetchSubmissions = () => {
   const [result, setResults] = useState<ResultsLocalStorage>(null);
@@ -22,6 +23,15 @@ const useFetchSubmissions = () => {
     }
   };
 
+  const deleteSubmission = async (id: string) => {
+    try {
+      await deleteUserInput(id);
+    } catch (err) {
+      setError(err);
+    }
+    await fetchSubmissions();
+  };
+
   const fetchSubmissions = useCallback(async () => {
     setLoading(true);
     try {
@@ -30,7 +40,7 @@ const useFetchSubmissions = () => {
       );
 
       if (!unmounted) {
-        setResults(res);
+        setResults(Object.keys(res).length > 0 ? res : null);
         setLoading(false);
         setError(null);
       }
@@ -51,7 +61,7 @@ const useFetchSubmissions = () => {
     };
   }, [fetchSubmissions]);
 
-  return { result, loading, error, resetSubmissions };
+  return { result, loading, error, deleteSubmission, resetSubmissions };
 };
 
 export default useFetchSubmissions;

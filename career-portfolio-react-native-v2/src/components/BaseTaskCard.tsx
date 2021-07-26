@@ -48,7 +48,7 @@ const BaseTaskCard: React.FC<BaseTaskCardProps> = ({
 
   const rotate = spinValue.interpolate({
     inputRange: [0, 1],
-    outputRange: ["90deg", "180deg"],
+    outputRange: ["0deg", "180deg"],
   });
 
   const spin = () => {

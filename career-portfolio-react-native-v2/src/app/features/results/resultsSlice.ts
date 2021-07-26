@@ -7,6 +7,7 @@ const initialState: ResultsState = {
   count: null,
   similar: null,
   missing: null,
+  recentlyOpenedId: null,
   [ResultsCategory.FAMILIARITY]: null,
   [ResultsCategory.PREFERENCE]: null,
   [ResultsCategory.PERSONALITY]: null,

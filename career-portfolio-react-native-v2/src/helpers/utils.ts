@@ -79,6 +79,20 @@ export const saveUserInput = async (
   return saveId;
 };
 
+export const deleteUserInput = async (id: string) => {
+  try {
+    const savedEntries: ResultsLocalStorage = JSON.parse(
+      await AsyncStorage.getItem("savedEntries")
+    );
+
+    delete savedEntries[id];
+
+    await AsyncStorage.setItem("savedEntries", JSON.stringify(savedEntries));
+  } catch (err) {
+    console.error("Error deleteing user input data", err);
+  }
+};
+
 export const getResultsTasks = (
   occupation: ResultsCountData,
   results: ResultsState,

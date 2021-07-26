@@ -23,7 +23,7 @@ const useFetchResults = (payload?: ResultsPayload) => {
   const [source] = useState(axios.CancelToken.source());
 
   const fetchResults = useCallback(
-    async (data: ResultsPayload) => {
+    async (data?: ResultsPayload) => {
       let responseData: UseFetchResultsResponse;
       if (data) {
         setLoading(true);

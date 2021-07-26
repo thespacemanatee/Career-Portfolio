@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Dimensions, ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import Animated, {
   Extrapolate,
@@ -28,7 +28,6 @@ import ThemedBackButton from "../../components/ThemedBackButton";
 const HEADER_HEIGHT_EXPANDED = 80;
 const HEADER_HEIGHT_COLLAPSED = 30;
 const CATEGORY_HEIGHT = 500;
-const WIDTH = Dimensions.get("window").width;
 
 const ResultsDashboardScreen = ({ navigation }) => {
   const tasks = useAppSelector(tasksSelector.selectAll);
@@ -93,10 +92,14 @@ const ResultsDashboardScreen = ({ navigation }) => {
   });
 
   const scrollViewAnimatedStyle = useAnimatedStyle(() => {
-    const translateX = interpolate(progress.value, [0, 1], [-WIDTH, 0]);
+    const translateY = interpolate(
+      progress.value,
+      [0, 1],
+      [CATEGORY_HEIGHT, 0]
+    );
     const opacity = interpolate(progress.value, [0, 1], [0, 1]);
     return {
-      transform: [{ translateX }],
+      transform: [{ translateY }],
       opacity,
     };
   });

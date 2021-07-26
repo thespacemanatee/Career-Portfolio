@@ -21,6 +21,7 @@ interface ResultsOverviewCardProps {
   editedDate: number;
   onetTitle: string;
   onPress: (id: string) => void;
+  onLongPress: (id: string) => void;
 }
 
 const ResultsOverviewCard: React.FC<ResultsOverviewCardProps> = ({
@@ -30,6 +31,7 @@ const ResultsOverviewCard: React.FC<ResultsOverviewCardProps> = ({
   editedDate,
   onetTitle,
   onPress,
+  onLongPress,
 }) => {
   const theme = useTheme();
 
@@ -37,6 +39,10 @@ const ResultsOverviewCard: React.FC<ResultsOverviewCardProps> = ({
 
   const handleOnPress = () => {
     onPress(id);
+  };
+
+  const handleOnLongPress = () => {
+    onLongPress(id);
   };
 
   useFocusEffect(
@@ -61,6 +67,7 @@ const ResultsOverviewCard: React.FC<ResultsOverviewCardProps> = ({
     <Animated.View style={animatedStyle}>
       <TouchableOpacity
         onPress={handleOnPress}
+        onLongPress={handleOnLongPress}
         style={[
           styles.container,
           { backgroundColor: theme["color-basic-400"] },

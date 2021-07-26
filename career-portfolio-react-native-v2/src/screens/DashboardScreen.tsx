@@ -21,6 +21,7 @@ import AnimatedFab from "../components/AnimatedFab";
 import CustomText from "../components/CustomText";
 import SectionTitle from "../components/SectionTitle";
 import { navigationRef } from "../navigation/NavigationHelper";
+import { setRecentlyOpenedId } from "../app/features/results/resultsSlice";
 
 const HEADER_HEIGHT_EXPANDED = 80;
 const HEADER_HEIGHT_COLLAPSED = 30;
@@ -39,7 +40,7 @@ const DashboardScreen = ({ navigation }) => {
 
   const { width } = Dimensions.get("window");
 
-  const { result, resetSubmissions } = useFetchSubmissions();
+  const { result, deleteSubmission, resetSubmissions } = useFetchSubmissions();
 
   const dispatch = useAppDispatch();
 
@@ -85,6 +86,22 @@ const DashboardScreen = ({ navigation }) => {
         },
       ]
     );
+  };
+
+  const handleDeleteSubmission = (id: string) => {
+    Alert.alert("Are you sure?", "This action will delete this submission.", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: async () => {
+          await deleteSubmission(id);
+          if (id === recentlyOpenedId) {
+            dispatch(setRecentlyOpenedId(null));
+          }
+        },
+      },
+    ]);
   };
 
   useEffect(() => {
@@ -219,6 +236,7 @@ const DashboardScreen = ({ navigation }) => {
                 editedDate={recentlyOpenedItem.editedDate}
                 onetTitle={recentlyOpenedItem.payload.onet_title}
                 onPress={handleNavigateResults}
+                onLongPress={handleDeleteSubmission}
               />
             </View>
           </View>
@@ -238,6 +256,7 @@ const DashboardScreen = ({ navigation }) => {
                     editedDate={previousSubmissions[id].editedDate}
                     onetTitle={previousSubmissions[id].payload.onet_title}
                     onPress={handleNavigateResults}
+                    onLongPress={handleDeleteSubmission}
                   />
                 </View>
               );

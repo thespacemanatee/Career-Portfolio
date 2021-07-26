@@ -9,8 +9,8 @@ import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
 
 import store from "./src/app/store";
-import { setVerbs, setOccupations } from "./src/app/features/local/localSlice";
 import AppNavigator from "./src/navigation/AppNavigator";
+import { setVerbs, setOccupations } from "./src/app/features/local/localSlice";
 import { getActionVerbsArray, getOccupationsArray } from "./src/helpers/utils";
 
 LogBox.ignoreLogs([
@@ -48,6 +48,7 @@ export default function App() {
       />
     );
   }
+
   return (
     <>
       <IconRegistry icons={EvaIconsPack} />

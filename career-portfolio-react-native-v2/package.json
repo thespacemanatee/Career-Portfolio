@@ -53,7 +53,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.14.8",
-    "@babel/eslint-parser": "^7.14.7",
+    "@babel/eslint-parser": "^7.16.3",
     "@types/react": "^17.0.15",
     "@types/react-native": "^0.64.12",
     "@types/react-native-svg-charts": "^5.0.9",

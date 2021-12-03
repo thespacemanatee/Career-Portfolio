@@ -7,7 +7,6 @@ import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { Provider } from "react-redux";
 import AppLoading from "expo-app-loading";
 import * as Font from "expo-font";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import store from "./src/app/store";
 import AppNavigator from "./src/navigation/AppNavigator";
@@ -15,7 +14,7 @@ import { setVerbs, setOccupations } from "./src/app/features/local/localSlice";
 import { getActionVerbsArray, getOccupationsArray } from "./src/helpers/utils";
 
 LogBox.ignoreLogs([
-  "ReactNativeFiberHostComponent: Calling getNode() on the ref of an Animated component is no longer necessary."
+  "ReactNativeFiberHostComponent: Calling getNode() on the ref of an Animated component is no longer necessary.",
 ]);
 
 export default function App() {
@@ -28,7 +27,7 @@ export default function App() {
       "Manrope-ExtraLight": require("./assets/fonts/Manrope-ExtraLight.ttf"),
       "Manrope-Light": require("./assets/fonts/Manrope-Light.ttf"),
       "Manrope-Medium": require("./assets/fonts/Manrope-Medium.ttf"),
-      "Manrope-Regular": require("./assets/fonts/Manrope-Regular.ttf")
+      "Manrope-Regular": require("./assets/fonts/Manrope-Regular.ttf"),
     });
   };
 
@@ -51,7 +50,7 @@ export default function App() {
   }
 
   return (
-    <SafeAreaProvider>
+    <>
       <IconRegistry icons={EvaIconsPack} />
       <Provider store={store}>
         <ApplicationProvider {...eva} theme={eva.light}>
@@ -59,6 +58,6 @@ export default function App() {
           <AppNavigator />
         </ApplicationProvider>
       </Provider>
-    </SafeAreaProvider>
+    </>
   );
 }

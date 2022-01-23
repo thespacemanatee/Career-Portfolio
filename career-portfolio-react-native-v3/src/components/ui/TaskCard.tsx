@@ -11,7 +11,7 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import { FONT_SIZE, SPACING } from "../../resources";
 import { ThemedText } from "../typography";
-import { getPositionalText } from "../../utils";
+import { getNumberWithOrdinal } from "../../utils";
 
 const aspectRatio = 3 / 2;
 
@@ -43,7 +43,7 @@ export const TaskCard = ({ source, index }: TaskCardProps) => {
           style={styles.labelBackground}
         >
           <ThemedText style={styles.labelText}>
-            <ThemedText style={styles.taskText}>{`${getPositionalText(
+            <ThemedText style={styles.taskText}>{`${getNumberWithOrdinal(
               10 - index
             )} task`}</ThemedText>{" "}
             from{" "}

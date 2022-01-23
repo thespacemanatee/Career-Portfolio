@@ -36,14 +36,16 @@ export const NavigationHeader = ({
 
 const styles = StyleSheet.create({
   container: {
-    padding: SPACING.spacing32,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    padding: SPACING.spacing32,
   },
   titleContainer: {
+    flexShrink: 1,
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: SPACING.spacing32,
   },
   titleText: {
     fontFamily: "bold",
@@ -53,6 +55,5 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     textAlign: "center",
     fontSize: FONT_SIZE.small,
-    maxWidth: "60%",
   },
 });

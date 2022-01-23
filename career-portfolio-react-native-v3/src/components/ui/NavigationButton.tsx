@@ -33,6 +33,7 @@ export const NavigationButton = ({
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
     width: 44,

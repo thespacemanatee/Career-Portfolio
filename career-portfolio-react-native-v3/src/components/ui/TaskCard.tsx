@@ -61,6 +61,16 @@ export const TaskCard = ({ source, index }: TaskCardProps) => {
 const styles = StyleSheet.create({
   imageBackground: {
     flexDirection: "column-reverse",
+    borderRadius: SPACING.spacing12,
+    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   labelBackground: {
     paddingHorizontal: SPACING.spacing16,

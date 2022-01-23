@@ -16,8 +16,6 @@ import Animated, {
 } from "react-native-reanimated";
 import { snapPoint } from "react-native-redash";
 
-import { SPACING } from "../../resources";
-
 import { TaskCard } from "./TaskCard";
 
 interface SwipeableTaskCardProps {
@@ -80,13 +78,13 @@ export const SwipeableTaskCard = ({
     <View style={styles.container} pointerEvents="box-none">
       {Platform.OS === "web" ? (
         <PanGestureHandler onGestureEvent={onGestureEvent}>
-          <Animated.View style={[styles.card, style]}>
+          <Animated.View style={style}>
             <TaskCard source={source} index={index} />
           </Animated.View>
         </PanGestureHandler>
       ) : (
         <GestureDetector gesture={gesture}>
-          <Animated.View style={[styles.card, style]}>
+          <Animated.View style={style}>
             <TaskCard source={source} index={index} />
           </Animated.View>
         </GestureDetector>
@@ -100,9 +98,5 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
     alignItems: "center",
-  },
-  card: {
-    borderRadius: SPACING.spacing12,
-    overflow: "hidden",
   },
 });

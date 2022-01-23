@@ -3,8 +3,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { registerRootComponent } from "expo";
 import { useFonts } from "expo-font";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider } from "react-redux";
-import { gestureHandlerRootHOC } from "react-native-gesture-handler"
 
 import { AppNavigator } from "./navigation/AppNavigator";
 import { TSSTheme } from "./theme";
@@ -42,9 +42,11 @@ export const App = () => {
   return (
     <Provider store={store}>
       <SafeAreaProvider>
-        <NavigationContainer theme={TSSTheme}>
-          <AppNavigator />
-        </NavigationContainer>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <NavigationContainer theme={TSSTheme}>
+            <AppNavigator />
+          </NavigationContainer>
+        </GestureHandlerRootView>
       </SafeAreaProvider>
     </Provider>
   );

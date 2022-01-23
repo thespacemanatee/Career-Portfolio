@@ -1,0 +1,29 @@
+{
+  "Management Occupations": [11, 13],
+  "Business and Financial Operations Occupations": [11, 13],
+  "Computer and Mathematical Occupations": [15, 17, 19],
+  "Architecture and Engineering Occupations": [15, 17, 19],
+  "Life, Physical, and Social Science Occupations": [15, 17, 19],
+  "Community and Social Services Occupations": [21, 23, 25, 27],
+  "Legal Occupations": [21, 23, 25, 27],
+  "Education, Training, and Library Occupations": [21, 23, 25, 27],
+  "Arts, Design, Entertainment, Sports, and Media Occupations": [
+    21, 23, 25, 27
+  ],
+  "Healthcare Practitioners and Technical Occupations": [29, 31],
+  "Healthcare Support Occupations": [31, 33, 35, 37, 39],
+  "Protective Service Occupations": [31, 33, 35, 37, 39],
+  "Food Preparation and Serving Related Occupations": [31, 33, 35, 37, 39],
+  "Building and Grounds Cleaning and Maintenance Occupations": [
+    31, 33, 35, 37, 39
+  ],
+  "Personal Care and Service Occupations": [31, 33, 35, 37, 39],
+  "Sales and Related Occupations": [41],
+  "Office and Administrative Support Occupations": [43],
+  "Farming, Fishing, and Forestry Occupations": [45],
+  "Construction and Extraction Occupations": [47],
+  "Installation, Maintenance, and Repair Occupations": [49],
+  "Production Occupations": [51],
+  "Transportation and Material Moving Occupations": [53],
+  "Military Specific Occupations": [55]
+}

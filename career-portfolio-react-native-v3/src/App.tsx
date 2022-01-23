@@ -2,11 +2,17 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { registerRootComponent } from "expo";
 import { useFonts } from "expo-font";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { Provider } from "react-redux";
 
 import { AppNavigator } from "./navigation/AppNavigator";
 import { TSSTheme } from "./theme";
+import { injectWebCss } from "./utils";
+import { store } from "./app/store";
 
 export const App = () => {
+  injectWebCss();
+
   const [loaded] = useFonts({
     black: require("../assets/fonts/Poppins-Black.ttf"),
     blackItalic: require("../assets/fonts/Poppins-BlackItalic.ttf"),
@@ -33,9 +39,13 @@ export const App = () => {
   }
 
   return (
-    <NavigationContainer theme={TSSTheme}>
-      <AppNavigator />
-    </NavigationContainer>
+    <Provider store={store}>
+      <SafeAreaProvider>
+        <NavigationContainer theme={TSSTheme}>
+          <AppNavigator />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </Provider>
   );
 };
 

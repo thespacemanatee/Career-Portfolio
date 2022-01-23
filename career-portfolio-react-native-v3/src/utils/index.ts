@@ -1,1 +1,1 @@
-export { injectWebCss } from "./utils";
+export { injectWebCss, getPositionalText } from "./utils";

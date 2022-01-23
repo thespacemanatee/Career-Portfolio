@@ -22,9 +22,13 @@ import { TaskCard } from "./TaskCard";
 
 interface SwipeableTaskCardProps {
   source: ImageSourcePropType;
+  index?: number;
 }
 
-export const SwipeableTaskCard = ({ source }: SwipeableTaskCardProps) => {
+export const SwipeableTaskCard = ({
+  source,
+  index,
+}: SwipeableTaskCardProps) => {
   const offset = useSharedValue({ x: 0, y: 0 });
   const translateX = useSharedValue(0);
   const rotate = useSharedValue(0);
@@ -77,13 +81,13 @@ export const SwipeableTaskCard = ({ source }: SwipeableTaskCardProps) => {
       {Platform.OS === "web" ? (
         <PanGestureHandler onGestureEvent={onGestureEvent}>
           <Animated.View style={[styles.card, style]}>
-            <TaskCard source={source} />
+            <TaskCard source={source} index={index} />
           </Animated.View>
         </PanGestureHandler>
       ) : (
         <GestureDetector gesture={gesture}>
           <Animated.View style={[styles.card, style]}>
-            <TaskCard source={source} />
+            <TaskCard source={source} index={index} />
           </Animated.View>
         </GestureDetector>
       )}

@@ -1,5 +1,6 @@
 {
-  "extends": "expo/tsconfig.base",
+  "extends": "eslint-config-react-native-wcandillon/tsconfig.base",
+  "typeRoots": ["./src/types"],
   "compilerOptions": {
     "strict": true
   }

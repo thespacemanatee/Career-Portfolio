@@ -1,15 +1,26 @@
 import React, { useCallback, useState } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import type { JobClass } from "../app/features/jobClass";
 import { useAppSelector } from "../app/hooks";
 import { CTAButton } from "../components/ui/CTAButton";
 import { JobClassEntry } from "../components/ui/JobClassEntry";
+import type { RootStackParamList } from "../navigation";
 import { SPACING } from "../resources";
 
-export const JobClassScreen = () => {
+type JobClassScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  "Job Class"
+>;
+
+export const JobClassScreen = ({ navigation }: JobClassScreenProps) => {
   const [selectedJobClass, setSelectedJobClass] = useState<JobClass>();
   const jobClasses = useAppSelector((state) => state.jobClass.jobClasses);
+
+  const submitSelection = () => {
+    navigation.navigate("Tasks");
+  };
 
   const selectJobClass = (jobClass: JobClass) => {
     setSelectedJobClass(jobClass);
@@ -36,7 +47,7 @@ export const JobClassScreen = () => {
         renderItem={renderJobClasses}
         keyExtractor={(item) => item.title}
       />
-      <CTAButton label="Continue" />
+      <CTAButton label="Continue" onPress={submitSelection} />
     </View>
   );
 };

@@ -8,14 +8,16 @@ import { ThemedText } from "../typography";
 
 type CTAButtonProps = {
   label: string;
+  onPress: () => void;
   style?: StyleProp<ViewStyle>;
 };
 
-export const CTAButton = ({ label, style }: CTAButtonProps) => {
+export const CTAButton = ({ label, onPress, style }: CTAButtonProps) => {
   const { colors } = useTheme();
 
   return (
     <Pressable
+      onPress={onPress}
       style={({ pressed }) => [
         { backgroundColor: colors.primary, opacity: pressed ? 0.5 : 1 },
         styles.container,

@@ -4,6 +4,7 @@ import { registerRootComponent } from "expo";
 import { useFonts } from "expo-font";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
+import { gestureHandlerRootHOC } from "react-native-gesture-handler"
 
 import { AppNavigator } from "./navigation/AppNavigator";
 import { TSSTheme } from "./theme";

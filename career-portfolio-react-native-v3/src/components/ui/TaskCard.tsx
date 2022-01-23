@@ -9,16 +9,18 @@ import {
 import { useTheme } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 
-import { SPACING } from "../../resources";
+import { FONT_SIZE, SPACING } from "../../resources";
 import { ThemedText } from "../typography";
+import { getPositionalText } from "../../utils";
 
 const aspectRatio = 3 / 2;
 
 type TaskCardProps = {
   source: ImageSourcePropType;
+  index?: number;
 };
 
-export const TaskCard = ({ source }: TaskCardProps) => {
+export const TaskCard = ({ source, index }: TaskCardProps) => {
   const { width } = useWindowDimensions();
   const { colors } = useTheme();
   const CARD_WIDTH = useMemo(() => width - SPACING.spacing64, [width]);
@@ -41,7 +43,10 @@ export const TaskCard = ({ source }: TaskCardProps) => {
           style={styles.labelBackground}
         >
           <ThemedText style={styles.labelText}>
-            <ThemedText style={styles.taskText}>1st task</ThemedText> from{" "}
+            <ThemedText style={styles.taskText}>{`${getPositionalText(
+              10 - index
+            )} task`}</ThemedText>{" "}
+            from{" "}
             <ThemedText style={[{ color: colors.secondary }, styles.setText]}>
               the first set
             </ThemedText>{" "}
@@ -65,6 +70,7 @@ const styles = StyleSheet.create({
   labelText: {
     color: "white",
     fontFamily: "regular",
+    fontSize: FONT_SIZE.medium,
   },
   taskText: {
     color: "#FF3030",

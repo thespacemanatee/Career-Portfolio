@@ -13,6 +13,7 @@ export const TasksScreen = () => {
           <SwipeableTaskCard
             key={idx}
             source={{ uri: `https://picsum.photos/id/${idx + 10}/200/300` }}
+            index={idx}
           />
         );
       })}

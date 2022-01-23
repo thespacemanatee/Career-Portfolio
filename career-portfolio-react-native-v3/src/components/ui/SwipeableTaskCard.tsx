@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useMemo } from "react";
 import type { ImageSourcePropType } from "react-native";
-import { Platform, View, StyleSheet, Dimensions, Image } from "react-native";
+import { useWindowDimensions, Platform, View, StyleSheet } from "react-native";
 import type { PanGestureHandlerGestureEvent } from "react-native-gesture-handler";
 import {
   Gesture,
@@ -18,12 +18,7 @@ import { snapPoint } from "react-native-redash";
 
 import { SPACING } from "../../resources";
 
-const { width: wWidth } = Dimensions.get("window");
-
-const SNAP_POINTS = [-wWidth, 0, wWidth];
-const aspectRatio = 3 / 2;
-const CARD_WIDTH = wWidth - SPACING.spacing64;
-const CARD_HEIGHT = CARD_WIDTH * aspectRatio;
+import { TaskCard } from "./TaskCard";
 
 interface SwipeableTaskCardProps {
   source: ImageSourcePropType;
@@ -33,6 +28,8 @@ export const SwipeableTaskCard = ({ source }: SwipeableTaskCardProps) => {
   const offset = useSharedValue({ x: 0, y: 0 });
   const translateX = useSharedValue(0);
   const rotate = useSharedValue(0);
+  const { width } = useWindowDimensions();
+  const SNAP_POINTS = useMemo(() => [-width, 0, width], [width]);
 
   const style = useAnimatedStyle(() => ({
     transform: [
@@ -60,25 +57,6 @@ export const SwipeableTaskCard = ({ source }: SwipeableTaskCardProps) => {
     },
   });
 
-  if (Platform.OS === "web") {
-    return (
-      <View style={styles.container} pointerEvents="box-none">
-        <PanGestureHandler onGestureEvent={onGestureEvent}>
-          <Animated.View style={[styles.card, style]}>
-            <Image
-              source={source}
-              style={{
-                width: CARD_WIDTH,
-                height: CARD_WIDTH * aspectRatio,
-              }}
-              resizeMode="contain"
-            />
-          </Animated.View>
-        </PanGestureHandler>
-      </View>
-    );
-  }
-
   const gesture = Gesture.Pan()
     .onBegin(() => {
       offset.value.x = translateX.value;
@@ -96,18 +74,19 @@ export const SwipeableTaskCard = ({ source }: SwipeableTaskCardProps) => {
 
   return (
     <View style={styles.container} pointerEvents="box-none">
-      <GestureDetector gesture={gesture}>
-        <Animated.View style={[styles.card, style]}>
-          <Image
-            source={source}
-            style={{
-              width: CARD_WIDTH,
-              height: CARD_WIDTH * aspectRatio,
-            }}
-            resizeMode="contain"
-          />
-        </Animated.View>
-      </GestureDetector>
+      {Platform.OS === "web" ? (
+        <PanGestureHandler onGestureEvent={onGestureEvent}>
+          <Animated.View style={[styles.card, style]}>
+            <TaskCard source={source} />
+          </Animated.View>
+        </PanGestureHandler>
+      ) : (
+        <GestureDetector gesture={gesture}>
+          <Animated.View style={[styles.card, style]}>
+            <TaskCard source={source} />
+          </Animated.View>
+        </GestureDetector>
+      )}
     </View>
   );
 };
@@ -119,9 +98,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   card: {
-    borderRadius: 10,
-    width: CARD_WIDTH,
-    height: CARD_HEIGHT,
+    borderRadius: SPACING.spacing12,
     overflow: "hidden",
   },
 });

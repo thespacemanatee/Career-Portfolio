@@ -1,39 +1,42 @@
-import React from "react";
-import type { ImageSourcePropType, StyleProp, ViewStyle } from "react-native";
-import { StyleSheet, Dimensions, Image } from "react-native";
+import React, { useMemo } from "react";
+import type { ImageSourcePropType } from "react-native";
+import { useWindowDimensions, Platform, View, StyleSheet } from "react-native";
 import type { PanGestureHandlerGestureEvent } from "react-native-gesture-handler";
 import {
-  GestureHandlerRootView,
+  Gesture,
+  GestureDetector,
   PanGestureHandler,
 } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedGestureHandler,
+  useAnimatedStyle,
   useSharedValue,
   withSpring,
-  useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
 import { snapPoint } from "react-native-redash";
 
 import { SPACING } from "../../resources";
 
-const { width: wWidth } = Dimensions.get("window");
-
-const SNAP_POINTS = [-wWidth, 0, wWidth];
-const aspectRatio = 3 / 2;
-const CARD_WIDTH = wWidth - 64;
+import { TaskCard } from "./TaskCard";
 
 interface SwipeableTaskCardProps {
   source: ImageSourcePropType;
-  style?: StyleProp<ViewStyle>;
 }
 
-export const SwipeableTaskCard = ({
-  source,
-  style,
-}: SwipeableTaskCardProps) => {
+export const SwipeableTaskCard = ({ source }: SwipeableTaskCardProps) => {
+  const offset = useSharedValue({ x: 0, y: 0 });
   const translateX = useSharedValue(0);
   const rotate = useSharedValue(0);
+  const { width } = useWindowDimensions();
+  const SNAP_POINTS = useMemo(() => [-width, 0, width], [width]);
+
+  const style = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: translateX.value },
+      { rotate: `${rotate.value}deg` },
+    ],
+  }));
 
   const onGestureEvent = useAnimatedGestureHandler<
     PanGestureHandlerGestureEvent,
@@ -43,8 +46,9 @@ export const SwipeableTaskCard = ({
       ctx.x = translateX.value;
     },
     onActive: ({ translationX }, ctx) => {
-      translateX.value = ctx.x + translationX;
-      rotate.value = (ctx.x + translationX) / 10;
+      const newX = ctx.x + translationX;
+      translateX.value = newX;
+      rotate.value = newX / 10;
     },
     onEnd: ({ velocityX }) => {
       const dest = snapPoint(translateX.value, velocityX, SNAP_POINTS);
@@ -53,31 +57,37 @@ export const SwipeableTaskCard = ({
     },
   });
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: translateX.value },
-      { rotate: `${rotate.value}deg` },
-    ],
-  }));
+  const gesture = Gesture.Pan()
+    .onBegin(() => {
+      offset.value.x = translateX.value;
+    })
+    .onUpdate(({ translationX }) => {
+      const newX = offset.value.x + translationX;
+      translateX.value = newX;
+      rotate.value = newX / 10;
+    })
+    .onEnd(({ velocityX }) => {
+      const dest = snapPoint(translateX.value, velocityX, SNAP_POINTS);
+      translateX.value = withSpring(dest, { velocity: velocityX });
+      rotate.value = withTiming(0);
+    });
 
   return (
-    <GestureHandlerRootView
-      style={[styles.container, style]}
-      pointerEvents="box-none"
-    >
-      <PanGestureHandler onGestureEvent={onGestureEvent}>
-        <Animated.View style={[styles.card, animatedStyle]}>
-          <Image
-            source={source}
-            style={{
-              width: CARD_WIDTH,
-              height: CARD_WIDTH * aspectRatio,
-            }}
-            resizeMode="contain"
-          />
-        </Animated.View>
-      </PanGestureHandler>
-    </GestureHandlerRootView>
+    <View style={styles.container} pointerEvents="box-none">
+      {Platform.OS === "web" ? (
+        <PanGestureHandler onGestureEvent={onGestureEvent}>
+          <Animated.View style={[styles.card, style]}>
+            <TaskCard source={source} />
+          </Animated.View>
+        </PanGestureHandler>
+      ) : (
+        <GestureDetector gesture={gesture}>
+          <Animated.View style={[styles.card, style]}>
+            <TaskCard source={source} />
+          </Animated.View>
+        </GestureDetector>
+      )}
+    </View>
   );
 };
 
@@ -88,9 +98,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   card: {
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: SPACING.spacing16,
+    borderRadius: SPACING.spacing12,
     overflow: "hidden",
   },
 });

@@ -6,7 +6,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FONT_SIZE, SPACING } from "../../resources";
 import { ThemedText } from "../typography";
 
-import { BackButton, StarButton } from ".";
+import { BackButton } from "./BackButton";
+import { StarButton } from "./StarButton";
 
 type NavigationHeaderProps = {
   title: string;

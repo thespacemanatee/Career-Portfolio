@@ -11,6 +11,7 @@ import Animated, {
   runOnJS,
   useAnimatedGestureHandler,
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
   withSpring,
   withTiming,
@@ -27,6 +28,7 @@ interface SwipeableTaskCardProps {
   taskIndex: number;
   onSwipeRight: () => void;
   onSwipeLeft: () => void;
+  swipeProgress?: (value: number) => void;
 }
 
 export const SwipeableTaskCard = ({
@@ -35,6 +37,7 @@ export const SwipeableTaskCard = ({
   taskIndex,
   onSwipeRight,
   onSwipeLeft,
+  swipeProgress,
 }: SwipeableTaskCardProps) => {
   const [enabled, setEnabled] = useState(false);
   const offset = useSharedValue({ x: 0 });
@@ -44,6 +47,12 @@ export const SwipeableTaskCard = ({
   const scale = useSharedValue(0.9);
   const { width } = useWindowDimensions();
   const snapPoints = useMemo(() => [-width, 0, width], [width]);
+
+  useDerivedValue(() => {
+    if (swipeProgress) {
+      runOnJS(swipeProgress)(translateX.value / (width / 2));
+    }
+  });
 
   useEffect(() => {
     if (index === 0) {

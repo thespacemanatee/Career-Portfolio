@@ -7,5 +7,6 @@ export const TSSTheme = {
     primary: "#6391F0",
     secondary: "#FFCF01",
     background: "white",
+    destructive: "#F7464E",
   },
 };

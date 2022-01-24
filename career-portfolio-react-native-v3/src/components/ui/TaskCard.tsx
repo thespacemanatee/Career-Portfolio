@@ -17,10 +17,10 @@ const aspectRatio = 3 / 2;
 
 type TaskCardProps = {
   source: ImageSourcePropType;
-  index?: number;
+  taskIndex: number;
 };
 
-export const TaskCard = ({ source, index }: TaskCardProps) => {
+export const TaskCard = ({ source, taskIndex }: TaskCardProps) => {
   const { width } = useWindowDimensions();
   const { colors } = useTheme();
   const CARD_WIDTH = useMemo(() => width - SPACING.spacing64, [width]);
@@ -44,7 +44,7 @@ export const TaskCard = ({ source, index }: TaskCardProps) => {
         >
           <ThemedText style={styles.labelText}>
             <ThemedText style={styles.taskText}>{`${getNumberWithOrdinal(
-              10 - index
+              taskIndex
             )} task`}</ThemedText>{" "}
             from{" "}
             <ThemedText style={[{ color: colors.secondary }, styles.setText]}>

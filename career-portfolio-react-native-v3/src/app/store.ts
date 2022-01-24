@@ -1,9 +1,11 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 
 import { reducer as jobClassReducer } from "./features/jobClass";
+import { reducer as tasksReducer } from "./features/tasks";
 
 const rootReducer = combineReducers({
   jobClass: jobClassReducer,
+  tasks: tasksReducer,
 });
 
 export const store = configureStore({

@@ -15,7 +15,7 @@ const initialState: JobClassState = {
 };
 
 const JobClassSlice = createSlice({
-  name: "form",
+  name: "jobClass",
   initialState,
   reducers: {
     setJobClasses: (state, action: PayloadAction<JobClass[]>) => {

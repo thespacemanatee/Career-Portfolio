@@ -3,11 +3,12 @@ import { View, StyleSheet, FlatList } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import type { JobClass } from "../app/features/jobClass";
-import { useAppSelector } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { CTAButton } from "../components/ui/CTAButton";
 import { JobClassEntry } from "../components/ui/JobClassEntry";
 import type { RootStackParamList } from "../navigation";
 import { SPACING } from "../resources";
+import { setTasks } from "../app/features/tasks";
 
 type JobClassScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -18,7 +19,10 @@ export const JobClassScreen = ({ navigation }: JobClassScreenProps) => {
   const [selectedJobClass, setSelectedJobClass] = useState<JobClass>();
   const jobClasses = useAppSelector((state) => state.jobClass.jobClasses);
 
+  const dispatch = useAppDispatch();
+
   const submitSelection = () => {
+    dispatch(setTasks(Array(10).fill(0)));
     navigation.navigate("Tasks");
   };
 

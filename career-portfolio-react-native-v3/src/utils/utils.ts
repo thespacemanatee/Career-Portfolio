@@ -13,19 +13,8 @@ export const injectWebCss = () => {
   return document.head.append(style);
 };
 
-export const getPositionalText = (index: number) => {
-  switch (index) {
-    case 1: {
-      return "1st";
-    }
-    case 2: {
-      return "2nd";
-    }
-    case 3: {
-      return "3rd";
-    }
-    default: {
-      return `${index}th`;
-    }
-  }
+export const getNumberWithOrdinal = (n: number) => {
+  const s = ["th", "st", "nd", "rd"],
+    v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
 };

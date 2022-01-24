@@ -1,10 +1,22 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { StyleSheet, View } from "react-native";
 
+import { removeFirstTask } from "../app/features/tasks";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { SwipeableTaskCard } from "../components/ui/SwipeableTaskCard";
 
 export const TasksScreen = () => {
-  const tasks = useMemo(() => Array(10).fill(0), []);
+  const tasks = useAppSelector((state) => state.tasks.tasks);
+
+  const dispatch = useAppDispatch();
+
+  const likeTask = () => {
+    dispatch(removeFirstTask());
+  };
+
+  const dislikeTask = () => {
+    dispatch(removeFirstTask());
+  };
 
   return (
     <View style={styles.container}>
@@ -13,7 +25,10 @@ export const TasksScreen = () => {
           <SwipeableTaskCard
             key={idx}
             source={{ uri: `https://picsum.photos/id/${idx + 10}/200/300` }}
-            index={idx}
+            index={tasks.length - 1 - idx}
+            taskIndex={10 - idx}
+            onSwipeRight={likeTask}
+            onSwipeLeft={dislikeTask}
           />
         );
       })}
@@ -24,5 +39,6 @@ export const TasksScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    overflow: "hidden",
   },
 });

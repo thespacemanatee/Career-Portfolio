@@ -1,1 +1,1 @@
-export { injectWebCss, getPositionalText } from "./utils";
+export { injectWebCss, getNumberWithOrdinal } from "./utils";

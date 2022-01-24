@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import type { ImageSourcePropType } from "react-native";
 import { useWindowDimensions, Platform, View, StyleSheet } from "react-native";
 import type { PanGestureHandlerGestureEvent } from "react-native-gesture-handler";
@@ -8,6 +8,7 @@ import {
   PanGestureHandler,
 } from "react-native-gesture-handler";
 import Animated, {
+  runOnJS,
   useAnimatedGestureHandler,
   useAnimatedStyle,
   useSharedValue,
@@ -16,31 +17,42 @@ import Animated, {
 } from "react-native-reanimated";
 import { snapPoint } from "react-native-redash";
 
-import { SPACING } from "../../resources";
-
 import { TaskCard } from "./TaskCard";
+
+const OFFSET_Y = -50;
 
 interface SwipeableTaskCardProps {
   source: ImageSourcePropType;
-  index?: number;
+  index: number;
+  taskIndex: number;
+  onSwipeRight: () => void;
+  onSwipeLeft: () => void;
 }
 
 export const SwipeableTaskCard = ({
   source,
   index,
+  taskIndex,
+  onSwipeRight,
+  onSwipeLeft,
 }: SwipeableTaskCardProps) => {
-  const offset = useSharedValue({ x: 0, y: 0 });
+  const [enabled, setEnabled] = useState(false);
+  const offset = useSharedValue({ x: 0 });
   const translateX = useSharedValue(0);
+  const translateY = useSharedValue(OFFSET_Y);
   const rotate = useSharedValue(0);
+  const scale = useSharedValue(0.9);
   const { width } = useWindowDimensions();
-  const SNAP_POINTS = useMemo(() => [-width, 0, width], [width]);
+  const snapPoints = useMemo(() => [-width, 0, width], [width]);
 
-  const style = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: translateX.value },
-      { rotate: `${rotate.value}deg` },
-    ],
-  }));
+  useEffect(() => {
+    if (index === 0) {
+      translateY.value = withTiming(0);
+      scale.value = withTiming(1, {}, () => {
+        runOnJS(setEnabled)(true);
+      });
+    }
+  }, [index, scale, translateY]);
 
   const onGestureEvent = useAnimatedGestureHandler<
     PanGestureHandlerGestureEvent,
@@ -55,9 +67,15 @@ export const SwipeableTaskCard = ({
       rotate.value = newX / 10;
     },
     onEnd: ({ velocityX }) => {
-      const dest = snapPoint(translateX.value, velocityX, SNAP_POINTS);
+      const dest = snapPoint(translateX.value, velocityX, snapPoints);
       translateX.value = withSpring(dest, { velocity: velocityX });
-      rotate.value = withTiming(0);
+      rotate.value = withTiming(0, {}, () => {
+        if (dest > 0) {
+          runOnJS(onSwipeRight)();
+        } else if (dest < 0) {
+          runOnJS(onSwipeLeft)();
+        }
+      });
     },
   });
 
@@ -71,23 +89,39 @@ export const SwipeableTaskCard = ({
       rotate.value = newX / 10;
     })
     .onEnd(({ velocityX }) => {
-      const dest = snapPoint(translateX.value, velocityX, SNAP_POINTS);
+      const dest = snapPoint(translateX.value, velocityX, snapPoints);
       translateX.value = withSpring(dest, { velocity: velocityX });
-      rotate.value = withTiming(0);
-    });
+      rotate.value = withTiming(0, {}, () => {
+        if (dest > 0) {
+          runOnJS(onSwipeRight)();
+        } else if (dest < 0) {
+          runOnJS(onSwipeLeft)();
+        }
+      });
+    })
+    .enabled(enabled);
+
+  const style = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: translateX.value },
+      { translateY: translateY.value },
+      { rotate: `${rotate.value}deg` },
+      { scale: scale.value },
+    ],
+  }));
 
   return (
     <View style={styles.container} pointerEvents="box-none">
       {Platform.OS === "web" ? (
-        <PanGestureHandler onGestureEvent={onGestureEvent}>
-          <Animated.View style={[styles.card, style]}>
-            <TaskCard source={source} index={index} />
+        <PanGestureHandler onGestureEvent={onGestureEvent} enabled={enabled}>
+          <Animated.View style={style}>
+            <TaskCard source={source} taskIndex={taskIndex} />
           </Animated.View>
         </PanGestureHandler>
       ) : (
         <GestureDetector gesture={gesture}>
-          <Animated.View style={[styles.card, style]}>
-            <TaskCard source={source} index={index} />
+          <Animated.View style={style}>
+            <TaskCard source={source} taskIndex={taskIndex} />
           </Animated.View>
         </GestureDetector>
       )}
@@ -100,9 +134,5 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
     alignItems: "center",
-  },
-  card: {
-    borderRadius: SPACING.spacing12,
-    overflow: "hidden",
   },
 });

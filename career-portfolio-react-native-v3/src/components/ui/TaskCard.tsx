@@ -11,16 +11,16 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import { FONT_SIZE, SPACING } from "../../resources";
 import { ThemedText } from "../typography";
-import { getPositionalText } from "../../utils";
+import { getNumberWithOrdinal } from "../../utils";
 
 const aspectRatio = 3 / 2;
 
 type TaskCardProps = {
   source: ImageSourcePropType;
-  index?: number;
+  taskIndex: number;
 };
 
-export const TaskCard = ({ source, index }: TaskCardProps) => {
+export const TaskCard = ({ source, taskIndex }: TaskCardProps) => {
   const { width } = useWindowDimensions();
   const { colors } = useTheme();
   const CARD_WIDTH = useMemo(() => width - SPACING.spacing64, [width]);
@@ -43,8 +43,8 @@ export const TaskCard = ({ source, index }: TaskCardProps) => {
           style={styles.labelBackground}
         >
           <ThemedText style={styles.labelText}>
-            <ThemedText style={styles.taskText}>{`${getPositionalText(
-              10 - index
+            <ThemedText style={styles.taskText}>{`${getNumberWithOrdinal(
+              taskIndex
             )} task`}</ThemedText>{" "}
             from{" "}
             <ThemedText style={[{ color: colors.secondary }, styles.setText]}>
@@ -61,6 +61,16 @@ export const TaskCard = ({ source, index }: TaskCardProps) => {
 const styles = StyleSheet.create({
   imageBackground: {
     flexDirection: "column-reverse",
+    borderRadius: SPACING.spacing12,
+    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   labelBackground: {
     paddingHorizontal: SPACING.spacing16,

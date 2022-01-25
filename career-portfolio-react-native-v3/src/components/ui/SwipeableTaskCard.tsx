@@ -1,6 +1,6 @@
-import React from "react";
-import type { ImageSourcePropType } from "react-native";
-import { Platform, View, StyleSheet, Dimensions, Image } from "react-native";
+import React, { useEffect, useMemo, useState } from "react";
+import type { ImageSourcePropType, StyleProp, ViewStyle } from "react-native";
+import { useWindowDimensions, Platform, View, StyleSheet } from "react-native";
 import type { PanGestureHandlerGestureEvent } from "react-native-gesture-handler";
 import {
   Gesture,
@@ -8,38 +8,64 @@ import {
   PanGestureHandler,
 } from "react-native-gesture-handler";
 import Animated, {
+  runOnJS,
   useAnimatedGestureHandler,
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
   withSpring,
   withTiming,
 } from "react-native-reanimated";
 import { snapPoint } from "react-native-redash";
 
-import { SPACING } from "../../resources";
+import { TaskCard } from "./TaskCard";
 
-const { width: wWidth } = Dimensions.get("window");
-
-const SNAP_POINTS = [-wWidth, 0, wWidth];
-const aspectRatio = 3 / 2;
-const CARD_WIDTH = wWidth - SPACING.spacing64;
-const CARD_HEIGHT = CARD_WIDTH * aspectRatio;
+const OFFSET_Y = -50;
 
 interface SwipeableTaskCardProps {
   source: ImageSourcePropType;
+  index: number;
+  taskSet: number;
+  taskIndex: number;
+  onSwipeRight: () => void;
+  onSwipeLeft: () => void;
+  swipeProgress?: (value: number) => void;
+  style?: StyleProp<ViewStyle>;
 }
 
-export const SwipeableTaskCard = ({ source }: SwipeableTaskCardProps) => {
-  const offset = useSharedValue({ x: 0, y: 0 });
+export const SwipeableTaskCard = ({
+  source,
+  index,
+  taskSet,
+  taskIndex,
+  onSwipeRight,
+  onSwipeLeft,
+  swipeProgress,
+  style,
+}: SwipeableTaskCardProps) => {
+  const [enabled, setEnabled] = useState(false);
+  const offset = useSharedValue({ x: 0 });
   const translateX = useSharedValue(0);
+  const translateY = useSharedValue(OFFSET_Y);
   const rotate = useSharedValue(0);
+  const scale = useSharedValue(0.9);
+  const { width } = useWindowDimensions();
+  const snapPoints = useMemo(() => [-width, 0, width], [width]);
 
-  const style = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: translateX.value },
-      { rotate: `${rotate.value}deg` },
-    ],
-  }));
+  useDerivedValue(() => {
+    if (swipeProgress) {
+      runOnJS(swipeProgress)(translateX.value / (width / 2));
+    }
+  });
+
+  useEffect(() => {
+    if (index === 0) {
+      translateY.value = withTiming(0);
+      scale.value = withTiming(1, {}, () => {
+        runOnJS(setEnabled)(true);
+      });
+    }
+  }, [index, scale, translateY]);
 
   const onGestureEvent = useAnimatedGestureHandler<
     PanGestureHandlerGestureEvent,
@@ -54,30 +80,17 @@ export const SwipeableTaskCard = ({ source }: SwipeableTaskCardProps) => {
       rotate.value = newX / 10;
     },
     onEnd: ({ velocityX }) => {
-      const dest = snapPoint(translateX.value, velocityX, SNAP_POINTS);
+      const dest = snapPoint(translateX.value, velocityX, snapPoints);
       translateX.value = withSpring(dest, { velocity: velocityX });
-      rotate.value = withTiming(0);
+      rotate.value = withTiming(0, {}, () => {
+        if (dest > 0) {
+          runOnJS(onSwipeRight)();
+        } else if (dest < 0) {
+          runOnJS(onSwipeLeft)();
+        }
+      });
     },
   });
-
-  if (Platform.OS === "web") {
-    return (
-      <View style={styles.container} pointerEvents="box-none">
-        <PanGestureHandler onGestureEvent={onGestureEvent}>
-          <Animated.View style={[styles.card, style]}>
-            <Image
-              source={source}
-              style={{
-                width: CARD_WIDTH,
-                height: CARD_WIDTH * aspectRatio,
-              }}
-              resizeMode="contain"
-            />
-          </Animated.View>
-        </PanGestureHandler>
-      </View>
-    );
-  }
 
   const gesture = Gesture.Pan()
     .onBegin(() => {
@@ -89,25 +102,42 @@ export const SwipeableTaskCard = ({ source }: SwipeableTaskCardProps) => {
       rotate.value = newX / 10;
     })
     .onEnd(({ velocityX }) => {
-      const dest = snapPoint(translateX.value, velocityX, SNAP_POINTS);
+      const dest = snapPoint(translateX.value, velocityX, snapPoints);
       translateX.value = withSpring(dest, { velocity: velocityX });
-      rotate.value = withTiming(0);
-    });
+      rotate.value = withTiming(0, {}, () => {
+        if (dest > 0) {
+          runOnJS(onSwipeRight)();
+        } else if (dest < 0) {
+          runOnJS(onSwipeLeft)();
+        }
+      });
+    })
+    .enabled(enabled);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { translateX: translateX.value },
+      { translateY: translateY.value },
+      { rotate: `${rotate.value}deg` },
+      { scale: scale.value },
+    ],
+  }));
 
   return (
-    <View style={styles.container} pointerEvents="box-none">
-      <GestureDetector gesture={gesture}>
-        <Animated.View style={[styles.card, style]}>
-          <Image
-            source={source}
-            style={{
-              width: CARD_WIDTH,
-              height: CARD_WIDTH * aspectRatio,
-            }}
-            resizeMode="contain"
-          />
-        </Animated.View>
-      </GestureDetector>
+    <View style={[styles.container, style]} pointerEvents="box-none">
+      {Platform.OS === "web" ? (
+        <PanGestureHandler onGestureEvent={onGestureEvent} enabled={enabled}>
+          <Animated.View style={animatedStyle}>
+            <TaskCard source={source} taskSet={taskSet} taskIndex={taskIndex} />
+          </Animated.View>
+        </PanGestureHandler>
+      ) : (
+        <GestureDetector gesture={gesture}>
+          <Animated.View style={animatedStyle}>
+            <TaskCard source={source} taskSet={taskSet} taskIndex={taskIndex} />
+          </Animated.View>
+        </GestureDetector>
+      )}
     </View>
   );
 };
@@ -117,11 +147,5 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
     alignItems: "center",
-  },
-  card: {
-    borderRadius: 10,
-    width: CARD_WIDTH,
-    height: CARD_HEIGHT,
-    overflow: "hidden",
   },
 });

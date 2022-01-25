@@ -1,25 +1,33 @@
 import React from "react";
-import type { StyleProp, ViewStyle } from "react-native";
+import type { PressableProps, StyleProp, ViewStyle } from "react-native";
 import { Pressable, StyleSheet } from "react-native";
 import { useTheme } from "@react-navigation/native";
 
 import { FONT_SIZE, SPACING } from "../../resources";
 import { ThemedText } from "../typography";
 
-type CTAButtonProps = {
+interface CTAButtonProps extends PressableProps {
   label: string;
-  onPress: () => void;
   style?: StyleProp<ViewStyle>;
-};
+}
 
-export const CTAButton = ({ label, onPress, style }: CTAButtonProps) => {
+export const CTAButton = ({
+  label,
+  onPress,
+  disabled,
+  style,
+}: CTAButtonProps) => {
   const { colors } = useTheme();
 
   return (
     <Pressable
       onPress={onPress}
+      disabled={disabled}
       style={({ pressed }) => [
-        { backgroundColor: colors.primary, opacity: pressed ? 0.5 : 1 },
+        {
+          backgroundColor: disabled ? "gray" : colors.primary,
+          opacity: pressed ? 0.5 : 1,
+        },
         styles.container,
         style,
       ]}

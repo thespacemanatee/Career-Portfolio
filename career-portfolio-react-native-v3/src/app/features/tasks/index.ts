@@ -2,6 +2,7 @@ export {
   reducer,
   setTaskSet,
   setRecommendedTasks,
+  setSwipedTask,
   removeFirstTask,
   resetTasks,
   resetTasksState,

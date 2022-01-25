@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export type JobClass = {
   title: string;
-  socCode: number[];
+  socCodes: number[];
 };
 
 interface JobClassState {
@@ -21,10 +21,10 @@ const JobClassSlice = createSlice({
     setJobClasses: (state, action: PayloadAction<JobClass[]>) => {
       state.jobClasses = action.payload;
     },
-    resetState: () => initialState,
+    resetJobClassState: () => initialState,
   },
 });
 
-export const { setJobClasses, resetState } = JobClassSlice.actions;
+export const { setJobClasses, resetJobClassState } = JobClassSlice.actions;
 
 export const { reducer } = JobClassSlice;

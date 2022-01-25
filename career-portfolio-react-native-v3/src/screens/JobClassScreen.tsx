@@ -8,7 +8,9 @@ import { CTAButton } from "../components/ui/CTAButton";
 import { JobClassEntry } from "../components/ui/JobClassEntry";
 import type { RootStackParamList } from "../navigation";
 import { SPACING } from "../resources";
-import { setTasks } from "../app/features/tasks";
+import { resetTasksState, setRecommendedTasks } from "../app/features/tasks";
+import { getRecommendedTasks } from "../services";
+import { toTopRecommendedTask } from "../utils";
 
 type JobClassScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -21,9 +23,21 @@ export const JobClassScreen = ({ navigation }: JobClassScreenProps) => {
 
   const dispatch = useAppDispatch();
 
-  const submitSelection = () => {
-    dispatch(setTasks(Array(10).fill(0)));
-    navigation.navigate("Tasks");
+  const submitSelection = async () => {
+    if (!selectedJobClass) {
+      return;
+    }
+    dispatch(resetTasksState());
+    try {
+      const { data } = await getRecommendedTasks(selectedJobClass, []);
+      const tasks = toTopRecommendedTask(JSON.parse(data.tasks));
+      dispatch(setRecommendedTasks(tasks));
+      navigation.navigate("Tasks", {
+        selectedJobClass,
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const selectJobClass = (jobClass: JobClass) => {
@@ -51,7 +65,11 @@ export const JobClassScreen = ({ navigation }: JobClassScreenProps) => {
         renderItem={renderJobClasses}
         keyExtractor={(item) => item.title}
       />
-      <CTAButton label="Continue" onPress={submitSelection} />
+      <CTAButton
+        label="Continue"
+        onPress={submitSelection}
+        disabled={!selectedJobClass}
+      />
     </View>
   );
 };

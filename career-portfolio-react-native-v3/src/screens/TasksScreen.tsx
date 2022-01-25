@@ -1,22 +1,56 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
+import { batch } from "react-redux";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-import { removeFirstTask } from "../app/features/tasks";
+import {
+  removeFirstTask,
+  resetTasks,
+  setRecommendedTasks,
+  setTaskSet,
+} from "../app/features/tasks";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { AnimatedDislikeIndicator } from "../components/ui/AnimatedDislikeIndicator";
 import { AnimatedLikeIndicator } from "../components/ui/AnimatedLikeIndicator";
 import { SwipeableTaskCard } from "../components/ui/SwipeableTaskCard";
+import type { RootStackParamList } from "../navigation";
 import { SPACING } from "../resources";
+import { getRecommendedTasks } from "../services";
+import { toTopRecommendedTask } from "../utils";
 
-export const TasksScreen = () => {
+type TasksScreenProps = NativeStackScreenProps<RootStackParamList, "Tasks">;
+
+export const TasksScreen = ({ navigation, route }: TasksScreenProps) => {
   const swipeProgress = useSharedValue(0);
-  const tasks = useAppSelector((state) => state.tasks.tasks);
+  const recommendedTasks = useAppSelector(
+    (state) => state.tasks.recommendedTasks
+  );
+  const taskSet = useAppSelector((state) => state.tasks.taskSet);
+  const swipedTasks = useAppSelector((state) => state.tasks.swipedTasks);
+
+  const { selectedJobClass } = route.params;
 
   const dispatch = useAppDispatch();
 
-  const likeTask = () => {
-    dispatch(removeFirstTask());
+  const likeTask = async () => {
+    if (!selectedJobClass) {
+      return;
+    }
+    try {
+      const { data } = await getRecommendedTasks(
+        selectedJobClass,
+        swipedTasks.map((task) => task.iwaId)
+      );
+      const tasks = toTopRecommendedTask(JSON.parse(data.tasks));
+      dispatch(resetTasks());
+      batch(() => {
+        dispatch(setTaskSet(taskSet + 1));
+        dispatch(setRecommendedTasks(tasks));
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const dislikeTask = () => {
@@ -25,27 +59,37 @@ export const TasksScreen = () => {
 
   return (
     <View style={styles.container}>
-      {tasks.map((task, idx) => {
+      {recommendedTasks.map((task, idx) => {
         return (
           <SwipeableTaskCard
-            key={idx}
-            source={{ uri: `https://picsum.photos/id/${idx + 10}/200/300` }}
-            index={tasks.length - 1 - idx}
-            taskIndex={10 - idx}
+            key={task.iwaId}
+            source={{
+              uri: `https://picsum.photos/id/${
+                (task.index + 1) * (taskSet + 1)
+              }/200/300`,
+            }}
+            index={idx}
+            taskSet={taskSet}
+            taskIndex={task.index}
             onSwipeRight={likeTask}
             onSwipeLeft={dislikeTask}
             swipeProgress={(value) => {
               swipeProgress.value = value;
             }}
+            style={{ zIndex: -idx }}
           />
         );
       })}
-      <View style={styles.like} pointerEvents="box-none">
-        <AnimatedLikeIndicator progress={swipeProgress} />
-      </View>
-      <View style={styles.dislike} pointerEvents="box-none">
-        <AnimatedDislikeIndicator progress={swipeProgress} />
-      </View>
+      {recommendedTasks.length > 0 && (
+        <>
+          <View style={styles.like} pointerEvents="box-none">
+            <AnimatedLikeIndicator progress={swipeProgress} />
+          </View>
+          <View style={styles.dislike} pointerEvents="box-none">
+            <AnimatedDislikeIndicator progress={swipeProgress} />
+          </View>
+        </>
+      )}
     </View>
   );
 };

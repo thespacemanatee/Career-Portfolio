@@ -1,2 +1,2 @@
-export { reducer, setJobClasses, resetState } from "./jobClassReducer";
+export { reducer, setJobClasses, resetJobClassState } from "./jobClassReducer";
 export type { JobClass } from "./jobClassReducer";

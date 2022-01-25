@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import type { ImageSourcePropType } from "react-native";
+import type { ImageSourcePropType, StyleProp, ViewStyle } from "react-native";
 import { useWindowDimensions, Platform, View, StyleSheet } from "react-native";
 import type { PanGestureHandlerGestureEvent } from "react-native-gesture-handler";
 import {
@@ -25,19 +25,23 @@ const OFFSET_Y = -50;
 interface SwipeableTaskCardProps {
   source: ImageSourcePropType;
   index: number;
+  taskSet: number;
   taskIndex: number;
   onSwipeRight: () => void;
   onSwipeLeft: () => void;
   swipeProgress?: (value: number) => void;
+  style?: StyleProp<ViewStyle>;
 }
 
 export const SwipeableTaskCard = ({
   source,
   index,
+  taskSet,
   taskIndex,
   onSwipeRight,
   onSwipeLeft,
   swipeProgress,
+  style,
 }: SwipeableTaskCardProps) => {
   const [enabled, setEnabled] = useState(false);
   const offset = useSharedValue({ x: 0 });
@@ -110,7 +114,7 @@ export const SwipeableTaskCard = ({
     })
     .enabled(enabled);
 
-  const style = useAnimatedStyle(() => ({
+  const animatedStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: translateX.value },
       { translateY: translateY.value },
@@ -120,17 +124,17 @@ export const SwipeableTaskCard = ({
   }));
 
   return (
-    <View style={styles.container} pointerEvents="box-none">
+    <View style={[styles.container, style]} pointerEvents="box-none">
       {Platform.OS === "web" ? (
         <PanGestureHandler onGestureEvent={onGestureEvent} enabled={enabled}>
-          <Animated.View style={style}>
-            <TaskCard source={source} taskIndex={taskIndex} />
+          <Animated.View style={animatedStyle}>
+            <TaskCard source={source} taskSet={taskSet} taskIndex={taskIndex} />
           </Animated.View>
         </PanGestureHandler>
       ) : (
         <GestureDetector gesture={gesture}>
-          <Animated.View style={style}>
-            <TaskCard source={source} taskIndex={taskIndex} />
+          <Animated.View style={animatedStyle}>
+            <TaskCard source={source} taskSet={taskSet} taskIndex={taskIndex} />
           </Animated.View>
         </GestureDetector>
       )}

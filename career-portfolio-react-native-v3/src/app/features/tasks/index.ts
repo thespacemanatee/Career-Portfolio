@@ -1,6 +1,9 @@
 export {
   reducer,
-  setTasks,
+  setTaskSet,
+  setRecommendedTasks,
   removeFirstTask,
-  resetState,
+  resetTasks,
+  resetTasksState,
 } from "./tasksReducer";
+export type { RecommendedTask } from "./tasksReducer";

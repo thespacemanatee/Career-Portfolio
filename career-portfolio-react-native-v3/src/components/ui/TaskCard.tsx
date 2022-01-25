@@ -17,10 +17,11 @@ const aspectRatio = 3 / 2;
 
 type TaskCardProps = {
   source: ImageSourcePropType;
+  taskSet: number;
   taskIndex: number;
 };
 
-export const TaskCard = ({ source, taskIndex }: TaskCardProps) => {
+export const TaskCard = ({ source, taskSet, taskIndex }: TaskCardProps) => {
   const { width } = useWindowDimensions();
   const { colors } = useTheme();
   const CARD_WIDTH = useMemo(() => width - SPACING.spacing64, [width]);
@@ -44,11 +45,11 @@ export const TaskCard = ({ source, taskIndex }: TaskCardProps) => {
         >
           <ThemedText style={styles.labelText}>
             <ThemedText style={styles.taskText}>{`${getNumberWithOrdinal(
-              taskIndex
+              taskIndex + 1
             )} task`}</ThemedText>{" "}
             from{" "}
             <ThemedText style={[{ color: colors.secondary }, styles.setText]}>
-              the first set
+              {`the ${getNumberWithOrdinal(taskSet + 1)} set`}
             </ThemedText>{" "}
             of recommendation
           </ThemedText>

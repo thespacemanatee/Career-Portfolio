@@ -1,8 +1,9 @@
-import React from "react";
+import React, { createRef, useCallback, useRef } from "react";
 import { StyleSheet, View } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 import { batch } from "react-redux";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import type BottomSheet from "@gorhom/bottom-sheet";
 
 import {
   setSwipedTask,
@@ -10,19 +11,23 @@ import {
   resetTasks,
   setRecommendedTasks,
   setTaskSet,
-} from "../app/features/tasks";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { AnimatedDislikeIndicator } from "../components/ui/AnimatedDislikeIndicator";
-import { AnimatedLikeIndicator } from "../components/ui/AnimatedLikeIndicator";
-import { SwipeableTaskCard } from "../components/ui/SwipeableTaskCard";
-import type { RootStackParamList } from "../navigation";
-import { SPACING } from "../resources";
-import { getRecommendedTasks } from "../services";
-import { toTopRecommendedTask } from "../utils";
+} from "../../app/features/tasks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { AnimatedDislikeIndicator } from "../../components/ui/AnimatedDislikeIndicator";
+import { AnimatedLikeIndicator } from "../../components/ui/AnimatedLikeIndicator";
+import { SwipeableTaskCard } from "../../components/ui/SwipeableTaskCard";
+import type { RootStackParamList } from "../../navigation";
+import { SPACING } from "../../resources";
+import { getRecommendedTasks } from "../../services";
+import { toTopRecommendedTask } from "../../utils";
+import { NavigationHeader } from "../../components/navigation";
+
+import { SwipedTasksBottomSheet } from "./SwipedTasksBottomSheet";
 
 type TasksScreenProps = NativeStackScreenProps<RootStackParamList, "Tasks">;
 
 export const TasksScreen = ({ navigation, route }: TasksScreenProps) => {
+  const sheetRef = createRef<BottomSheet>();
   const swipeProgress = useSharedValue(0);
   const recommendedTasks = useAppSelector(
     (state) => state.tasks.recommendedTasks
@@ -61,8 +66,22 @@ export const TasksScreen = ({ navigation, route }: TasksScreenProps) => {
     dispatch(removeFirstTask());
   };
 
+  const handleSnapPress = useCallback(() => {
+    sheetRef.current?.expand();
+  }, [sheetRef]);
+
+  const handleClosePress = useCallback(() => {
+    sheetRef.current?.close();
+  }, [sheetRef]);
+
   return (
     <View style={styles.container}>
+      <NavigationHeader
+        title="Tasks"
+        subtitle="Find tasks that are relevant to you"
+        onBackPress={navigation.goBack}
+        onStarPress={handleSnapPress}
+      />
       {recommendedTasks.map((task, idx) => {
         return (
           <SwipeableTaskCard
@@ -95,6 +114,11 @@ export const TasksScreen = ({ navigation, route }: TasksScreenProps) => {
           </View>
         </>
       )}
+      <SwipedTasksBottomSheet
+        ref={sheetRef}
+        swipedTasks={swipedTasks}
+        jobClass={selectedJobClass}
+      />
     </View>
   );
 };

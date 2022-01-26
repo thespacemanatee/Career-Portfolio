@@ -26,7 +26,7 @@ export const SwipedTaskCard = ({ task, index, style }: SwipedTaskCardProps) => {
         source={{
           uri: `https://picsum.photos/id/${index + 1}/200/300`,
         }}
-        style={[{ height: height / 4 }, styles.imageBackground, style]}
+        style={[{ height: height / 3.75 }, styles.imageBackground, style]}
       >
         <LinearGradient
           colors={["transparent", "black"]}
@@ -67,6 +67,6 @@ const styles = StyleSheet.create({
   labelText: {
     color: "white",
     fontFamily: "bold",
-    fontSize: FONT_SIZE.medium,
+    fontSize: FONT_SIZE.large,
   },
 });

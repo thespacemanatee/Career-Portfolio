@@ -11,6 +11,7 @@ import { SPACING } from "../resources";
 import { resetTasksState, setRecommendedTasks } from "../app/features/tasks";
 import { getRecommendedTasks } from "../services";
 import { toTopRecommendedTask } from "../utils";
+import { NavigationHeader } from "../components/navigation";
 
 type JobClassScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -64,16 +65,22 @@ export const JobClassScreen = ({ navigation }: JobClassScreenProps) => {
 
   return (
     <View style={styles.container}>
+      <NavigationHeader
+        title="Job Class"
+        subtitle="Find tasks that are relevant to you"
+      />
       <FlatList
         data={jobClasses}
         renderItem={renderJobClasses}
         keyExtractor={(item) => item.title}
+        style={styles.flatList}
       />
       <CTAButton
         label="Continue"
         onPress={submitSelection}
         loading={isLoading}
         disabled={isLoading || !selectedJobClass}
+        style={styles.continueButton}
       />
     </View>
   );
@@ -82,9 +89,15 @@ export const JobClassScreen = ({ navigation }: JobClassScreenProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: SPACING.spacing16,
+  },
+  flatList: {
+    marginHorizontal: SPACING.spacing16,
   },
   jobClassEntry: {
     marginVertical: SPACING.spacing4,
+  },
+  continueButton: {
+    marginHorizontal: SPACING.spacing16,
+    marginBottom: SPACING.spacing16,
   },
 });

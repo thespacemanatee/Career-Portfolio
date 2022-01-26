@@ -50,7 +50,7 @@ export const SwipedTasksBottomSheet = ({
       onRequestClose={onToggle}
     >
       <Pressable style={styles.container} onPress={onToggle}>
-        <Pressable style={[{ height: height / 1.5 }, styles.modalView]}>
+        <Pressable style={[{ height: height / 1.25 }, styles.modalView]}>
           <View style={styles.titleContainer}>
             <ThemedText style={styles.titleText}>
               Collection of my tasks

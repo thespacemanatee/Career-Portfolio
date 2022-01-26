@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export type JobClass = {
   title: string;
-  socCodes: number[];
+  socCode: number;
 };
 
 interface JobClassState {

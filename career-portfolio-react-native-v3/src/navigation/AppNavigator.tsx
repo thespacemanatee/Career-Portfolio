@@ -20,7 +20,7 @@ export const AppNavigator = () => {
   useEffect(() => {
     const temp: JobClass[] = Object.entries(jobClasses).map((jobClass) => ({
       title: jobClass[0],
-      socCodes: jobClass[1],
+      socCode: jobClass[1],
     }));
     dispatch(setJobClasses(temp));
   }, [dispatch]);

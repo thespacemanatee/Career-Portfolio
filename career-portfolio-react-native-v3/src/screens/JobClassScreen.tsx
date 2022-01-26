@@ -19,6 +19,7 @@ type JobClassScreenProps = NativeStackScreenProps<
 
 export const JobClassScreen = ({ navigation }: JobClassScreenProps) => {
   const [selectedJobClass, setSelectedJobClass] = useState<JobClass>();
+  const [isLoading, setIsLoading] = useState(false);
   const jobClasses = useAppSelector((state) => state.jobClass.jobClasses);
 
   const dispatch = useAppDispatch();
@@ -27,6 +28,7 @@ export const JobClassScreen = ({ navigation }: JobClassScreenProps) => {
     if (!selectedJobClass) {
       return;
     }
+    setIsLoading(true);
     dispatch(resetTasksState());
     try {
       const { data } = await getRecommendedTasks(selectedJobClass, []);
@@ -37,6 +39,8 @@ export const JobClassScreen = ({ navigation }: JobClassScreenProps) => {
       });
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -68,7 +72,8 @@ export const JobClassScreen = ({ navigation }: JobClassScreenProps) => {
       <CTAButton
         label="Continue"
         onPress={submitSelection}
-        disabled={!selectedJobClass}
+        loading={isLoading}
+        disabled={isLoading || !selectedJobClass}
       />
     </View>
   );

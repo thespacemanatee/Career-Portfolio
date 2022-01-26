@@ -1,9 +1,8 @@
-import React, { createRef, useCallback, useRef } from "react";
+import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 import { batch } from "react-redux";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import type BottomSheet from "@gorhom/bottom-sheet";
 
 import {
   setSwipedTask,
@@ -27,7 +26,7 @@ import { SwipedTasksBottomSheet } from "./SwipedTasksBottomSheet";
 type TasksScreenProps = NativeStackScreenProps<RootStackParamList, "Tasks">;
 
 export const TasksScreen = ({ navigation, route }: TasksScreenProps) => {
-  const sheetRef = createRef<BottomSheet>();
+  const [modalVisible, setModalVisible] = useState(false);
   const swipeProgress = useSharedValue(0);
   const recommendedTasks = useAppSelector(
     (state) => state.tasks.recommendedTasks
@@ -66,13 +65,9 @@ export const TasksScreen = ({ navigation, route }: TasksScreenProps) => {
     dispatch(removeFirstTask());
   };
 
-  const handleSnapPress = useCallback(() => {
-    sheetRef.current?.expand();
-  }, [sheetRef]);
-
-  const handleClosePress = useCallback(() => {
-    sheetRef.current?.close();
-  }, [sheetRef]);
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
 
   return (
     <View style={styles.container}>
@@ -80,7 +75,7 @@ export const TasksScreen = ({ navigation, route }: TasksScreenProps) => {
         title="Tasks"
         subtitle="Find tasks that are relevant to you"
         onBackPress={navigation.goBack}
-        onStarPress={handleSnapPress}
+        onStarPress={toggleModal}
       />
       {recommendedTasks.map((task, idx) => {
         return (
@@ -115,9 +110,10 @@ export const TasksScreen = ({ navigation, route }: TasksScreenProps) => {
         </>
       )}
       <SwipedTasksBottomSheet
-        ref={sheetRef}
         swipedTasks={swipedTasks}
         jobClass={selectedJobClass}
+        visible={modalVisible}
+        onToggle={toggleModal}
       />
     </View>
   );

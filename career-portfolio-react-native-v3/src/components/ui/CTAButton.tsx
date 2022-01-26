@@ -1,6 +1,6 @@
 import React from "react";
 import type { PressableProps, StyleProp, ViewStyle } from "react-native";
-import { Pressable, StyleSheet } from "react-native";
+import { ActivityIndicator, Pressable, StyleSheet } from "react-native";
 import { useTheme } from "@react-navigation/native";
 
 import { FONT_SIZE, SPACING } from "../../resources";
@@ -8,12 +8,14 @@ import { ThemedText } from "../typography";
 
 interface CTAButtonProps extends PressableProps {
   label: string;
+  loading?: boolean;
   style?: StyleProp<ViewStyle>;
 }
 
 export const CTAButton = ({
   label,
   onPress,
+  loading,
   disabled,
   style,
 }: CTAButtonProps) => {
@@ -33,6 +35,7 @@ export const CTAButton = ({
       ]}
     >
       <ThemedText style={styles.labelText}>{label}</ThemedText>
+      {loading && <ActivityIndicator color="white" style={styles.indicator} />}
     </Pressable>
   );
 };
@@ -55,5 +58,11 @@ const styles = StyleSheet.create({
     color: "white",
     fontFamily: "bold",
     fontSize: FONT_SIZE.large,
+  },
+  indicator: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "center",
+    alignItems: "flex-end",
+    marginHorizontal: SPACING.spacing16,
   },
 });

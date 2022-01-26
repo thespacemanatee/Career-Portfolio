@@ -5,6 +5,7 @@ import { batch } from "react-redux";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import {
+  setSwipedTask,
   removeFirstTask,
   resetTasks,
   setRecommendedTasks,
@@ -33,14 +34,17 @@ export const TasksScreen = ({ navigation, route }: TasksScreenProps) => {
 
   const dispatch = useAppDispatch();
 
-  const likeTask = async () => {
+  const likeTask = async (iwaId: string) => {
     if (!selectedJobClass) {
       return;
     }
+    const newSwipedTasks = [...swipedTasks];
+    newSwipedTasks.push(iwaId);
+    dispatch(setSwipedTask(newSwipedTasks));
     try {
       const { data } = await getRecommendedTasks(
         selectedJobClass,
-        swipedTasks.map((task) => task.iwaId)
+        newSwipedTasks
       );
       const tasks = toTopRecommendedTask(JSON.parse(data.tasks));
       dispatch(resetTasks());
@@ -69,6 +73,7 @@ export const TasksScreen = ({ navigation, route }: TasksScreenProps) => {
               }/200/300`,
             }}
             index={idx}
+            iwaId={task.iwaId}
             taskSet={taskSet}
             taskIndex={task.index}
             onSwipeRight={likeTask}

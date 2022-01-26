@@ -25,9 +25,10 @@ const OFFSET_Y = -50;
 interface SwipeableTaskCardProps {
   source: ImageSourcePropType;
   index: number;
+  iwaId: string;
   taskSet: number;
   taskIndex: number;
-  onSwipeRight: () => void;
+  onSwipeRight: (iwaId: string) => void;
   onSwipeLeft: () => void;
   swipeProgress?: (value: number) => void;
   style?: StyleProp<ViewStyle>;
@@ -36,6 +37,7 @@ interface SwipeableTaskCardProps {
 export const SwipeableTaskCard = ({
   source,
   index,
+  iwaId,
   taskSet,
   taskIndex,
   onSwipeRight,
@@ -84,7 +86,7 @@ export const SwipeableTaskCard = ({
       translateX.value = withSpring(dest, { velocity: velocityX });
       rotate.value = withTiming(0, {}, () => {
         if (dest > 0) {
-          runOnJS(onSwipeRight)();
+          runOnJS(onSwipeRight)(iwaId);
         } else if (dest < 0) {
           runOnJS(onSwipeLeft)();
         }
@@ -106,7 +108,7 @@ export const SwipeableTaskCard = ({
       translateX.value = withSpring(dest, { velocity: velocityX });
       rotate.value = withTiming(0, {}, () => {
         if (dest > 0) {
-          runOnJS(onSwipeRight)();
+          runOnJS(onSwipeRight)(iwaId);
         } else if (dest < 0) {
           runOnJS(onSwipeLeft)();
         }

@@ -10,7 +10,7 @@ export type RecommendedTask = {
 interface TasksState {
   taskSet: number;
   recommendedTasks: RecommendedTask[];
-  swipedTasks: RecommendedTask[];
+  swipedTasks: string[];
 }
 
 const initialState: TasksState = {
@@ -29,6 +29,9 @@ const tasksSlice = createSlice({
     setRecommendedTasks: (state, action: PayloadAction<RecommendedTask[]>) => {
       state.recommendedTasks = action.payload.reverse();
     },
+    setSwipedTask: (state, action: PayloadAction<string[]>) => {
+      state.swipedTasks = action.payload;
+    },
     removeFirstTask: (state) => {
       state.recommendedTasks.splice(0, 1);
     },
@@ -42,6 +45,7 @@ const tasksSlice = createSlice({
 export const {
   setTaskSet,
   setRecommendedTasks,
+  setSwipedTask,
   removeFirstTask,
   resetTasks,
   resetTasksState,

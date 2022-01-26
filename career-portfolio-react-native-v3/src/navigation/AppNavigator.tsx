@@ -1,10 +1,8 @@
 import React, { useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { getHeaderTitle } from "@react-navigation/elements";
 
 import { JobClassScreen } from "../screens/JobClassScreen";
 import { TasksScreen } from "../screens/tasks/TasksScreen";
-import { NavigationHeader } from "../components/navigation/NavigationHeader";
 import { useAppDispatch } from "../app/hooks";
 import type { JobClass } from "../app/features/jobClass";
 import { setJobClasses } from "../app/features/jobClass";

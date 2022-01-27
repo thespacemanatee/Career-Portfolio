@@ -74,6 +74,8 @@ export const TasksScreen = ({ navigation, route }: TasksScreenProps) => {
       <NavigationHeader
         title="Tasks"
         subtitle="Find tasks that are relevant to you"
+        tooltipText="Review your tasks to generate your career transition map"
+        tooltipVisible={swipedTasks.length >= 3}
         onBackPress={navigation.goBack}
         onStarPress={toggleModal}
       />

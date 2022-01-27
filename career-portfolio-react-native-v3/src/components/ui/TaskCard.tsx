@@ -22,9 +22,10 @@ type TaskCardProps = {
 };
 
 export const TaskCard = ({ source, taskSet, taskIndex }: TaskCardProps) => {
-  const { height } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const { colors } = useTheme();
-  const CARD_HEIGHT = useMemo(() => height / 1.75, [height]);
+  const CARD_HEIGHT = useMemo(() => height / 1.5, [height]);
+  const MAX_CARD_WIDTH = useMemo(() => width - SPACING.spacing64, [width]);
 
   return (
     <View>
@@ -34,6 +35,8 @@ export const TaskCard = ({ source, taskSet, taskIndex }: TaskCardProps) => {
           {
             width: CARD_HEIGHT * aspectRatio,
             height: CARD_HEIGHT,
+            maxWidth: MAX_CARD_WIDTH,
+            maxHeight: MAX_CARD_WIDTH / aspectRatio,
           },
           styles.imageBackground,
         ]}

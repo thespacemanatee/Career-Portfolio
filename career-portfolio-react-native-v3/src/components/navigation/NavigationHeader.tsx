@@ -5,6 +5,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { FONT_SIZE, SPACING } from "../../resources";
 import { ThemedText } from "../typography";
+import { NAV_BUTTON_SIZE } from "../ui/NavigationButton";
+import { NavigationTooltip } from "../ui/NavigationTooltip";
 
 import { BackButton } from "./BackButton";
 import { StarButton } from "./StarButton";
@@ -14,12 +16,16 @@ type NavigationHeaderProps = {
   subtitle?: string;
   onBackPress?: () => void;
   onStarPress?: () => void;
+  tooltipText?: string;
+  tooltipVisible?: boolean;
   style?: StyleProp<ViewStyle>;
 };
 
 export const NavigationHeader = ({
   title,
   subtitle,
+  tooltipText,
+  tooltipVisible,
   onBackPress,
   onStarPress,
   style,
@@ -31,7 +37,14 @@ export const NavigationHeader = ({
         <ThemedText style={styles.titleText}>{title}</ThemedText>
         <ThemedText style={styles.subtitleText}>{subtitle}</ThemedText>
       </View>
-      <StarButton onPress={onStarPress} />
+      <View style={styles.actionContainer}>
+        <StarButton onPress={onStarPress} />
+        <NavigationTooltip
+          text={tooltipText}
+          visible={tooltipVisible}
+          style={styles.tooltip}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -56,5 +69,15 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     textAlign: "center",
     fontSize: FONT_SIZE.small,
+  },
+  actionContainer: {
+    flexDirection: "row-reverse",
+  },
+  tooltip: {
+    position: "absolute",
+    top: NAV_BUTTON_SIZE,
+    padding: SPACING.spacing8,
+    borderRadius: SPACING.spacing8,
+    marginTop: SPACING.spacing8,
   },
 });

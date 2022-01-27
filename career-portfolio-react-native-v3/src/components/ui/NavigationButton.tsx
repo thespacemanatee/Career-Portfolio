@@ -2,6 +2,8 @@ import React from "react";
 import type { StyleProp, ViewStyle } from "react-native";
 import { View, Pressable, StyleSheet } from "react-native";
 
+export const NAV_BUTTON_SIZE = 44;
+
 type NavigationButton = {
   onPress?: () => void;
   children: React.ReactNode;
@@ -36,9 +38,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: NAV_BUTTON_SIZE,
+    height: NAV_BUTTON_SIZE,
+    borderRadius: NAV_BUTTON_SIZE / 2,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -49,7 +51,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   empty: {
-    width: 44,
-    height: 44,
+    width: NAV_BUTTON_SIZE,
+    height: NAV_BUTTON_SIZE,
   },
 });

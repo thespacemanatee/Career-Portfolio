@@ -13,7 +13,7 @@ import { FONT_SIZE, SPACING } from "../../resources";
 import { ThemedText } from "../typography";
 import { getNumberWithOrdinal } from "../../utils";
 
-const aspectRatio = 3 / 2;
+const aspectRatio = 2 / 3;
 
 type TaskCardProps = {
   source: ImageSourcePropType;
@@ -22,9 +22,9 @@ type TaskCardProps = {
 };
 
 export const TaskCard = ({ source, taskSet, taskIndex }: TaskCardProps) => {
-  const { width } = useWindowDimensions();
+  const { height } = useWindowDimensions();
   const { colors } = useTheme();
-  const CARD_WIDTH = useMemo(() => width - SPACING.spacing64, [width]);
+  const CARD_HEIGHT = useMemo(() => height / 1.75, [height]);
 
   return (
     <View>
@@ -32,8 +32,8 @@ export const TaskCard = ({ source, taskSet, taskIndex }: TaskCardProps) => {
         source={source}
         style={[
           {
-            width: CARD_WIDTH,
-            height: CARD_WIDTH * aspectRatio,
+            width: CARD_HEIGHT * aspectRatio,
+            height: CARD_HEIGHT,
           },
           styles.imageBackground,
         ]}

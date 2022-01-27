@@ -1,7 +1,6 @@
 import React from "react";
 import type { StyleProp, ViewStyle } from "react-native";
 import { StyleSheet, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import { FONT_SIZE, SPACING } from "../../resources";
 import { ThemedText } from "../typography";
@@ -31,7 +30,7 @@ export const NavigationHeader = ({
   style,
 }: NavigationHeaderProps) => {
   return (
-    <SafeAreaView style={[styles.container, style]}>
+    <View style={[styles.container, style]}>
       <BackButton onPress={onBackPress} />
       <View style={styles.titleContainer}>
         <ThemedText style={styles.titleText}>{title}</ThemedText>
@@ -45,7 +44,7 @@ export const NavigationHeader = ({
           style={styles.tooltip}
         />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

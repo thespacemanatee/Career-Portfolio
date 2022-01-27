@@ -11,6 +11,8 @@ import {
 import { FONT_SIZE, SPACING } from "../../resources";
 import { ThemedText } from "../typography";
 
+const ASPECT_RATIO = 3 / 2.5;
+
 type SwipedTaskCardProps = {
   task: string;
   index: number;
@@ -18,7 +20,7 @@ type SwipedTaskCardProps = {
 };
 
 export const SwipedTaskCard = ({ task, index, style }: SwipedTaskCardProps) => {
-  const { height } = useWindowDimensions();
+  const { width } = useWindowDimensions();
 
   return (
     <Pressable style={styles.container}>
@@ -26,7 +28,11 @@ export const SwipedTaskCard = ({ task, index, style }: SwipedTaskCardProps) => {
         source={{
           uri: `https://picsum.photos/id/${index + 1}/200/300`,
         }}
-        style={[{ height: height / 3.75 }, styles.imageBackground, style]}
+        style={[
+          { height: (width / 2) * ASPECT_RATIO },
+          styles.imageBackground,
+          style,
+        ]}
       >
         <LinearGradient
           colors={["transparent", "black"]}

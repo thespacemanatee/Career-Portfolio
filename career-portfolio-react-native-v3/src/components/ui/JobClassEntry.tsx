@@ -33,8 +33,8 @@ export const JobClassEntry = ({
       style={({ pressed }) => [
         {
           backgroundColor: isSelected ? colors.secondary : "white",
+          borderColor: isSelected ? colors.secondary : "lightgray",
           opacity: pressed && onPress ? 0.5 : 1,
-          borderWidth: isSelected ? 0 : 1,
         },
         styles.container,
         style,
@@ -53,8 +53,8 @@ export const JobClassEntry = ({
 const styles = StyleSheet.create({
   container: {
     padding: SPACING.spacing12,
-    borderColor: "lightgray",
     borderRadius: SPACING.spacing16,
+    borderWidth: 1,
   },
   jobClassText: {
     fontFamily: "regular",

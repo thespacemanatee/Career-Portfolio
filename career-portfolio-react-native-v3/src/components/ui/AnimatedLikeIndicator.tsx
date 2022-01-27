@@ -42,11 +42,15 @@ export const AnimatedLikeIndicator = ({
   }));
 
   return (
-    <Animated.View style={[styles.container, animatedStyle, style]}>
+    <Animated.View
+      style={[styles.container, animatedStyle, style]}
+      pointerEvents="box-none"
+    >
       <Star
         color={isActive ? "white" : colors.secondary}
         width={ICON_SIZE}
         height={ICON_SIZE}
+        pointerEvents="box-none"
       />
     </Animated.View>
   );

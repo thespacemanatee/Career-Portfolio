@@ -42,11 +42,15 @@ export const AnimatedDislikeIndicator = ({
   }));
 
   return (
-    <Animated.View style={[styles.container, animatedStyle, style]}>
+    <Animated.View
+      style={[styles.container, animatedStyle, style]}
+      pointerEvents="box-none"
+    >
       <Ionicons
         name="close"
         color={isActive ? "white" : colors.destructive}
         size={ICON_SIZE}
+        pointerEvents="box-none"
       />
     </Animated.View>
   );

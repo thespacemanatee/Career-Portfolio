@@ -79,7 +79,7 @@ export const SwipeableTaskCard = ({
     onActive: ({ translationX }, ctx) => {
       const newX = ctx.x + translationX;
       translateX.value = newX;
-      rotate.value = newX / 10;
+      rotate.value = (newX / width / 2) * 90;
     },
     onEnd: ({ velocityX }) => {
       const dest = snapPoint(translateX.value, velocityX, snapPoints);
@@ -149,5 +149,6 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
     alignItems: "center",
+    ...(Platform.OS === "web" && { cursor: "pointer" }),
   },
 });

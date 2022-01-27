@@ -12,6 +12,7 @@ import { resetTasksState, setRecommendedTasks } from "../app/features/tasks";
 import { getRecommendedTasks } from "../services";
 import { toTopRecommendedTask } from "../utils";
 import { NavigationHeader } from "../components/navigation";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type JobClassScreenProps = NativeStackScreenProps<
   RootStackParamList,
@@ -64,7 +65,7 @@ export const JobClassScreen = ({ navigation }: JobClassScreenProps) => {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <NavigationHeader
         title="Job Class"
         subtitle="Find tasks that are relevant to you"
@@ -82,7 +83,7 @@ export const JobClassScreen = ({ navigation }: JobClassScreenProps) => {
         disabled={isLoading || !selectedJobClass}
         style={styles.continueButton}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

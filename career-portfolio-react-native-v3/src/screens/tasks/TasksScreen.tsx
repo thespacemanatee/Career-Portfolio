@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { SafeAreaView, StyleSheet, View } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 import { batch } from "react-redux";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -70,7 +70,7 @@ export const TasksScreen = ({ navigation, route }: TasksScreenProps) => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <NavigationHeader
         title="Tasks"
         subtitle="Find tasks that are relevant to you"
@@ -79,45 +79,47 @@ export const TasksScreen = ({ navigation, route }: TasksScreenProps) => {
         onBackPress={navigation.goBack}
         onStarPress={toggleModal}
       />
-      {recommendedTasks.map((task, idx) => {
-        return (
-          <SwipeableTaskCard
-            key={task.iwaId}
-            source={{
-              uri: `https://picsum.photos/id/${
-                (task.index + 1) * (taskSet + 1)
-              }/200/300`,
-            }}
-            index={idx}
-            iwaId={task.iwaId}
-            taskSet={taskSet}
-            taskIndex={task.index}
-            onSwipeRight={likeTask}
-            onSwipeLeft={dislikeTask}
-            swipeProgress={(value) => {
-              swipeProgress.value = value;
-            }}
-            style={{ zIndex: -idx }}
-          />
-        );
-      })}
-      {recommendedTasks.length > 0 && (
-        <>
-          <View style={styles.like} pointerEvents="box-none">
-            <AnimatedLikeIndicator progress={swipeProgress} />
-          </View>
-          <View style={styles.dislike} pointerEvents="box-none">
-            <AnimatedDislikeIndicator progress={swipeProgress} />
-          </View>
-        </>
-      )}
+      <View style={styles.contentContainer}>
+        {recommendedTasks.map((task, idx) => {
+          return (
+            <SwipeableTaskCard
+              key={task.iwaId}
+              source={{
+                uri: `https://picsum.photos/id/${
+                  (task.index + 1) * (taskSet + 1)
+                }/200/300`,
+              }}
+              index={idx}
+              iwaId={task.iwaId}
+              taskSet={taskSet}
+              taskIndex={task.index}
+              onSwipeRight={likeTask}
+              onSwipeLeft={dislikeTask}
+              swipeProgress={(value) => {
+                swipeProgress.value = value;
+              }}
+              style={{ zIndex: -idx }}
+            />
+          );
+        })}
+        {recommendedTasks.length > 0 && (
+          <>
+            <View style={styles.like} pointerEvents="box-none">
+              <AnimatedLikeIndicator progress={swipeProgress} />
+            </View>
+            <View style={styles.dislike} pointerEvents="box-none">
+              <AnimatedDislikeIndicator progress={swipeProgress} />
+            </View>
+          </>
+        )}
+      </View>
       <SwipedTasksBottomSheet
         swipedTasks={swipedTasks}
         jobClass={selectedJobClass}
         visible={modalVisible}
         onToggle={toggleModal}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -125,6 +127,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     overflow: "hidden",
+  },
+  contentContainer: {
+    flex: 1,
   },
   like: {
     ...StyleSheet.absoluteFillObject,
